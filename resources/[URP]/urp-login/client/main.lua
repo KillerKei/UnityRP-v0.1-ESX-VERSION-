@@ -117,7 +117,7 @@ AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
 		local pos = spawn
 		exports.spawnmanager:setAutoSpawn(false)
 		IsChoosing = false
-		TriggerEvent("amp-spawnselect:createMenu")
+        TriggerEvent("hotel:createRoom")
         Citizen.Wait(10)
         TriggerServerEvent('urp-identity:UpdateJob')
         TriggerServerEvent('urp-identity:UpdateCid')

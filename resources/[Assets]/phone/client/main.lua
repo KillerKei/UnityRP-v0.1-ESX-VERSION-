@@ -265,7 +265,7 @@ end)
 RegisterNUICallback('btnProperty', function(data, cb)
   loading()
   local job = exports["isPed"]:isPed("myjob")
-  if job == 'police' then
+  if job == 'police' then -- wtf shouldnt this be realestate ? Pog
     SendNUIMessage({
         openSection = "RealEstate",
         RERank = realEstateRank
