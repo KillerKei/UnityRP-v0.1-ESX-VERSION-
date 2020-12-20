@@ -279,8 +279,8 @@ function ICUscreen(dying)
 end
 
 function logout()
-	TriggerEvent("urp-base:clearStates")
-	exports["urp-base"]:getModule("SpawnManager"):Initialize()
+	TriggerEvent("urp-core:clearStates")
+	exports["urp-core"]:getModule("SpawnManager"):Initialize()
 end
 
 Citizen.CreateThread( function()

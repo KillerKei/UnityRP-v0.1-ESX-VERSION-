@@ -30,5 +30,5 @@ files {
 
 dependencies {
     'urp-core',
-    'urp-base'
+    'urp-core'
 }

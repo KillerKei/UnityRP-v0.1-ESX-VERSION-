@@ -2,20 +2,20 @@ fx_version 'adamant'
 games { 'gta5' }
 
 server_scripts {
-	'server/sqlite/SQLite.net.dll',
-	'server/sqlite/sqlite.js',
+	'server/server-functions/sqlite/SQLite.net.dll',
+	'server/server-functions/sqlite/sqlite.js',
 	'config.lua',
-	'server/util.lua',
-	'server/main.lua',
-	'server/db.lua',
-	'server/classes/player.lua',
-	'server/classes/groups.lua',
-	'server/player/login.lua',
-	'server/metrics.lua'
+	'server/server-functions/util.lua',
+	'server/server-functions/main.lua',
+	'server/server-functions/db.lua',
+	'server/server-functions/classes/player.lua',
+	'server/server-functions/classes/groups.lua',
+	'server/server-functions/player/login.lua',
+	'server/server-functions/metrics.lua'
 }
 
 client_scripts {
-	'client/main.lua',
+	'client/client-functions/main.lua',
 	"@urp-errorlog/client/cl_errorlog.lua"
 }
 

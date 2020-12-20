@@ -797,14 +797,14 @@ cmd = {
 }
 
 function cmd.RunCommand(caller, args)
-    if not args.steamid or not exports["urp-base"]:getModule("Util"):IsSteamId(args.steamid) then return end
+    if not args.steamid or not exports["urp-core"]:getModule("Util"):IsSteamId(args.steamid) then return end
     if not args.reason then args.reason = "No Reason Given" end
     if not args.time then return end
 
-    local players = exports["urp-base"]:getModule("Player"):GetUsers()
+    local players = exports["urp-core"]:getModule("Player"):GetUsers()
 
     for k,v in pairs(players) do
-        local user = exports["urp-base"]:getModule("Player"):GetUser(v)
+        local user = exports["urp-core"]:getModule("Player"):GetUser(v)
         if user:getVar("steamid") == args.steamid then URP.Admin:GetCommandData("ban").runcommand(caller, {target = user, reason = args.reason, time = args.time}) return end
     end
 
@@ -826,7 +826,7 @@ function cmd.DrawCommand()
         URP.Admin.Menu:ShowTextEntry("Enter a Steam ID", "", function(result)
             if result then
                 if string.gsub(result, " ", "") == "" or result == "" then result = nil end
-                if not exports["urp-base"]:getModule("Util"):IsSteamId(result) then result = nil end
+                if not exports["urp-core"]:getModule("Util"):IsSteamId(result) then result = nil end
             end
 
             cmd.vars.steamid = result
@@ -874,7 +874,7 @@ cmd = {
 }
 
 function cmd.RunCommand(caller, args)
-    if not args.steamid or not exports["urp-base"]:getModule("Util"):IsSteamId(args.steamid) then return end
+    if not args.steamid or not exports["urp-core"]:getModule("Util"):IsSteamId(args.steamid) then return end
 
     local log = string.format("%s [%s] Unbanned steamid: %s", caller:getVar("name"), caller:getVar("steamid"), args.steamid)
     URP.Admin:Log(log, caller)
@@ -889,7 +889,7 @@ function cmd.DrawCommand()
         URP.Admin.Menu:ShowTextEntry("Enter a Steam ID", "", function(result)
             if result then
                 if string.gsub(result, " ", "") == "" or result == "" then result = nil end
-                if not exports["urp-base"]:getModule("Util"):IsSteamId(result) then result = nil end
+                if not exports["urp-core"]:getModule("Util"):IsSteamId(result) then result = nil end
             end
 
             cmd.vars.steamid = result
@@ -930,11 +930,11 @@ function cmd.Init()
     cmd.vars.bannedplayers = {}
 
     AddEventHandler("queue:playerJoinQueue", function(src, setReason)
-        local hexId = exports["urp-base"]:getModule("Util"):GetHexId(src)
+        local hexId = exports["urp-core"]:getModule("Util"):GetHexId(src)
         if cmd.vars.bannedplayers[steamId] then setReason("You are temporarily banned until next server restart") CancelEvent() end
     end)
 
-    AddEventHandler("urp-base:playerLoggedIn", function(user)
+    AddEventHandler("urp-core:playerLoggedIn", function(user)
         Citizen.Wait(1000)
         if cmd.vars.bannedplayers[user:getVar("hexid")] then DropPlayer(user:getVar("source"), "You are temporarily banned until next restart") end
     end)
@@ -1324,7 +1324,7 @@ function cmd.Init()
             TriggerClientEvent("urp-admin:RaveMode", -1, enabled)
         end)
 
-        AddEventHandler("urp-base:characterLoaded", function(user, char)
+        AddEventHandler("urp-core:characterLoaded", function(user, char)
             local src = user:getVar("source")
             if cmd.vars.toggle then TriggerClientEvent("urp-admin:RaveMode", src, cmd.vars.toggle) end
         end)
@@ -1949,7 +1949,7 @@ URP.Admin:AddCommand(cmd)
         if not URP.Admin:IsValidUser(target) then return end
 
         local args = {
-            target = exports["urp-base"]:getModule("Player"):getUser(target),
+            target = exports["urp-core"]:getModule("Player"):getUser(target),
             rank = rank
         }
 
