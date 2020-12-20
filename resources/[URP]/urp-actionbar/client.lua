@@ -335,7 +335,7 @@ Citizen.CreateThread( function()
 
 			local weapon = "".. hash ..""
 			if throwableWeapons[weapon] then
-				if exports["rrp-inventory"]:hasEnoughOfItem(weapon,1,false) then
+				if exports["urp-inventory"]:hasEnoughOfItem(weapon,1,false) then
 					TriggerEvent("inventory:removeItem", weapon, 1)
 					Citizen.Wait(3000)
 				end
@@ -381,7 +381,7 @@ Citizen.CreateThread( function()
 		end
 
 		if IsPedPlantingBomb(ped) then
-			if exports["rrp-inventory"]:hasEnoughOfItem("741814745",1,false) then
+			if exports["urp-inventory"]:hasEnoughOfItem("741814745",1,false) then
 
 				TriggerEvent("inventory:removeItem", 741814745, 1)
 				Citizen.Wait(3000)
@@ -807,48 +807,48 @@ end
 
 function AttachmentCheck(weaponhash)
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("silencer_l",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("silencer_l",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_AR_SUPP` )
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("silencer_l2",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("silencer_l2",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_AR_SUPP_02` )
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("silencer_s",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("silencer_s",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_PI_SUPP` )
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("silencer_s2",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("silencer_s2",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_PI_SUPP_02` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("extended_ap",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("extended_ap",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_APPISTOL_CLIP_02` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("extended_sns",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("extended_sns",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_SNSPISTOL_CLIP_02` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("extended_micro",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("extended_micro",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_MICROSMG_CLIP_02` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("MediumScope",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("MediumScope",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_SCOPE_MEDIUM` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("SmallScope",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("SmallScope",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_SCOPE_SMALL` )	
 	end
 
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("TinyScope",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("TinyScope",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_AT_SCOPE_MACRO` )	
 	end
 
-	if exports["rrp-inventory"]:hasEnoughOfItem("extended_tec9",1,false) then
+	if exports["urp-inventory"]:hasEnoughOfItem("extended_tec9",1,false) then
 		GiveWeaponComponentToPed( PlayerPedId(), weaponhash, `COMPONENT_MACHINEPISTOL_CLIP_02` )	
 	end
 
