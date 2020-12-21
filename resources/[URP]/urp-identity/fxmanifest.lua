@@ -1,8 +1,8 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-description 'ESX Identity'
+fx_version 'adamant'
+games { 'gta5' }
 
-version '1.1.0'
+version '1.0.0'
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
@@ -26,6 +26,3 @@ files {
 }
 
 dependency 'urp-core'
-
-fx_version 'adamant'
-games { 'gta5' }

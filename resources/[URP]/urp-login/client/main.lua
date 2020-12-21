@@ -150,7 +150,6 @@ AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
         IsChoosing = false
         Citizen.Wait(5)
         TriggerEvent("hotel:createRoom")
-<<<<<<< HEAD
         TriggerEvent("DoLongHudText", "Tax is currently set to: 15%", 1)
         TriggerServerEvent("irp-clothing:get_character_current")
         TriggerServerEvent("irp-clothing:get_character_face")
@@ -159,28 +158,6 @@ AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
         TriggerEvent('hud:voice:talking', false)
         TriggerScreenblurFadeOut(0)
     end
-=======
-        Citizen.Wait(10)
-        TriggerServerEvent('urp-identity:UpdateJob')
-        TriggerServerEvent('urp-identity:UpdateCid')
-        local cid = exports["isPed"]:isPed("cid")
-		TriggerServerEvent('hotel:load')
-        TriggerServerEvent('refresh', cid)
-		TriggerEvent("DoLongHudText", "Tax is currently set to: 0%", 1)
-		TriggerEvent('urp-clothing:get_character_current', source)
-		TriggerEvent("urp-clothing:get_character_face", source)
-		TriggerEvent("urp-clothing:get_character_current", source)
-		TriggerEvent("hud:voice:transmitting", false)
-		TriggerEvent('hud:voice:talking', false)
-		TriggerScreenblurFadeOut(0)
-	end
-end)
-
-RegisterNetEvent('kashactersC:ChoseCharacter')
-AddEventHandler('kashactersC:ChoseCharacter', function(spawn)
-	local pos = spawn
-	SetEntityCoords(PlayerPedId(), pos.x, pos.y, pos.z)
->>>>>>> 98c92594de0bee67b443d6f677dd1682504994d4
 end)
 
 RegisterNetEvent('urp-login:ReloadCharacters')
