@@ -1605,3 +1605,15 @@ RegisterCommand("mycid", function(source, args, rawCommand)
     local cid = exports["isPed"]:isPed("cid")
     print(cid)
 end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        BlockWeaponWheelThisFrame()
+        HideHudComponentThisFrame(19)
+        HideHudComponentThisFrame(20)
+        HideHudComponentThisFrame(17)
+        DisableControlAction(0, 37, true)
+        DisableControlAction(0, 199, true) 
+    end
+end)
