@@ -264,14 +264,11 @@ end)
 
 RegisterNUICallback('btnProperty', function(data, cb)
   loading()
-  local job = exports["isPed"]:isPed("myjob")
-  if job == 'police' then -- wtf shouldnt this be realestate ? Pog
-    SendNUIMessage({
-        openSection = "RealEstate",
-        RERank = realEstateRank
+  SendNUIMessage({
+      openSection = "RealEstate",
+      RERank = realEstateRank
     })        
-  end
-end)
+  end)
 
 RegisterNUICallback('btnPropertyModify', function(data, cb)
 TriggerEvent("housing:info:realtor","modify")

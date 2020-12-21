@@ -1,9 +1,5 @@
 html {
     overflow: hidden;
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10+ and Edge */
-    user-select: none; /* Standard syntax */
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 p {
@@ -12,72 +8,57 @@ p {
 }
 
 .bottom-bar2 {
-  position: fixed;
-  width: 100%;
+  position: absolute;
+  width: 1920px;
   height: 50px;
   bottom: 0px;
   left: 0px;
-  background-color: black;
-  border-top: 2px solid #5ab2ff;
-  box-shadow: 0px 0px 10px black;
-}
-
-img {
-	width: 8%;
-	height: auto;
+  background-color: rgb(0,0,0);
+  border-top: 3px solid #A5C4D8;
+  box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.75);
 }
 
 .top-bar2 {
-  position: fixed;
-  width: 100%;
+  position: absolute;
+  width: 1920px;
   height: 50px;
   right: 0;
   top: 0;
-  background-color: black;
-  border-bottom: 2px solid#5ab2ff;
-  box-shadow: 0px 0px 10px black;
+  background-color: rgb(0,0,0);
+  border-bottom: 3px solid #A5C4D8;
+  box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.75);
 }
 
 .charWelcome {
-    background-color: rgba(0, 0, 0, 0.8);
-    padding: 12px;
-    margin-top: 8em;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 50px;
+    margin-top: 175px;
     width: 100vw;
-    border-bottom: 1px solid#5ab2ff;
-    border-top: 1px solid #5ab2ff;
-    box-shadow: 0 0 20px black;
+    border-bottom: 2px solid #A5C4D8;
+    border-top: 2px solid #A5C4D8;
+    box-shadow: -1px 1px 0px #222222, -1px -1px 0px #000000;
     text-align: center;
     color: white;
+    box-shadow: 0 0 20px black;
+    text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
     display: none;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+
 }
 
-.title{
-    text-align: center;
-    background: black;
-    color:#5ab2ff;
-	border-bottom: 1px solid#5ab2ff;
-}
-.title > h1 {
-    margin: 0;
-	padding: 25px;
-}
-h1 {
-    font-size: 32px;
-	margin-bottom: 14px;
-}
 
 #changelog {
     background: rgba(0, 0, 0, 0.6);
+    border-top: 1px solid #006aff;
+    border-bottom: 1px solid #006aff;
     color: rgba(255, 255, 255, 0.8);
-    font-size: 12px;
+    font-size: 1.0em;
     border: 1px solid rgb(50, 50, 50);
     box-shadow: 0 0 10px 3px black;
     margin: 0 auto;
-    margin-top: 4%;
+    margin-top: 3%;
     width: 40vw;
     display: none;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: 'Open Sans', sans-serif;
 }
 
 #changelog .log {
@@ -86,33 +67,30 @@ h1 {
     overflow: auto;
     padding: 8px;
     border-top: 1px solid #ffff;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 #changelog .title {
-    font-size: 14px;
-    padding: 2px;
+    font-size: 1.0em;
     background-color: rgb(0,0,0);
-    border-bottom: 4px solid #5ab2ff;
+    border-bottom: 3px solid #A5C4D8;
     box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.75);
-    color:#5ab2ff;
+    color: #A5C4D8;
     border: 1px solid #000;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
 #changelog .date {
     margin-top: 10px;
     font-weight: bold;
-    font-size: 13.5px;
-    color:#ebda28;
-    text-indent: 1.4%;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-size: 18px;
+    font-family: 'Open Sans', sans-serif;
+    color: #A5C4D8;
+    text-indent: 5%;
 }
 
 #changelog ul {
     list-style-type: circle;
     margin-top: 5px;
-    margin-left: 10px;
+    margin-left: 40px;
     margin-bottom: 15px;
 }
 
@@ -120,22 +98,25 @@ h1 {
     padding: 2px;
 }
 
+
+
+
 .scrollbar {
   overflow-y: scroll;
   width: 770px;
-  height: 225px;
+  height: 175px;
   left: 575px;
   position: absolute;
   background-color: rgba(0, 0, 0, 0.6);
   border-radius: 2px;
   border: 2px solid #252525;
-  color:#5ab2ff;
-  border-top: 0.8px solid #5ab2ff;
+  color: white;
+  border-top: 0.5px solid #FFFFFF;
   box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.75);
 }
 
 .scrollbar h2 {
-    color: white;
+    color: #A5C4D8;
     font-size: 22px;
 }
 
@@ -146,7 +127,7 @@ h1 {
   background: transparent; 
 }
 ::-webkit-scrollbar-thumb {
-  background: white; 
+  background: #A5C4D8; 
     height: 51px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -154,29 +135,14 @@ h1 {
 }
 
 .card {
-    margin: 15px;
-    background: rgba(0, 0, 0, 0.8);
-    position: relative;
-    width: 100%;
-    max-width: 25em;
-    border: 1px solid rgb(50, 50, 50);
-}
-
-.chartitle {
-    font-size: 30px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-.chartitle2 {
-    font-size: 30px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-
-.card-without-player {
-}
-
-.card-with-player {
-
+    background-color: rgba(20, 20, 20, 0.6) !important;
+    border: 0px;
+    box-shadow: rgba(0, 0, 0, .05);
+    padding-bottom: 10px !important;
+    border-radius: 0px !important;
+    border: 1px solid #000004;
+    top: 150px;
+    
 }
 
 .card-body-1 {
@@ -185,22 +151,19 @@ h1 {
 
 .card-body-2 {
     background-color: transparent !important;
-    padding: 8px;
-    height: 315px;
+    padding: 15px;
+    height: 300px;
     overflow: auto;
     padding-bottom: 0px !important;
     margin-bottom: 0px !important;
-    letter-spacing: 0.2px;
-    margin-top:10px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    letter-spacing: 0.5px;
 }
 
 .card-body-3 {
     background-color: transparent !important;
-    padding-top: 10px !important;
-    padding-right: 4px !important; 
-    padding-left: 4px !important;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    padding-top: 15px !important;
+    padding-right: 5px !important; 
+    padding-left: 5px !important;
 }
 
 
@@ -208,15 +171,15 @@ h1 {
     background: transparent !important;
 }
 .card-body-2::-webkit-scrollbar {
-    width: 4px !important;
+    width: 3px !important;
   }
   
   .card-body-2::-webkit-scrollbar-track {
-    background: white; 
+    background: #A5C4D8;
   }
   
   .card-body-2::-webkit-scrollbar-thumb {
-    background: white; 
+    background: #A5C4D8;
   }
   
   .card-body-2::-webkit-scrollbar-thumb:hover {
@@ -232,30 +195,24 @@ h1 {
   }
   
   ::-webkit-scrollbar-track {
-    background: white; 
+    background: #A5C4D8;
   }
   
   ::-webkit-scrollbar-thumb {
-    background: white; 
+    background: #A5C4D8;
   }
   
   ::-webkit-scrollbar-thumb:hover {
     background: rgb(151, 150, 150);
   }
 
-.charButton:hover {
-	box-shadow: 0 0 10px #fff !important;
-}
-
 .clearfix {clear: both;}
 .card-body-1 .card-title {
-    color: white;
+    color: #A5C4D8;
     text-align: center;
-    border-bottom: 1.5px solid#5ab2ff;
-    font-weight: 900;
-    padding: 12px;
-    font-size: 15.2px;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    border-bottom: 1px solid rgb(140, 204, 239);
+    font-weight: bold;
+    padding: 15px;
 }
 
 
@@ -276,163 +233,41 @@ h1 {
     font-weight: normal;
 }
 
-.delete-button {
-    margin: 0 auto;
-    width: 97%;
-    font-size: 12px;
-    text-align: center;
-    margin-bottom: 10px;
-    height: 2em;
-    background: rgb(15, 15, 15);
-    border: 1px solid rgb(70, 70, 70);
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-}
-
-.delete-button:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25)
-}
-
-.play-button {
-    color: white;
-    font-size: 12px;
-    width: 97%;
-    height: 2em;
-    margin: 0 auto;
-    margin-bottom: 5px;
-    display: table;
-    text-align: center;
-    background: rgb(15, 15, 15);
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-    border: 1px solid rgb(70, 70, 70);
-}
-
-.play-button:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25)
-}
-
-.create-button {
-    color: white;
-    font-size: 12px;
-    width: 97%;
-    height: 2em;
-    margin: 0 auto;
-    margin-bottom: 5px;
-    display: table;
-    text-align: center;
-    background: rgb(15, 15, 15);
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-    border: 1px solid rgb(70, 70, 70);
-}
-
-.create-button:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25)
-}
-
-.btn-confirmdelete {
-    font-size: 15px;
-    display: inline-block;
-    border: 1px solid rgb(70, 70, 70);
-    background-color: rgb(15, 15, 15);
-    color: rgb(180, 0, 0);
-    text-align: center;
-    width: 100%;
-    height: 40px;
-    padding: 7px 15px;
-    position: relative;
-    margin-top: 8%;
-    box-shadow: 0 0 5px 3px black;
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-}
-.btn-confirmdelete:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25);
-
-}
-
-#disconnect {
-    position: absolute;
-    margin-left: 10px;
-    top: 25px;
-    transform: translateY(-50%);  
-    text-align: center;
-    width: 100px;
-    font-size: 12px;
-    background: rgb(15, 15, 15);
-    border: 1px solid rgb(70, 70, 70);
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-    padding: 2px;
-    color: rgb(180, 0, 0);
-}
-
-#disconnect:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25);
-    color: red;
-}
-
-#disconnect2 {
-    position: absolute;
-    margin-left: 15px;
-    top: 25px;
-    transform: translateY(-50%);  
-    text-align: center;
-    width: 100px;
-    font-size: 12px;
-    background: rgb(15, 15, 15);
-    border: 1px solid rgb(70, 70, 70);
-    transition: box-shadow 0.2s ease-in, background 0.2s ease-in;
-    padding: 2px;
-    color: rgb(180, 0, 0);
-}
-
-#disconnect2:hover {
-    box-shadow: 0 0 2px 0.5px white inset;
-    background: rgb(25, 25, 25);
-    color: red;
-}
-
 .modal {
-    top: 25%;
+    top: 30%;
 }
 
 .lds-spinner {
     color: black;
     text-align: center;
-    font-size: 13.5px;
+    font-size: 1.3em;
     position: fixed;
     z-index: 99;
-    left: calc(52% - 135px);
-    top: calc(19% - 50px);
-    width: 200px;
-    height: 160px;
+    left: calc(50% - 125px);
+    top: calc(50% - 55px);
+    height: 110px;
+    width: 250px;
 }
 
 .lds-spinner p {
     position: absolute;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    font-family: "Segoe UI", sans-serif;
     bottom: 15px;
-    top: 105px;
+    width: 100%;
+    margin-top: 85px;
     font-weight: 600;
     text-align: center;
     color: white;
-    left:50px;
-    text-shadow:
-    -1px -1px 0 black,
-    1px -1px 0 black,
-    -1px 1px 0 black,
-    1px 1px 0 black;
 }
 
 .lds-spinner .spinner {
     display: inline-block;
+    margin-left: -25%;
 }
 
 .lds-spinner div {
     transform-origin: 32px 32px;
-    animation: lds-spinner 1s linear infinite;
+    animation: lds-spinner 1.2s linear infinite;
 }
 
 .lds-spinner div:after {
@@ -443,7 +278,8 @@ h1 {
     left: 29px;
     width: 5px;
     height: 14px;
-    background: #5ab2ff;
+    background: rgb(140, 204, 239);
+    border: 20%;
     border: 1px solid black;
 }
 
@@ -517,3 +353,267 @@ h1 {
     }
 }
 
+.delete-button {
+    width: 15% !important;
+    border: 1px solid rgb(194, 59, 66);
+    color: #252525;
+    padding: 4px 7px;
+    background-color: (0,0,0,0);
+    color: #fff;
+    display: inline-block;
+    font-family: 'Montserrat',sans-serif;
+    font-size: 15px !important;
+    text-align: center;
+}
+
+.delete-button:hover {
+    background-color: rgb(194, 59, 66);;
+    color: white;
+    cursor: pointer;
+}
+
+.play-button {
+    width:  15% !important;
+    border: 1px solid rgb(19, 122, 15);
+    color: #fff;
+    padding: 4px 7px;
+    background-color: (0,0,0,0);
+    display: inline-block;
+    font-family: 'Montserrat',sans-serif;
+    font-size: 15px !important;
+    text-align: center;
+}
+
+.play-button:hover {
+    background-color: rgb(30, 182, 25);
+    color: #fff;
+    cursor: pointer;
+}
+
+.create-button {
+    width: 15% !important;
+    border: 1px solid rgb(76, 111, 226);
+    color: #252525;
+    padding: 4px 7px;
+    background-color: (0,0,0,0);
+    color: #fff;
+    display: inline-block;
+    font-family: 'Montserrat',sans-serif;
+    font-size: 15px !important;
+    text-align: center;
+}
+
+.create-button:hover {
+    background-color: rgb(76, 111, 226);
+    color: #fff;
+    cursor: pointer;
+}
+
+.btn-confirmdelete {
+    font-family: 'Roboto';
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: inline-block;
+    background-color: rgb(28, 28, 28);
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    padding: 7px 10px;
+    color: #ffffff;
+    border-radius: 3px;
+    position: relative;
+    margin-top: 8%;
+}
+.btn-confirmdelete:hover {
+    background-color: rgba(226, 74, 74, 0.8);
+}
+
+.character-info-wrapper {
+    position: relative;
+    vertical-align: top;
+    max-width: 60%;
+    display: inline-block
+}
+
+.button-wrapper {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+    vertical-align: bottom;
+    text-align: right;
+}
+
+.button-wrapper-fullwidth {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, 0);
+    text-align: center;
+    vertical-align: middle;
+    margin:0 auto;
+}
+
+.uppercase {
+    text-transform: capitalize;
+}
+
+.card-without-player{
+    width: 100%;
+    height: 100%;
+}
+
+.card-with-player {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    margin: 0 auto;
+}
+
+.character-container {
+    display: none;
+}
+
+.character-container h1 {
+    font-family: 'Montserrat',sans-serif;
+    text-transform: uppercase;
+    text-overflow: clip;
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.accordion {
+    position: absolute;
+    top: 0;
+    left: auto;
+    right: auto;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.accordion .accordion-wrapper {
+    width: 100%;
+    display: table;
+    table-layout: fixed;
+    margin: 0;
+    padding: 0;
+}
+.accordion .accordion-wrapper .col {
+    display: table-cell;
+    vertical-align: bottom;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+    transition: all 500ms ease;
+    padding: 0;
+    margin: 0;
+    background-color:rgb(0, 0, 0, 0);
+}
+
+.accordion .accordion-wrapper .col .col-wrapper {
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
+.accordion .accordion-wrapper .col .col-wrapper > a {
+    display: block;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+    padding: 15px;
+    box-sizing: border-box;
+    color: #fff;
+    text-decoration: none;
+    font-family: Open Sans, sans-serif;
+    transition: all 200ms ease;
+}
+.accordion .accordion-wrapper .col .col-wrapper > a * {
+    opacity: 0;
+    margin: 0;
+    width: 100%;
+    text-overflow: ellipsis;
+    z-index: 5;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-transform: translateX(-20px);
+    transform: translateX(-20px);
+    -webkit-transition: all 400ms ease;
+    transition: all 400ms ease;
+}
+
+.accordion .accordion-wrapper .col:nth-child(1) {
+    background-image: url("../img/frenzy_bg_2.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+.accordion .accordion-wrapper .col:nth-child(2) {
+    background-image: url("../img/frenzy_bg_3.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+.accordion .accordion-wrapper .col:nth-child(3) {
+    background-image: url("../img/frenzy_bg_4.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+.accordion .accordion-wrapper .col:nth-child(4) {
+    background-image: url("../img/frenzy_bg_5.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+.accordion .accordion-wrapper .col:nth-child(5) {
+    background-image: url("../img/frenzy_bg_6.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+.accordion .accordion-wrapper .col:nth-child(6) {
+    background-image: url("../img/frenzy_bg_8.jpg");
+    background-size: cover;
+    background-position: center center;
+}
+
+.accordion .accordion-wrapper:hover .col
+.accordion .accordion-wrapper:focus-within .col {
+    width: 8%;
+}
+.accordion .accordion-wrapper .col:focus {
+    outline: none;
+}
+.accordion .accordion-wrapper:hover .col:hover,
+.accordion .accordion-wrapper .col:focus, .accordion .accordion-wrapper:focus-within .col:focus {
+    width: 60%;
+}
+.accordion .accordion-wrapper:hover .col:hover a,
+.accordion .accordion-wrapper .col:focus a, .accordion .accordion-wrapper:focus-within .col:focus a {
+    background: rgba(0, 0, 0, 0.4);
+}
+.accordion .accordion-wrapper:hover .col:hover a *,
+.accordion .accordion-wrapper .col:focus a *, .accordion .accordion-wrapper:focus-within .col:focus a * {
+    opacity: 1;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}
+.accordion .accordion-wrapper:hover .col {
+    width: 8% !important;
+}
+.accordion .accordion-wrapper:hover .col > a * {
+    opacity: 0 !important;
+}
+.accordion .accordion-wrapper:hover .col:hover {
+    width: 60% !important;
+}
+.accordion .accordion-wrapper:hover .col:hover > a {
+    background: rgba(0, 0, 0, 0.4);
+}
+.accordion .accordion-wrapper:hover .col:hover > a * {
+    opacity: 1 !important;
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+}

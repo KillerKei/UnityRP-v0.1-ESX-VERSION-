@@ -314,8 +314,8 @@ commands['info'].perm = 0
 commands['info'].arguments = -1
 commands['info'].cmd = function(source, args, user)
 	local Source = source
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Version: ^2 " .. _VERSION)
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 2))
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Version: ^2 " .. _VERSION)
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 2))
 end
 
 -- Dev command, no need to ever use this.
@@ -327,10 +327,10 @@ commands["devinfo"].cmd = function(source, args, user)
 	local Source = source
 	local db = "CouchDB"
 	if GetConvar('es_enableCustomData', 'false') == "1" then db = "Custom" end
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Version: ^2 " .. _VERSION)
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Groups: ^2 " .. (returnIndexesInTable(groups) - 1))
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Database: ^2 " .. db)
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-base^2]^0 Logging enabled: ^2 " .. tostring(settings.defaultSettings.enableLogging))
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Version: ^2 " .. _VERSION)
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Groups: ^2 " .. (returnIndexesInTable(groups) - 1))
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Database: ^2 " .. db)
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3urp-core^2]^0 Logging enabled: ^2 " .. tostring(settings.defaultSettings.enableLogging))
 end
 commands["devinfo"].callbackfailed = function(source, args, user)end

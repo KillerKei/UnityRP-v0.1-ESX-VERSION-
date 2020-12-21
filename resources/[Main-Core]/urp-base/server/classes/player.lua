@@ -215,7 +215,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 		end
 	end
 
-	-- Returns the players identifier used in urp-base
+	-- Returns the players identifier used in urp-core
 	rTable.getIdentifier = function(i)
 		return self.identifier
 	end
@@ -235,7 +235,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 		return self[k]
 	end
 
-	-- Creates globals, pretty nifty function take a look at https://docs.urp-base.com for more info
+	-- Creates globals, pretty nifty function take a look at https://docs.urp-core.com for more info
 	rTable.setGlobal = function(g, default)
 		self[g] = default or ""
 

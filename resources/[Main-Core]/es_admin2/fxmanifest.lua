@@ -12,4 +12,4 @@ files {
 	'ui/style.css'
 }
 
-dependency 'urp-base'
+dependency 'urp-core'

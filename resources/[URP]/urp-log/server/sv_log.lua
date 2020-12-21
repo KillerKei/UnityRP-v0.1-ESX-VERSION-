@@ -46,7 +46,7 @@ function sendToDiscord(name, message, color)
               ["title"] = "**".. name .."**",
               ["description"] = message,
               ["footer"] = {
-                  ["text"] = "Developed with ❤️ By Tristen L.",
+                  ["text"] = "Developed with ❤️ By URP Development Team.",
               },
           }
       }

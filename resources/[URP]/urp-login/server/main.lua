@@ -19,88 +19,71 @@ local IdentifierTables = {
     {table = "__motels", column = "cid"},
 }
 
-RegisterServerEvent("kashactersS:SetupCharacters")
-AddEventHandler('kashactersS:SetupCharacters', function()
+RegisterServerEvent("urp-login:SetupCharacters")
+AddEventHandler('urp-login:SetupCharacters', function()
     local src = source
     local LastCharId = GetLastCharacter(src)
     SetIdentifierToChar(GetPlayerIdentifiers(src)[1], LastCharId)
     local Characters = GetPlayerCharacters(src)
-    TriggerClientEvent('kashactersC:SetupUI', src, Characters)
-    TriggerClientEvent('updatecid', src, GetPlayerIdentifiers(src)[1])
+    TriggerClientEvent('urp-login:SetupUI', src, Characters)
 end)
 
-RegisterServerEvent("kashactersS:CharacterChosen")
-AddEventHandler('kashactersS:CharacterChosen', function(charid, ischar, spawnid)
+RegisterServerEvent("urp-login:CharacterChosen")
+AddEventHandler('urp-login:CharacterChosen', function(charid, ischar, spawnid)
 	local spid = spawnid
     local src = source
-    if type(charid) == "number" and type(ischar) == "boolean" then
-        local spawn = {}
-        SetLastCharacter(src, tonumber(charid))
-        SetCharToIdentifier(GetPlayerIdentifiers(src)[1], tonumber(charid))
-        if ischar then
-
-            if spid=="1" then
-                spawn = GetSpawnPos(src)
-            elseif spid=="2" then
-                --Stab city
-                spawn = { x = 101.0187, y = -1713.761, z = 30.11242 }
-            elseif spid=="3" then
-                --Sandy Shores
-                spawn = { x = 101.0187, y = -1713.761, z = 30.11242 }
-            elseif spid=="4" then
-                --paleto
-                spawn = { x = 101.0187, y = -1713.761, z = 30.11242 }
-            else
-                spawn = GetSpawnPos(src)
-            end
-            if spawn.x == nil then
-                spawn = { x = 101.0187, y = -1713.761, z = 30.11242 }
-            end
-            TriggerClientEvent("kashactersC:SpawnCharacter", src, spawn)
-            TriggerClientEvent('updatecid', src, GetPlayerIdentifiers(src)[1])
-        else --default spawn mode
-
-            spawn = { x = 101.0187, y = -1713.761, z = 30.11242 } -- DEFAULT SPAWN POSITION -- EDIT THIS
-            TriggerClientEvent("kashactersC:SpawnCharacter", src, spawn,true)
-        end
-    end
-end)
-
-RegisterServerEvent('kashactersS:Yeet')
-AddEventHandler('kashactersS:Yeet', function()
-    local src = source
     local spawn = {}
+    SetLastCharacter(src, tonumber(charid))
+    SetCharToIdentifier(GetPlayerIdentifiers(src)[1], tonumber(charid))
+    if ischar == "true" then
 
-    spawn = GetSpawnPos(src)
-    TriggerClientEvent('kashactersC:ChoseCharacter', src, spawn)
-end)
+        if spid=="1" then
+			spawn = GetSpawnPos(src)
+        elseif spid=="2" then
+            --Stab city
+            spawn = { x = 198.79, y = -934.32, z = 30.68 }
+        elseif spid=="3" then
+            --Sandy Shores
+            spawn = { x = 1556.18, y = 3609.20, z = 35.43 }
+        elseif spid=="4" then
+            --paleto
+            spawn = { x = -687.73, y = 5768.60, z = 17.33 }
+        else
+            spawn = GetSpawnPos(src)
+        end
+		if spawn.x == nil then
+			-- print("spawn its nill setting default")
+			spawn = { x = -1045.42, y = -2750.85, z = 22.31 }
+		end
+		TriggerClientEvent("urp-login:SpawnCharacter", src, spawn)
+    else --default spawn mode
 
-RegisterServerEvent("kashactersS:Register")
-AddEventHandler('kashactersS:Register', function(charid)
-    local src = source
-    if type(charid) == "number" then 
-        GetIdentifierWithSteam(GetPlayerIdentifiers(src)[1], charid)
-        TriggerClientEvent("kashactersC:ReloadCharacters", src)
+		
+        spawn = { x = -1045.42, y = -2750.85, z = 22.31 } -- DEFAULT SPAWN POSITION -- EDIT THIS
+		TriggerClientEvent("urp-login:SpawnCharacter", src, spawn,true)
     end
 end)
 
-RegisterServerEvent("kashactersS:DeleteCharacter")
-AddEventHandler('kashactersS:DeleteCharacter', function(charid)
+-- RegisterCommand('logout', function(source, args, rawCommand)
+--     local player = GetPlayerPed(-1)
+--     local playerloc = GetEntityCoords(player, 0)
+--     local logoutspot = vector3(1018.3767089844, -2523.2868652344, 2.1543624401093)
+--     local distance = GetDistanceBetweenCoords(logoutspot['x'], logoutspot['y'], logoutspot['z'], playerloc['x'], playerloc['y'], playerloc['z'], true)
+
+--     --TriggerEvent("urp-login:SaveSwitchedPlayer")
+--     TriggerClientEvent('urp-login:ReloadCharacters', source)
+-- end)
+
+RegisterServerEvent("urp-login:DeleteCharacter")
+AddEventHandler('urp-login:DeleteCharacter', function(charid)
     local src = source
     DeleteCharacter(GetPlayerIdentifiers(src)[1], charid)
-    TriggerClientEvent("kashactersC:ReloadCharacters", src)
-    TriggerClientEvent('updatecid', src, GetPlayerIdentifiers(src)[1])
+    TriggerClientEvent("urp-login:ReloadCharacters", src)
 end)
 
 function GetPlayerCharacters(source)
     local identifier = GetIdentifierWithoutSteam(GetPlayerIdentifiers(source)[1])
-    local Chars = MySQLAsyncExecute("SELECT * FROM `users` WHERE identifier LIKE '%"..identifier.."%' AND active = 1")
-    for i = 1, #Chars, 1 do
-        charJob = MySQLAsyncExecute("SELECT * FROM `jobs` WHERE `name` = '"..Chars[i].job.."'")
-        charJobgrade = MySQLAsyncExecute("SELECT * FROM `job_grades` WHERE `grade` = '"..Chars[i].job_grade.."'")
-        Chars[i].job = charJob[1].label
-        Chars[i].job_grade = charJobgrade[1].label
-    end
+    local Chars = MySQLAsyncExecute("SELECT * FROM `users` WHERE identifier LIKE '%"..identifier.."%'")
     return Chars
 end
 
@@ -112,10 +95,6 @@ function GetLastCharacter(source)
         MySQLAsyncExecute("INSERT INTO `user_lastcharacter` (`steamid`, `charid`) VALUES('"..GetPlayerIdentifiers(source)[1].."', 1)")
         return 1
     end
-end
-
-function SetLastCharacter(source, charid)
-    MySQLAsyncExecute("UPDATE `user_lastcharacter` SET `charid` = '"..charid.."' WHERE `steamid` = '"..GetPlayerIdentifiers(source)[1].."'")
 end
 
 function SetLastCharacter(source, charid)
@@ -134,18 +113,21 @@ function SetCharToIdentifier(identifier, charid)
     end
 end
 
-function GetIdentifierWithSteam(identifier, charid)
-    MySQLAsyncExecute("UPDATE users SET active = 0 WHERE users.identifier = 'Char"..charid..GetIdentifierWithoutSteam(identifier).."'")
+function DeleteCharacter(identifier, charid)
     for _, itable in pairs(IdentifierTables) do
-        MySQLAsyncExecute("UPDATE `"..itable.table.."` SET `"..itable.column.."` = 0 WHERE `"..itable.column.."` = 'Char"..charid..GetIdentifierWithoutSteam(identifier).."'")
+        MySQLAsyncExecute("DELETE FROM `"..itable.table.."` WHERE `"..itable.column.."` = 'Char"..charid..GetIdentifierWithoutSteam(identifier).."'")
     end
 end
 
 function GetSpawnPos(source)
     local SpawnPos = MySQLAsyncExecute("SELECT `position` FROM `users` WHERE `identifier` = '"..GetPlayerIdentifiers(source)[1].."'")
-    return json.decode(SpawnPos[1].position)
+	if SpawnPos[1].position ~= nil then
+		return json.decode(SpawnPos[1].position)
+	else
+		local spawn = { x = -1045.42, y = -2750.85, z = 22.31 }
+		return spawn
+	end
 end
-
 
 function GetIdentifierWithoutSteam(Identifier)
     return string.gsub(Identifier, "steam", "")
@@ -163,9 +145,3 @@ function MySQLAsyncExecute(query)
     end
     return result
 end
-
-RegisterNetEvent("urp-login:disconnectPlayer")
-AddEventHandler("urp-login:disconnectPlayer", function()
-    local src = source
-    DropPlayer(src, 'Disconnected!')
-end)

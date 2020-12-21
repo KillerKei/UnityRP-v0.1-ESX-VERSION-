@@ -1,17 +1,20 @@
 URPCore              = nil
-
 local PlayerData = {}
-
 Citizen.CreateThread(function()
-    while URPCore == nil do
-        Citizen.Wait(200)
+	while URPCore == nil do
 		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
+		Citizen.Wait(0)
 	end
+end)
+
+RegisterNetEvent('urp:playerLoaded')
+AddEventHandler('urp:playerLoaded', function(xPlayer)
+  PlayerData = xPlayer   
 end)
 
 RegisterNetEvent('urp:setJob')
 AddEventHandler('urp:setJob', function(job)
-	PlayerData.job = job
+  PlayerData.job = job
 end)
 
 
@@ -20,54 +23,78 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         if NetworkIsSessionStarted() then
             Citizen.Wait(500)
-			--TriggerServerEvent("kashactersS:SetupCharacters")
+           --TriggerServerEvent("urp-login:SetupCharacters")
 			TriggerServerEvent("urp-scoreboard:AddPlayer")
 			TriggerServerEvent('urp-admin:AddPlayer')
-			TriggerEvent("kashactersC:WelcomePage")
-			TriggerEvent("kashactersC:SetupCharacters")
+			TriggerEvent("urp-login:WelcomePage")
+			TriggerEvent("urp-login:SetupCharacters")
             return -- break the loop
         end
     end
 end)
 
-RegisterNetEvent('urp-login:swapcharacter')
-AddEventHandler('urp-login:swapcharacter', function()
-	TriggerEvent("kashactersC:WelcomePage")
-	TriggerEvent("kashactersC:ReloadCharacters")
+local IsChoosing = true
+Citizen.CreateThread(function ()
+    while true do
+        Citizen.Wait(0)
+		if IsChoosing then
+			TriggerScreenblurFadeIn(0)
+		end
+
+		if Logout then
+			for i=1, #Config.Logouts, 1 do
+				local player = GetPlayerPed(-1)
+				local playerloc = GetEntityCoords(player, 0)
+				local logoutspot = Config.Logouts[i]
+				local logoutdistance = GetDistanceBetweenCoords(logoutspot['x'], logoutspot['y'], logoutspot['z'], playerloc['x'], playerloc['y'], playerloc['z'], true)
+				if logoutdistance <= 8 then
+					DrawText3Ds(logoutspot.x,logoutspot.y,logoutspot.z + 0.10, "/logout to swap characters")
+				end
+			end
+		end
+	end
 end)
 
-local IsChoosing = true
+Citizen.CreateThread(function()
+	if Logout then
+		for i=1, #Config.Logouts, 1 do
+			local logoutspot = Config.Logouts[i]
+			local blip = AddBlipForCoord(logoutspot)
+
+			SetBlipSprite(blip, 480)
+			SetBlipDisplay(blip, 4)
+			SetBlipScale(blip, 0.75)
+			SetBlipColour(blip, 4)
+			SetBlipAsShortRange(blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString("Logout")
+			EndTextCommandSetBlipName(blip)
+		end
+	end
+end)
+
 local cam = nil
 local cam2 = nil
-RegisterNetEvent('kashactersC:SetupCharacters')
-AddEventHandler('kashactersC:SetupCharacters', function()
-	TransitionToBlurred(500)
-	local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-    FreezeEntityPosition(GetPlayerPed(-1), true)
-	SetCamRot(cam, 0.0, 0.0, -45.0, 2)
-	SetCamCoord(cam, -682.0, -1092.0, 226.0)
-	SetCamActive(cam, true)
-	RenderScriptCams(true, false, 0, true, true)
+RegisterNetEvent('urp-login:SetupCharacters')
+AddEventHandler('urp-login:SetupCharacters', function()
+    SetTimecycleModifier('hud_def_blur')
+    --FreezeEntityPosition(GetPlayerPed(-1), true)
+    cam = CreateCamWithParams("DEFAULT_SCRIPTED_CAMERA", 256.32,-1055.71,369.89, 300.00,0.00,0.00, 100.00, false, 0)
+    SetCamActive(cam, true)
+    RenderScriptCams(true, false, 1, true, true)
 end)
 
-RegisterNetEvent('kashactersC:WelcomePage')
-AddEventHandler('kashactersC:WelcomePage', function()
+RegisterNetEvent('urp-login:WelcomePage')
+AddEventHandler('urp-login:WelcomePage', function()
     SetNuiFocus(true, true)
 	SendNUIMessage({
         action = "openwelcome"
     })
 end)
 
--- RegisterCommand("AdminTestOkay", function()
--- 	TriggerEvent("hotel:createRoom")
--- end)
-
-local function disconnect()
-    TriggerServerEvent("urp-login:disconnectPlayer")
-end
-
-RegisterNetEvent('kashactersC:SetupUI')
-AddEventHandler('kashactersC:SetupUI', function(Characters)
+RegisterNetEvent('urp-login:SetupUI')
+AddEventHandler('urp-login:SetupUI', function(Characters)
+	IsChoosing = true
     SetNuiFocus(true, true)
     SendNUIMessage({
         action = "openui",
@@ -75,91 +102,82 @@ AddEventHandler('kashactersC:SetupUI', function(Characters)
     })
 end)
 
+RegisterCommand('logout', function(source, args, rawCommand)
+	for i=1, #Config.Logouts, 1 do
+		local player = GetPlayerPed(-1)
+		local playerloc = GetEntityCoords(player, 0)
+		local logoutspot = Config.Logouts[i]
+		local logoutdistance = GetDistanceBetweenCoords(logoutspot['x'], logoutspot['y'], logoutspot['z'], playerloc['x'], playerloc['y'], playerloc['z'], true)
 
-local function nuiCallBack()
-	SetNuiFocus(true, true)
-	SendNUIMessage({
-        disconnect = disconnect()
-	})
-end
-
-RegisterNUICallback("DisconnectGame", nuiCallBack)
-
-
-RegisterNetEvent('kashactersC:SpawnCharacter')
-AddEventHandler('kashactersC:SpawnCharacter', function(spawn, isnew)
-	TriggerServerEvent('es:firstJoinProper')
-	TriggerEvent('es:allowedToSpawn')
-	local pos = spawn
-	Citizen.Wait(0)
-	if isnew then
-		IsChoosing = false
-		SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
-		TriggerEvent('urp-identity:showRegisterIdentity')
-		TriggerEvent("hud:voice:transmitting", false)
-		TriggerEvent('hud:voice:talking', false)
-		SendNUIMessage({
-        action = "displayback"
-		})
-		SetTimecycleModifier('default')
-		FreezeEntityPosition(GetPlayerPed(-1), true)
-		local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
-		SetCamRot(cam, 0.0, 0.0, -45.0, 2)
-		SetCamCoord(cam, -682.0, -1092.0, 226.0)
-		FreezeEntityPosition(GetPlayerPed(-1), false)
-		SetCamActive(cam, true)
-		RenderScriptCams(true, false, 1, true, true)
-		TriggerEvent("hud:voice:transmitting", false)
-		TriggerEvent('hud:voice:talking', false)
-		TriggerScreenblurFadeOut(0)
-	else
-		SetTimecycleModifier('default')
-		local pos = spawn
-		exports.spawnmanager:setAutoSpawn(false)
-		IsChoosing = false
-        TriggerEvent("hotel:createRoom")
-        Citizen.Wait(10)
-        TriggerServerEvent('urp-identity:UpdateJob')
-        TriggerServerEvent('urp-identity:UpdateCid')
-        local cid = exports["isPed"]:isPed("cid")
-		TriggerServerEvent('hotel:load')
-        TriggerServerEvent('refresh', cid)
-		TriggerEvent("DoLongHudText", "Tax is currently set to: 0%", 1)
-		TriggerServerEvent("urp-clothing:get_character_current", source)
-		TriggerServerEvent("urp-clothing:get_character_face", source)
-		TriggerServerEvent("urp-clothing:retrieve_tats", source)
-		TriggerEvent("hud:voice:transmitting", false)
-		TriggerEvent('hud:voice:talking', false)
-		TriggerScreenblurFadeOut(0)
+		--TriggerEvent("urp-login:SaveSwitchedPlayer")
+		if logoutdistance <= 3 then
+			TriggerEvent('ls-radio:onRadioDrop')
+			TriggerEvent('urp-login:ReloadCharacters')
+		end
 	end
 end)
 
-RegisterNetEvent('kashactersC:ChoseCharacter')
-AddEventHandler('kashactersC:ChoseCharacter', function(spawn)
-	local pos = spawn
-	SetEntityCoords(PlayerPedId(), pos.x, pos.y, pos.z)
+RegisterNetEvent('urp-login:SpawnCharacter')
+AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
+	TriggerServerEvent('es:firstJoinProper')
+    TriggerEvent('es:allowedToSpawn')
+    local pos = spawn
+    Citizen.Wait(0)
+    if isnew then
+        IsChoosing = false
+        SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
+        TriggerEvent('irp-identity:showRegisterIdentity')
+        TriggerEvent("hud:voice:transmitting", false)
+        TriggerEvent('hud:voice:talking', false)
+        SendNUIMessage({
+        action = "displayback"
+        })
+        SetTimecycleModifier('default')
+        FreezeEntityPosition(GetPlayerPed(-1), true)
+        local cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
+        SetCamRot(cam, 0.0, 0.0, -45.0, 2)
+        SetCamCoord(cam, -682.0, -1092.0, 226.0)
+        FreezeEntityPosition(GetPlayerPed(-1), false)
+        SetCamActive(cam, true)
+        RenderScriptCams(true, false, 1, true, true)
+        TriggerEvent("hud:voice:transmitting", false)
+        TriggerEvent('hud:voice:talking', false)
+        TriggerScreenblurFadeOut(0)
+    else
+        SetTimecycleModifier('default')
+        local pos = spawn
+        exports.spawnmanager:setAutoSpawn(false)
+        IsChoosing = false
+        Citizen.Wait(5)
+        TriggerEvent("hotel:createRoom")
+        TriggerEvent("DoLongHudText", "Tax is currently set to: 15%", 1)
+        TriggerServerEvent("irp-clothing:get_character_current")
+        TriggerServerEvent("irp-clothing:get_character_face")
+        TriggerServerEvent("irp-clothing:retrieve_tats")
+        TriggerEvent("hud:voice:transmitting", false)
+        TriggerEvent('hud:voice:talking', false)
+        TriggerScreenblurFadeOut(0)
+    end
 end)
 
-RegisterNetEvent('kashactersC:ReloadCharacters')
-AddEventHandler('kashactersC:ReloadCharacters', function()
-    TriggerServerEvent("kashactersS:SetupCharacters")
-    TriggerEvent("kashactersC:SetupCharacters")
+RegisterNetEvent('urp-login:ReloadCharacters')
+AddEventHandler('urp-login:ReloadCharacters', function()
+    TriggerServerEvent("urp-login:SetupCharacters")
+    TriggerEvent("urp-login:SetupCharacters")
 end)
 
 RegisterNUICallback("CharacterChosen", function(data, cb)
     SetNuiFocus(false,false)
-    TriggerServerEvent('kashactersS:CharacterChosen', data.charid, data.ischar, data.spawnid or "1")
+    TriggerServerEvent('urp-login:CharacterChosen', data.charid, data.ischar, data.spawnid or "1")
     cb("ok")
 end)
-
 RegisterNUICallback("DeleteCharacter", function(data, cb)
     SetNuiFocus(false,false)
-    TriggerServerEvent('kashactersS:Register', data.charid)
+    TriggerServerEvent('urp-login:DeleteCharacter', data.charid)
     cb("ok")
 end)
-
 RegisterNUICallback("ShowSelection", function(data, cb)
-	TriggerServerEvent("kashactersS:SetupCharacters")
+	TriggerServerEvent("urp-login:SetupCharacters")
 end)
 
 function DrawText3Ds(x,y,z, text)

@@ -1,6 +1,6 @@
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-description 'ES Extended'
+description 'urp-core'
 
 version '1.1.0'
 
@@ -22,7 +22,17 @@ server_scripts {
 
 	'common/modules/math.lua',
 	'common/modules/table.lua',
-	'common/functions.lua'
+	'common/functions.lua',
+	'server/server-functions/sqlite/SQLite.net.dll',
+	'server/server-functions/sqlite/sqlite.js',
+	'config.lua',
+	'server/server-functions/util.lua',
+	'server/server-functions/main.lua',
+	'server/server-functions/db.lua',
+	'server/server-functions/classes/player.lua',
+	'server/server-functions/classes/groups.lua',
+	'server/server-functions/player/login.lua',
+	'server/server-functions/metrics.lua'
 }
 
 client_scripts {
@@ -43,6 +53,7 @@ client_scripts {
 	'common/modules/math.lua',
 	'common/modules/table.lua',
 	'common/functions.lua',
+	'client/client-functions/main.lua',
 	"@urp-errorlog/client/cl_errorlog.lua"
 }
 
@@ -68,16 +79,24 @@ files {
 }
 
 exports {
-	'getSharedObject'
+	'getSharedObject',
+	'getUser'
 }
 
 server_exports {
 	'getSharedObject',
-	'getCurrentCharacter'
+	'getCurrentCharacter',
+	'getPlayerFromId',
+	'addAdminCommand',
+	'addCommand',
+	'addGroupCommand',
+	'addACECommand',
+	'canGroupTarget',
+	'log',
+	'debugMsg'
 }
 
 dependencies {
 	'mysql-async',
-	'urp-base',
 	'async'
 }

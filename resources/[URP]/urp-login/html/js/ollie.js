@@ -14,35 +14,39 @@ $('.card-with-player').click(function () {
 });
 
 $('.create-button').click(function () {
-
+    $('#loader').css({"display":"block"});
     var chosenCharacterId = $(this).data('character-id');
     var isCharacter = 'false';
 
     $.post("http://urp-login/CharacterChosen", JSON.stringify({
-        charid: Number(chosenCharacterId),
-        ischar: ('false' == false)
+        charid: chosenCharacterId,
+        ischar: 'false'
     }));
     Kashacter.CloseUI();
+    setTimeout(function() {
+        $('#loader').css({"display":"none"});
+        $('body').css({"background-color":"rgba(0,0,0,0)"});
+    }, 5000);
 });
 
 $('.play-button').click(function () {
     $('#load-char').css({"display":"block"});
-
+    $('body').css({"background-color":"rgba(0,0,0,1)"});
     var chosenCharacterId = $(this).data('character-id');
 
     $.post("http://urp-login/CharacterChosen", JSON.stringify({
-        charid: Number(chosenCharacterId),
-        ischar: ('true') == "true"
+        charid: chosenCharacterId,
+        ischar: 'true'
     }));
     Kashacter.CloseUI();
     setTimeout(function() {
         $('#load-char').css({"display":"none"});
+        $('body').css({"background-color":"rgba(0,0,0,0)"});
     }, 5000);
 });
 
-
 $('.delete-button').click(function () {
-
+    $('#loader').css({"display":"block"});
     var chosenCharacterId = $(this).data('character-id');
 
 	if (chosenCharacterId > 0) {
@@ -51,22 +55,24 @@ $('.delete-button').click(function () {
     } else {
 		Kashacter.CloseUI();
 	}
-    
 });
 
-
-
 $("#deletechar").click(function () {
-	
+    $('#loader').css({"display":"block"});
+    $('body').css({"background-color":"rgba(0,0,0,1)"});
 	var chosenCharacterId =  $(this).data('character-id');
-	
+
 	if (chosenCharacterId > 0) {
 		$.post("http://urp-login/DeleteCharacter", JSON.stringify({
-			charid: Number(chosenCharacterId),
+			charid: chosenCharacterId,
 		}));
     }
 
     Kashacter.CloseUI();
+    setTimeout(function() {
+        $('#loader').css({"display":"none"});
+        $('body').css({"background-color":"rgba(0,0,0,0)"});
+    }, 5000);
 });
 
 
@@ -77,7 +83,7 @@ $("#deletechar").click(function () {
     Kashacter = {};
 
     Kashacter.ShowUI = function (data) {
-        $("#main").css("display", "none");
+        $('body').css({"background-color":"rgba(0,0,0,1)"});
         $('.character-container').css('display', 'block');
         if (data.characters !== null) {
             $('.card-with-player').css('display', 'none');
@@ -91,7 +97,9 @@ $("#deletechar").click(function () {
                     var dateString = new Date(char.dateofbirth).toLocaleString('en-US');
                     $('#c-dob-' + charid).html(dateString.substring(0, dateString.length - 12));
                     $('#c-gender-' + charid).html((char.sex === 'm') ? 'Male' : (char.sex === 'f') ? 'Female' : 'Unknown');
+                    var jobGrade = (char.job !== 'Unemployed' && char.job !== 'unemployed') ? + char.job_grade + '' : '';
                     $('#c-job-' + charid).html(char.job);
+                    $('#c-jobrank-' + charid).html(jobGrade);
                     $('#c-height-' + charid).html(char.height + ' cm');
                     $('#c-phone-' + charid).html(char.phone_number);
                     $('#c-bank-' + charid).html('$' + char.bank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
@@ -112,21 +120,23 @@ $("#deletechar").click(function () {
         // $('.play-button').css('display', 'none');
         // $('.delete-button').css('display', 'none');
         $('.card-with-player').css('display', 'none');
-        $("#main").css("display", "none");
         $('.card-without-player').css('display', 'block');
     };
     Kashacter.ShowWelcome = function() {
-         $("#main").css("display", "block");
-         $('.charWelcome').css({"display":"block"});
-         $('#changelog').css({"display":"block"});
-         IsInMainMenu = true
+         //$('.charWelcome').css({"display":"block"});
+        //  $('#changelog').css({"display":"block"});
+        IsInMainMenu = true
     };
-    Kashacter.HideWelcome = function() {
-         $('.charWelcome').css({"display":"none"});
-         $('#changelog').css({"display":"none"});
-         IsInMainMenu = false
-    };
+    // Kashacter.HideWelcome = function() {
+    //      //$('.charWelcome').css({"display":"none"});
+    //     //  $('#changelog').css({"display":"none"});
+    //     IsInMainMenu = false
+    // };
     window.onload = function(e) {
+        $('body').css({"background-color":"rgba(0,0,0,1)"});
+        ShowLoading(true)
+        $.post("http://urp-login/ShowSelection", JSON.stringify({}));
+        ShowLoading(true)
         window.addEventListener('message', function(event) {
             switch(event.data.action) {
                 case 'openui':
@@ -137,19 +147,12 @@ $("#deletechar").click(function () {
                     Kashacter.ShowWelcome();
                     break;
                 case 'displayback':
-                     $('.top-bar2').css({"display":"block"});
-                     $('.bottom-bar2').css({"display":"block"});
+                    $('.top-bar2').css({"display":"block"});
+                    $('.bottom-bar2').css({"display":"block"});
                     $('.BG').css({"display":"block"});
                     break;
             }
         })
-        document.onkeydown = function(data) {
-            if (data.which == 13 && IsInMainMenu) {
-                Kashacter.HideWelcome();
-                $.post("http://urp-login/ShowSelection", JSON.stringify({}));
-                ShowLoading(true)
-            }
-        }
     }
 
 })();
@@ -161,10 +164,4 @@ function ShowLoading(display) {
     } else {
         $("#load-allchar").css("display", "none")
     }
-}
-
-function disconnect(){
-    $.post("http://urp-login/DisconnectGame", JSON.stringify({
-    }));
-    sendNuiMessage({disconnect: true});
 }

@@ -1,10 +1,10 @@
-.character-container {
-    display: none; /* set to none on upload */
-    max-width: 1900px;
-    margin-left: -5px;
-}
+/* .character-container {
+    display: none;
+    max-width: 1650px;
+    margin: 0px auto;
+} */
 
-.mr12 {
+/* .mr12 {
     margin-right: 12px;
 }
 
@@ -21,7 +21,7 @@
     margin-bottom: 20px;
     font-weight: 300;
     font-size: 1.8rem;
-    color: #5ab2ff;
+    color: #fff;
 }
 
 .characterIconContainer {
@@ -31,13 +31,13 @@
 
 .characterIcon {
     font-size: 3rem;
-    color: #5ab2ff;
+    color: #e0e0e0;
     text-align: center;
 }
 
 .infoIcon {
     font-size: 1rem;
-    color: #5ab2ff;
+    color: #b8b8b8;
     width: 22px;
 }
 
@@ -54,8 +54,8 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
     display: none;
-    background-color: rgb(#5ab2ff;
-}
+    background-color: #fff;
+} */
 /* 
 .card:hover {
     cursor: pointer;
@@ -84,7 +84,9 @@
     color: #fff!important;
 } */
 
-.card.chosen-character {
+/* .card.chosen-character {
+    background-color: #3b6dfb;
+    color: #fff;
 }
 
 .card.chosen-character > .card-body > .text-muted {
@@ -105,7 +107,7 @@
 
 .card.chosen-character > .card-body > .list-unstyled > li > .informativeText {
     color: #fff!important;
-}
+} */
 
 /* .play-button {
     display: none;

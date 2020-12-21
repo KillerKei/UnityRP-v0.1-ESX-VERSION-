@@ -63,7 +63,7 @@ function doesLogExist(cb)
 			end
 			cb(exists)
 
-			log('== urp-base started, version ' .. _VERSION .. ' ==')
+			log('== urp-core started, version ' .. _VERSION .. ' ==')
 
 			return
 		end)

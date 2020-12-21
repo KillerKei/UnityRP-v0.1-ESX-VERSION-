@@ -27,26 +27,26 @@ exposedDB = {}
 
 function db.firstRunCheck()
 	if settings.defaultSettings.enableCustomData ~= '1' and settings.defaultSettings.defaultDatabase ~= '1' then
-		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/urp-base/_compact", function(err, rText, headers)
+		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/urp-core/_compact", function(err, rText, headers)
 		end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. auth})
 
-		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/urp-base", function(err, rText, headers)
+		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/urp-core", function(err, rText, headers)
 			if err == 0 then
 				print("-------------------------------------------------------------")
-				print("--- No errors detected, urp-base is setup properly. ---")
+				print("--- No errors detected, urp-core is setup properly. ---")
 				print("-------------------------------------------------------------")
 			elseif err == 412 then
 				print("-------------------------------------------------------------")
-				print("--- No errors detected, urp-base is setup properly. ---")
+				print("--- No errors detected, urp-core is setup properly. ---")
 				print("-------------------------------------------------------------")
 			elseif err == 401 then
 				print("------------------------------------------------------------------------------------------------")
-				print("--- Error detected in authentication, please take a look at your convars for urp-base. ---")
+				print("--- Error detected in authentication, please take a look at your convars for urp-core. ---")
 				print("------------------------------------------------------------------------------------------------")
 				log('== Authentication error with CouchDB ==')
 			elseif err == 201 then
 				print("-------------------------------------------------------------")
-				print("--- No errors detected, urp-base is setup properly. ---")
+				print("--- No errors detected, urp-core is setup properly. ---")
 				print("-------------------------------------------------------------")
 				log('== DB Created ==')			
 			else
@@ -107,7 +107,7 @@ local function getUUID(amount, cb)
 end
 
 local function getDocument(uuid, callback)
-	requestDB('GET', 'urp-base/' .. uuid, nil, nil, function(err, rText, headers)
+	requestDB('GET', 'urp-core/' .. uuid, nil, nil, function(err, rText, headers)
 		local doc =  json.decode(rText)
 
 		if err ~= 200 then
@@ -125,7 +125,7 @@ local function createDocument(doc, cb)
 	if doc == nil or type(doc) ~= "table" then doc = {} end
 
 	getUUID(1, function(uuid)
-		requestDB('PUT', 'urp-base/' .. uuid, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+		requestDB('PUT', 'urp-core/' .. uuid, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 			if err ~= 201 then
 				print('Error occurred while performing database request: could not create document, error code: ' .. err .. ", server returned: " .. rText)
 			else
@@ -153,7 +153,7 @@ local function updateDocument(docID, updates, callback)
 				doc.license = updates.license
 			end
 
-			requestDB('PUT', 'urp-base/' .. docID, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+			requestDB('PUT', 'urp-core/' .. docID, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 				if not json.decode(rText).ok then
 					if err ~= 409 then
 						print('Error occurred while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
@@ -207,7 +207,7 @@ end
 function db.doesUserExist(identifier, callback)
 	if settings.defaultSettings.enableCustomData ~= '1' and settings.defaultSettings.defaultDatabase ~= '1' then
 		if identifier ~= nil and type(identifier) == "string" then
-			requestDB('POST', 'urp-base/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+			requestDB('POST', 'urp-core/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 				if rText then
 					if callback then
 						if json.decode(rText).docs[1] then callback(true) else callback(false) end
@@ -229,7 +229,7 @@ end
 function db.retrieveUser(identifier, callback)
 	if settings.defaultSettings.enableCustomData ~= '1' and settings.defaultSettings.defaultDatabase ~= '1' then
 		if identifier ~= nil and type(identifier) == "string" then
-			requestDB('POST', 'urp-base/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+			requestDB('POST', 'urp-core/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 				local doc =  json.decode(rText).docs[1]
 				if callback then
 					if doc then callback(doc) else callback(false) end

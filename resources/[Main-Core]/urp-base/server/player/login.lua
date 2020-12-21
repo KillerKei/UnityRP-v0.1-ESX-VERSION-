@@ -60,7 +60,7 @@ function getPlayerFromId(id)
 	return Users[id]
 end
 
--- Returns all urp-base user objects
+-- Returns all urp-core user objects
 AddEventHandler('es:getPlayers', function(cb)
 	cb(Users)
 end)

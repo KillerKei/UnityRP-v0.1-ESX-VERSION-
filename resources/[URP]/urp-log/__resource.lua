@@ -1,6 +1,6 @@
 resource_manifest_version "44febabe-d386-4d18-afbe-5e627f4af937"
 
-dependency "urp-base"
+dependency "urp-core"
 
 
 client_script "@urp-errorlog/client/cl_errorlog.lua"
