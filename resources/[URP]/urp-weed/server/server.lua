@@ -63,9 +63,10 @@ AddEventHandler("urp-weed:setStatus2", function()
             ['@id'] = weeds[c].id,
             ['@status'] = status
         }, function(lol) 
-            end)  TriggerEvent("urp-weed:requestTable")
-        end)
-    end
+           TriggerEvent("urp-weed:requestTable")
+          end)
+       end
+   end)
 end)
 
 RegisterServerEvent("urp-weed:killplant")
