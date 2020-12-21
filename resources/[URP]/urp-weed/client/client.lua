@@ -1,9 +1,8 @@
-
-ESX          = nil
+URPCore          = nil
 
 Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+	while URPCore == nil do
+		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
 		Citizen.Wait(0)
 	end
 	while true do
@@ -21,11 +20,11 @@ local crops = {
 
 local inhouse = false
 
-RegisterNetEvent('luck_weed:inhouse')
-AddEventHandler('luck_weed:inhouse', function(st)
+RegisterNetEvent('urp-weed:inhouse')
+AddEventHandler('urp-weed:inhouse', function(st)
 if st then 
 inhouse = true
-TriggerEvent('luck_weed:requestTable')
+TriggerEvent('urp-weed:requestTable')
 else
 inhouse = false
 end
@@ -39,16 +38,16 @@ local cropstatus = {
 Controlkey = {["generalUse"] = {38,"E"},["generalUseSecondaryWorld"] = {23,"F"}} 
 local tohum
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
+RegisterNetEvent('urp:playerLoaded')
+AddEventHandler('urp:playerLoaded', function(xPlayer)
  
-	TriggerServerEvent("luck_weed:requestTable")
+	TriggerServerEvent("urp-weed:requestTable")
     blnPlySpawned = true
 end)
 
 AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() == resourceName) then
-    TriggerServerEvent("luck_weed:setStatus2")
+    TriggerServerEvent("urp-weed:setStatus2")
     blnPlySpawned = true
     end
   end)
@@ -104,7 +103,7 @@ function canGrown()
 local saat =	GetClockHours()
 local dk =	GetClockMinutes()
    if saat == 9 and dk == 0 then	
-	TriggerServerEvent("luck_weed:setStatus2")
+	TriggerServerEvent("urp-weed:setStatus2")
    end
   
 
@@ -115,7 +114,7 @@ function InsertPlant(seed)
 	plyId = PlayerPedId()
 	local strain = seed
     local x,y,z = table.unpack(GetOffsetFromEntityInWorldCoords(plyId, 0.0, 0.4, 0.0))
-    TriggerServerEvent("luck_weed:createplant",x,y,z,strain)
+    TriggerServerEvent("urp-weed:createplant",x,y,z,strain)
 end
 
 
@@ -128,8 +127,8 @@ function DeleteTrees()
 	end
 end
 
-RegisterNetEvent("luck_weed:currentcrops")
-AddEventHandler("luck_weed:currentcrops", function(result)
+RegisterNetEvent("urp-weed:currentcrops")
+AddEventHandler("urp-weed:currentcrops", function(result)
 	local newcrops = {}
 	for i = 1, #result do
         local table = result[i]
@@ -141,8 +140,8 @@ AddEventHandler("luck_weed:currentcrops", function(result)
 end)
 
 
-RegisterNetEvent("luck_weed:startcrop")
-AddEventHandler("luck_weed:startcrop", function(seedType)
+RegisterNetEvent("urp-weed:startcrop")
+AddEventHandler("urp-weed:startcrop", function(seedType)
     local plyId = PlayerPedId()
     local plyCoords = GetEntityCoords(plyId)
     local Seed = "Kush"
@@ -165,11 +164,11 @@ AddEventHandler("luck_weed:startcrop", function(seedType)
     end
 
 	if success and Seed == "Male" then
-		--TriggerServerEvent("luck_weed:RemoveItem", Config.MaleSeed, 1)
-	  -- TriggerServerEvent("luck_weed:RemoveItem", Config.Pot, 1)
+		--TriggerServerEvent("urp-weed:RemoveItem", Config.MaleSeed, 1)
+	  -- TriggerServerEvent("urp-weed:RemoveItem", Config.Pot, 1)
 	else
-	--	TriggerServerEvent("luck_weed:RemoveItem", Config.FemaleSeed, 1)
-	   --TriggerServerEvent("luck_weed:RemoveItem", Config.Pot, 1)
+	--	TriggerServerEvent("urp-weed:RemoveItem", Config.FemaleSeed, 1)
+	   --TriggerServerEvent("urp-weed:RemoveItem", Config.Pot, 1)
 	end
 
 	if success then
@@ -178,8 +177,8 @@ AddEventHandler("luck_weed:startcrop", function(seedType)
 
 end)
 
-RegisterNetEvent("luck_weed:updateplantwithID")
-AddEventHandler("luck_weed:updateplantwithID", function(ids,newPercent,status)
+RegisterNetEvent("urp-weed:updateplantwithID")
+AddEventHandler("urp-weed:updateplantwithID", function(ids,newPercent,status)
 	if status == "alter" then
 		for i = 1, #crops do
 			if(crops[i] ~= nil) then
@@ -310,65 +309,55 @@ Citizen.CreateThread( function()
 					if IsControlJustReleased(2, Controlkey["generalUse"][1]) and #(vector3(crops[close]["x"],crops[close]["y"],crops[close]["z"]-0.3) - plyCoords) < 2.0 and counter == 0 then
 						if crops[close]["growth"] >= 100 then
 							local plyPed = GetPlayerPed(-1)
-							exports["xhen-taskbar"]:taskBar(20000,"Hasat ediliyor")
-							-- exports['progressBars']:startUI(20000, "Hasat Ediliyor")
+							exports["urp-taskbar"]:taskBar(20000,"It's being harvested")
 							TaskStartScenarioInPlace(plyPed, "PROP_HUMAN_BUM_BIN", 0, true)
 							Wait(20000)
 							TaskStartScenarioInPlace(plyPed, "PROP_HUMAN_BUM_BIN", 0, false)
 							Wait(1000)
 							ClearPedTasksImmediately(plyPed)
-                            TriggerServerEvent("luck_weed:requestTable")
-							TriggerServerEvent("luck_weed:killplant",crops[close]["dbID"])
+                            TriggerServerEvent("urp-weed:requestTable")
+							TriggerServerEvent("urp-weed:killplant",crops[close]["dbID"])
 							TriggerEvent("weed:giveitems",crops[close]["strain"])
 						else
 							if crops[close]["status"] == 1 then
-								exports['mythic_notify']:DoHudText('success', 'Bu bitki daha fazla özen gösterilmesini istemiyor!')
+								TriggerEvent("DoLongHudText", "This plant does not want any further attention!", 1)
 							else
-								--ESX.TriggerServerCallback('inventory-checkitem', function(qtty)
-									if crops[close]["strain"] == "Seeded" then
-									--ESX.TriggerServerCallback('luck_weed:qtty', function(qtty2)
-									if exports['xhen-inventory']:hasEnoughOfItem('fertilizer', 1) then
+								if crops[close]["strain"] == "Seeded" then
+									if exports['urp-inventory']:hasEnoughOfItem('fertilizer', 1) then
 										TriggerEvent('inventory:removeItem', 'fertilizer', 1)
-											if exports['xhen-inventory']:hasEnoughOfItem('fertilizer', 1) then 
+											if exports['urp-inventory']:hasEnoughOfItem('fertilizer', 1) then 
 											ClearPedSecondaryTask(PlayerPedId())
 											loadAnimDict( "mp_arresting" ) 
                         					TaskPlayAnim( PlayerPedId(), "mp_arresting", "a_uncuff", 8.0, 1.0, -1, 16, 0, 0, 0, 0 )
-											-- local finished = exports['progressBars']:startUI(5000,"Gübreliyorsun!")
-											local finished = exports["xhen-taskbar"]:taskBar(5000,"Gübreliyorsun")
+											local finished = exports["urp-taskbar"]:taskBar(5000,"You fertilized the plant")
 											Citizen.Wait(5000)
 											Citizen.Wait(850)
 											ClearPedTasks(PlayerPedId())    
 											if math.random(100) > 85 then
-                                	            exports['mythic_notify']:DoHudText('error', 'Bütün gübreyi döktün!')
-												--TriggerEvent('inventory:removeItem', Config.Fertilizer, 1)
+											TriggerEvent("DoLongHudText", "You poured all the manure!", 1)
 											end
 											local new = crops[close]["growth"] + math.random(25,45)
-											TriggerServerEvent("luck_weed:UpdateWeedGrowth",crops[close]["dbID"],new)
+											TriggerServerEvent("urp-weed:UpdateWeedGrowth",crops[close]["dbID"],new)
 										else
-											exports['mythic_notify']:DoHudText('success', 'Bunu yapman için gübre gerekiyor!')
+											TriggerEvent("DoLongHudText", "You need fertilizer to do this!", 1)
                                     end
                                 end
                                 else
-									--ESX.TriggerServerCallback('inventory-checkitem', function(qtty)
-										if exports['xhen-inventory']:hasEnoughOfItem('water', 1) then
-                                       -- if qtty >= 1 then  
-										TriggerEvent('inventory:removeItem', 'water', 1)
-										
-										loadAnimDict( "mp_arresting" ) 
-										TaskPlayAnim( PlayerPedId(), "mp_arresting", "a_uncuff", 8.0, 1.0, -1, 16, 0, 0, 0, 0 )
-										-- local finished = exports['progressBars']:startUI(5000,"Su veriyorsun..")
-										local finished = exports["xhen-taskbar"]:taskBar(5000,"Su veriyorsun..")
-										Citizen.Wait(5000)						
-										Citizen.Wait(850)
-										ClearPedTasks(PlayerPedId())    
-										local new = crops[close]["growth"] + math.random(14,17)
-										TriggerServerEvent("luck_weed:UpdateWeedGrowth",crops[close]["dbID"],new)
+									if exports['urp-inventory']:hasEnoughOfItem('water', 1) then
+                                    -- if qtty >= 1 then  
+									TriggerEvent('inventory:removeItem', 'water', 1)
+									loadAnimDict( "mp_arresting" ) 
+									TaskPlayAnim( PlayerPedId(), "mp_arresting", "a_uncuff", 8.0, 1.0, -1, 16, 0, 0, 0, 0 )
+									local finished = exports["urp-taskbar"]:taskBar(5000,"You give water..")
+									Citizen.Wait(5000)						
+									Citizen.Wait(850)
+									ClearPedTasks(PlayerPedId())    
+									local new = crops[close]["growth"] + math.random(14,17)
+									TriggerServerEvent("urp-weed:UpdateWeedGrowth",crops[close]["dbID"],new)
 									else
-										exports['mythic_notify']:DoHudText('success', 'Bunu yapman için 1 şişe su gerekiyor!')
+									TriggerEvent("DoLongHudText", "You need 1 bottle of water to do this!", 1)
                                     end
                                 end
-								--end
-							--end, Config.Fertilizer)	
 							end
 						end
 						counter = 200
