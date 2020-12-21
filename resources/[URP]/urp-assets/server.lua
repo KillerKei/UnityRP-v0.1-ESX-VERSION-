@@ -1,6 +1,6 @@
 URPCore = nil
 
-TriggerEvent('irp:getSharedObject', function(obj) URPCore = obj end)
+TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
 
 RegisterServerEvent('CrashTackle')
 AddEventHandler('CrashTackle', function(target)
