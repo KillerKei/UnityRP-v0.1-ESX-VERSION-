@@ -398,7 +398,7 @@ input[type="number"]::-webkit-inner-spin-button:hover, input[type="number"]::-we
   position:absolute;
   bottom:0px;
   color:white;
-  background:  rgba(90, 178, 255, 0.75);
+  background: rgba(111,195,111,0.9);
 }
 
 .perfect {
@@ -471,7 +471,7 @@ input[type="number"]::-webkit-inner-spin-button:hover, input[type="number"]::-we
 }
 
 .wrapmain::-webkit-scrollbar-thumb {
-  background: rgba(90, 178, 255, 0.75); !important;
+  background: rgba(111, 111, 185, 0.7) !important;
 }
 
 .wrapsecondary::-webkit-scrollbar {
@@ -479,7 +479,7 @@ input[type="number"]::-webkit-inner-spin-button:hover, input[type="number"]::-we
 }
 
 .wrapsecondary::-webkit-scrollbar-thumb {
-  background:  rgba(90, 178, 255, 0.75); !important;
+  background: rgba(111, 111, 185, 0.7) !important;
 }
 
 .wrapPersonalWeight {

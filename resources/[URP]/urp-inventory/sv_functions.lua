@@ -1,12 +1,3 @@
-URPCore = nil
-
-Citizen.CreateThread(function()
-	while URPCore == nil do
-		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
-		Citizen.Wait(0)
-	end
-end)
-
 RegisterServerEvent('server-inventory-request-identifier')
 AddEventHandler('server-inventory-request-identifier', function()
     local src = source
