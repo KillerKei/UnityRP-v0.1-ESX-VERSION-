@@ -23,7 +23,7 @@ itemList["-2084633992"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "P
 itemList["-270015777"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "ASMG Mk2", price: 250, craft: [ {itemid: "aluminium", amount: 155 }, {itemid: "plastic", amount: 100 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_assault-smg.png", weapon: true, deg: true} //'Assault SMG'
 itemList["-538741184"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Shank", craft: [ {itemid: "methbag", amount: 25 }, {itemid: "ciggy", amount: 100 } ], price: 250, weight: 11, nonStack: true, model: "", image: "np_switchblade.png", weapon: true , deg: true}
 itemList["-619010992"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Tec 9 Mk2", price: 250, weight: 11, craft: [ {itemid: "aluminium", amount: 50 }, {itemid: "plastic", amount: 20 } ], nonStack: true, model: "", image: "np_machine-pistol.png", weapon: true , deg: true}
-itemList["-771403250"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Heavy Pistol", price: 250, craft: [ {itemid: "goldbar", amount: 7 } ], weight: 11, nonStack: true, model:  "", image: "np_heavy-pistol.png", weapon: true, deg: true}
+itemList["-771403250"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Heavy Pistol", price: 250, craft: [ {itemid: "goldbar", amount: 3,  }, {itemid: "aluminium", amount: 50 }, {itemid: "plastic", amount: 10 }, {itemid: "steel", amount: 10 } ],  weight: 11, nonStack: true, model:  "", image: "np_heavy-pistol.png", weapon: true, deg: true}
 itemList["-86904375"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "PD 762", price: 10, craft: [{itemid: "aluminium", amount: 50 }, {itemid: "plastic", amount: 10 }, {itemid: "rubber", amount: 1 }], weight: 11, nonStack: true, model: "", image: "np_762saltmaker.png", weapon: true , deg: true} //'Carbine Rifle'
 itemList["100416529"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Sniper Rifle", price: 250, craft: [ {itemid: "aluminium", amount: 100 }, {itemid: "scrapmetal", amount: 40 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_sniper-rifle.png", weapon: true, deg: true} //'Sniper Rifle'
 itemList["101631238"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Fire Ext", price: 250, craft: [ {itemid: "aluminium", amount: 100 }, {itemid: "scrapmetal", amount: 40 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_fire-extinguisher.png", weapon: true, deg: false} //'Fire Extinguisher'
@@ -34,7 +34,7 @@ itemList["125959754"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Cmp
 itemList["126349499"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Snowball", price: 250, weight: 11, nonStack: true, model: "", image: "np_snowball.png", weapon: true , deg: false}
 itemList["1305664598"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "GND Launcher SMK", price: 250, weight: 11, nonStack: true, model: "", image: "np_grenade-launcher.png", weapon: true , deg: false}
 itemList["1317494643"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Hammer", price: 250, weight: 11, nonStack: true, model: "", image: "np_hammer.png", weapon: true , deg: false}
-itemList["137902532"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Vintage Pistol", price: 250,  craft: [ {itemid: "aluminium", amount: 1 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 } ], weight: 11, nonStack: true, model:  "", image: "np_vintage-pistol.png", weapon: true , deg: true} //'Vintage Pistol'
+itemList["137902532"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Vintage Pistol", price: 250,  craft: [ {itemid: "goldbar", amount: 2 }, {itemid: "steel", amount: 30 }, {itemid: "copper", amount: 10 } ], weight: 11, nonStack: true, model:  "", image: "np_vintage-pistol.png", weapon: true , deg: true} //'Vintage Pistol'
 itemList["1432025498"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "PD Shotgun", price: 10, craft: [{itemid: "aluminium", amount: 5 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 }], weight: 11, nonStack: true, model: "", image: "np_pump-shotgun.png", weapon: true , deg: true} //'Pump Shotgun'
 itemList["1593441988"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Combat Pistol", price: 250,  craft: [ {itemid: "steel", amount: 65 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 } ], weight: 11, nonStack: true, model:  "", image: "np_combat-pistol.png", weapon: true , deg: true} //'Combat Pistol'
 itemList["1627465347"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Gusenberg Mk2", price: 250, craft: [ {itemid: "aluminium", amount: 55 }, {itemid: "plastic", amount: 10 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_gusenberg.png", weapon: true, deg: true} //'Gusenberg'
@@ -64,7 +64,7 @@ itemList["2982836145"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "RP
 itemList["3125143736"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Pipebomb", price: 250, weight: 11, nonStack: true, model: "", image: "np_pipe-bomb.png", weapon: true , deg: false}
 itemList["317205821"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Autoshotgun", price: 250, craft: [ {itemid: "aluminium", amount: 80 }, {itemid: "plastic", amount: 80 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_sweeper-shotgun.png", weapon: true, deg: true} //'Autoshotgun'
 itemList["3173288789"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Skorpion", price: 250, weight: 11, craft: [ {itemid: "valuablegoods", amount: 1 }, {itemid: "goldbar", amount: 4 } ], nonStack: true, model: "", image: "np_mini-smg.png", weapon: true , deg: true}
-itemList["3218215474"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "SNS Pistol", price: 250,  craft: [ {itemid: "scrapmetal", amount: 8 } ],  weight: 11, nonStack: true, model:  "", image: "np_sns-pistol.png", weapon: true, deg: true}
+itemList["3218215474"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "SNS Pistol", price: 250,  craft: [ {itemid: "goldbar", amount: 6 }, {itemid: "aluminium", amount: 50 }, {itemid: "rubber", amount: 20 }, {itemid: "plastic", amount: 10 } ],  weight: 11, nonStack: true, model:  "", image: "np_sns-pistol.png", weapon: true, deg: true}
 itemList["3219281620"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "PD Pistol", price: 10, craft: [{itemid: "aluminium", amount: 1 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 }], weight: 11, nonStack: true, model: "", image: "np_pistol.png", weapon: true , deg: true} //'Pistol'
 itemList["3220176749"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Assault Rifle", price: 250, craft: [ {itemid: "aluminium", amount: 50 }, {itemid: "plastic", amount: 80 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_assault-shotgun.png", weapon: true, deg: true} //'Assault Rifle'
 itemList["3231910285"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Special Carbine", price: 250, weight: 11, nonStack: true, model: "", image: "np_special-carbine.png", weapon: true , deg: true}
@@ -84,7 +84,7 @@ itemList["4192643659"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Bo
 itemList["419712736"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Wrench", price: 250, weight: 11, nonStack: true, model: "", image: "np_wrench.png", weapon: true , deg: false}
 itemList["453432689"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Pistol", price: 250, craft: [{itemid: "aluminium", amount: 1 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 }], weight: 11, nonStack: true, model: "", image: "np_pistol.png", weapon: true , deg: true} //'Pistol'
 itemList["487013001"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "PD Beanbag SG", price: 10, craft: [{itemid: "aluminium", amount: 5 }, {itemid: "plastic", amount: 1 }, {itemid: "rubber", amount: 1 }], weight: 11, nonStack: true, model: "", image: "np_pump-shotgun2.png", weapon: true , deg: true} //'Pump Shotgun'
-itemList["584646201"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "AP Pistol", price: 250, craft: [ {itemid: "valuablegoods", amount: 1 }, {itemid: "goldbar", amount: 1 } ], weight: 11, nonStack: true, model:  "", image: "np_ap-pistol.png", weapon: true, deg: true} //'AP Pistol'
+itemList["584646201"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "AP Pistol", price: 250, craft: [ {itemid: "goldbar", amount: 15 }, {itemid: "aluminium", amount: 60 }, {itemid: "scrapmetal", amount: 60 }, {itemid: "copper", amount: 10 } ], weight: 11, nonStack: true, model:  "", image: "np_ap-pistol.png", weapon: true, deg: true} //'AP Pistol'
 itemList["615608432"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Moly", craft: [ {itemid: "methbag", amount: 35 }, {itemid: "ciggy", amount: 25 } ], price: 250, weight: 11, nonStack: false, model: "", image: "np_molotov.png", weapon: true , deg: false}
 itemList["736523883"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "PD MP5", price: 250, craft: [ {itemid: "aluminium", amount: 155 }, {itemid: "plastic", amount: 100 }, {itemid: "rubber", amount: 1 } ],  weight: 11, nonStack: true, model:  "", image: "np_smg.png", weapon: true , deg: true} //'SMG'
 itemList["741814745"]	= {fullyDegrades: false, decayrate: 2.0, displayname: "Sticky Bomb", price: 250, craft: [ {itemid: "aluminium", amount: 150 }, {itemid: "scrapmetal", amount: 150 }, {itemid: "rubber", amount: 100 } ],  weight: 11, nonStack: true, model:  "", image: "np_sticky-bomb.png", weapon: true, deg: false} //'Sticky Bomb'
@@ -160,11 +160,9 @@ itemList["weedoz"]	    = {fullyDegrades: true, illegal: true, decayrate: 0.3, di
 itemList["weedq"]	    = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Weed Q", craft: [{itemid: "weedoz", amount: 0.25 }], price: 65, weight: 2, nonStack: false, model: "", image: "np_weed-oz.png", information: "Lowers Stress" , deg: false}
 
 
-itemList["wetbud"] = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Wet Bud (2 Grams)", price: 30, weight: 5, nonStack: false, model: "", image: "wet.png", information: "Dry It?" , deg: false}
+itemList["smallbud"] = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Loose Bud (2 Grams)", price: 30, weight: 3, nonStack: false, model: "", image: "buddry.png", information: "Sell It?" , deg: false}
 
-itemList["driedbud"] = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Dried Bud (2 Grams)", price: 30, weight: 2, nonStack: false, model: "", image: "buddry2.png", information: "Dry It?" , deg: false}
-
-itemList["smallbud"] = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Packed Bud (2 Grams)", price: 30, weight: 2, nonStack: false, model: "", image: "buddry.png", information: "Sell It?" , deg: false}
+itemList["wetbud"] = {fullyDegrades: true, illegal: true, decayrate: 0.3, displayname: "Wet Bud", price: 30, weight: 5, nonStack: false, model: "", image: "wet.png", information: "Dry It?" , deg: false}
 
 
 itemList["joint2"]	    = {fullyDegrades: true, illegal: true, decayrate: 0.75, displayname: "2g Joint", craft: [ {itemid: "smallbud", amount: 1.0 }, {itemid: "rollingpaper", amount: 1 } ], price: 20, weight: 0,   nonStack: false, model: "", image: "np_joint.png", information: "Its a Joint, man. ", deg: false}
@@ -295,7 +293,7 @@ itemList["bakingsoda"]	= {fullyDegrades: true, decayrate: 0.01, displayname: "Ba
 
 itemList["bleederburger"]	= {fullyDegrades: true, decayrate: 0.01, displayname: "The Bleeder", price: 50,      weight: 1,   nonStack: false, model: "", image: "np_the-bleeder.png", information: "Sates Hunger and reduces stress." , deg: false}
 
-itemList["water"]	    = {fullyDegrades: true, decayrate: 0.01, displayname: "Water", price: 5, weight: 1, craft: [{itemid: "foodingredient", amount: 1 } ], nonStack: false, model: "", image: "np_water.png", information: "Sates Thirst" , deg: false}
+itemList["water"]	    = {fullyDegrades: false, decayrate: 0.00, displayname: "Water", price: 5, weight: 1, craft: [{itemid: "foodingredient", amount: 1 } ], nonStack: false, model: "", image: "np_water.png", information: "Sates Thirst" , deg: false}
 
 itemList["hotdog"]	    = {fullyDegrades: true, decayrate: 0.01, displayname: "Hot Dog", craft: [{itemid: "foodingredient", amount: 1 } ], price: 10, weight: 12, nonStack: false, model:  "", image: "np_hotdog.png", information: "Dont ask what is in it" , deg: false}
 
@@ -309,7 +307,7 @@ itemList["torpedo"]	    = {fullyDegrades: true, decayrate: 0.01, displayname: "T
 
 itemList["treat"]	    = {fullyDegrades: true, decayrate: 0.01, displayname: "Dog Treat", price: 69, weight: 0, nonStack: false, model:  "", image: "np_treat.png", information: "Feed to dog", deg: false }
 
-itemList["hamburger"]	= {fullyDegrades: true, decayrate: 0.01, displayname: "Hamburger", price: 5, weight: 1, nonStack: false, model: "", image: "np_hamburger.png", information: "Sates Hunger" , deg: false}
+itemList["hamburger"]	= {fullyDegrades: true, decayrate: 0.01, displayname: "Hamburger", craft: [{itemid: "foodingredient", amount: 1 } ], price: 5, weight: 1, nonStack: false, model: "", image: "np_hamburger.png", information: "Sates Hunger" , deg: false}
 
 itemList["weedtaco"]	    = {fullyDegrades: true, decayrate: 0.00012, displayname: "Delivery", craft: [{itemid: "foodingredient", amount: 1 } ], price: 10, weight: 5, nonStack: false, model: "", image: "np_paperbag.png", information: "This aint free taco.", deg: false}
 
@@ -561,7 +559,7 @@ itemList["holyhum"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Holy
 itemList["homme"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "L'Homme Qui Marche", price: 1, weight: 0, nonStack: false, model: "", image: "np_lhomme-qui-marche.png", information: "Giacometti 1960", deg: false }
 itemList["horchata"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Horchata", price: 1, weight: 0, nonStack: false, model: "", image: "np_horchata.png", information: "A la gran puchica!", deg: false }
 itemList["icbelt"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Intercontinental Belt", price: 1, weight: 0, nonStack: false, model: "", image: "np_intercontinental-belt.png", information: "Bah gawd!", deg: false }
-itemList["idcard"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Citizen Card", price: 500, weight: 0, nonStack: true, model: "", image: "np_citizen-card.png" , deg: false}
+itemList["idcard"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Citizen Card", price: 25, weight: 0, nonStack: true, model: "", image: "np_citizen-card.png" , deg: false}
 itemList["IFAK"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "IFAK", price: 500, weight: 0, nonStack: false, model: "", image: "ifak.png", information: "Heals you over time and clots wounds." , deg: false}
 itemList["inkedmoneybag"] = {fullyDegrades: false, illegal: true, decayrate: 0.0, displayname: "Inked Money Bag", price: 100000, weight: 35, nonStack: false, model: "", image: "np_inked-money-bag.png", information: "This belongs to the Vault Bank" , deg: false}
 itemList["inkset"]	    = {fullyDegrades: false, illegal: true, decayrate: 0.0, displayname: "Inked Set", price: 500, weight: 15, nonStack: false, model: "", image: "np_inked-money-bag.png" , deg: false}
@@ -651,7 +649,7 @@ itemList["pupusas"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Pupu
 itemList["purpleb"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Purple Bandana", price: 1, weight: 0, nonStack: false, model:  "", image: "np_purple-bandana.png", information: "Straight outta da cul-de-sac", deg: false }
 itemList["qhearts"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Queen of Hearts", price: 1, weight: 0, nonStack: false, model: "", image: "np_queen-of-hearts.png", information: "Off with their heads!", deg: false }
 itemList["qualityscales"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "High Quality Scales", craft: [{itemid: "aluminium", amount: 25 }, {itemid: "plastic", amount: 10 }, {itemid: "rubber", amount: 1 }], price: 1000, weight: 2, nonStack: false, model: "", image: "np_high-quality-scales.png", information: "Weighs Baggies with no loss" , deg: false}
-itemList["radio"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Radio", craft: [{itemid: "electronics", amount: 30 }, {itemid: "plastic", amount: 5 }, {itemid: "rubber", amount: 1 }], price: 1000, weight: 3, nonStack: false, model: "", image: "np_radio.png", information: "Used to chat with other people on private radio channels." , deg: false}
+itemList["radio"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Radio", craft: [{itemid: "electronics", amount: 30 }, {itemid: "plastic", amount: 5 }, {itemid: "rubber", amount: 1 }], price: 250, weight: 3, nonStack: false, model: "", image: "np_radio.png", information: "Used to chat with other people on private radio channels." , deg: false}
 itemList["rbumper"] = {fullyDegrades: false,  decayrate: 0.0, displayname: "Rear Bumper", price: 1, weight: 0, nonStack: false, model: "", image: "np_rear-bumper.png", information: "You owe me a ten second car", deg: false }
 itemList["recoupon10"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "10% Off Deal", price: 1, weight: 0, nonStack: false, model:  "", image: "np_recoupon10.png", information: "May not be used for drugs" , deg: false}
 itemList["recoupon15"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "15% Off Deal", price: 1, weight: 0, nonStack: false, model:  "", image: "np_recoupon15.png", information: "We are not liable for any raids or robberies" , deg: false}
@@ -823,3 +821,30 @@ itemList["humannail"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: 
 itemList["humanpancreas"]   = {fullyDegrades: false, decayrate: 2.0, displayname: "Human Pancreas", price: 1, weight: 2, nonStack: true, model:  "", image: "np_humanpancreas.png", information: "A bloody pancreas.", deg: false }
 itemList["humantongue"]	    = {fullyDegrades: false, decayrate: 2.0, displayname: "Human Tongue", price: 1, weight: 1, nonStack: true, model:  "", image: "np_humantongue.png", information: "A tongue without its human.", deg: false }
 itemList["humantooth"]	    = {fullyDegrades: false, decayrate: 0.0, displayname: "Human Tooth", price: 1, weight: 0, nonStack: true, model:  "", image: "np_humantooth.png", information: "A single tooth with root and all.", deg: false }
+
+// Chicken Job
+
+itemList["alive_chicken"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Alive Chicken", price: 1, weight: 2, nonStack: false, model:  "", image: "alive_chicken.png", information: "Wow a alive chicken!", deg: false }
+itemList["slaughtered_chicken"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Slaughtered Chicken", price: 1, weight: 2, nonStack: false, model:  "", image: "slaughtered_chicken.png", information: "Wow a slaughtered chicken!", deg: false }
+itemList["packaged_chicken"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Packaged Chicken", price: 1, weight: 2, nonStack: false, model:  "", image: "packaged_chicken.png", information: "Wow a packaged chicken!", deg: false }
+
+// Mining Job
+
+itemList["stone"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Stone", price: 1, weight: 0, nonStack: true, model:  "", image: "np_supplycrate_large.png", information: "You completed step 1 to mining head to step 2!", deg: false }
+itemList["washedstone"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Washed Stone", price: 1, weight: 0, nonStack: true, model:  "", image: "np_supplycrate_large.png", information: "You completed step 2 to mining head to step 3!", deg: false }
+
+// Illegal Crafting
+
+itemList["rasperry"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Hacking Kit", craft: [ {itemid: "electronics", amount: 60 }, {itemid: "plastic", amount: 30 }, {itemid: "steel", amount: 35 }, {itemid: "glass", amount: 5 } ], price: 5, weight: 0, nonStack: false, model:  "", image: "rasperry.png", information: "A small tool that allows you to access certian things!", deg: false }
+itemList["c4_bank"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "C4 Explosive", craft: [ {itemid: "aluminium", amount: 300 }, {itemid: "steel", amount: 80 }, {itemid: "glass", amount: 10 }, {itemid: "copper", amount: 20 } ], price: 10, weight: 0, nonStack: false, model:  "", image: "c4_bank.png", information: "What could this be used for?", deg: false }
+itemList["unknown"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Unknown Device", craft: [ {itemid: "electronics", amount: 30 }, {itemid: "plastic", amount: 20 }, {itemid: "steel", amount: 10 } ], price: 1, weight: 2, nonStack: false, model:  "", image: "unknown.png", information: "What could this be used for?", deg: false }
+itemList["purifiedwater"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Purified Water", price: 10, weight: 3, nonStack: false, model:  "", image: "purifiedwater.png", information: "What do I do with this?", deg: false }
+itemList["highgradefert"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "High Grade Fert", price: 10, weight: 2, nonStack: false, model:  "", image: "highgradefert.png", information: "What do I do with this?", deg: false }
+itemList["highgrademaleseed"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Male Seed", price: 10, weight: 1, nonStack: false, model:  "", image: "highgrademaleseed.png", information: "What do I do with this?", deg: false }
+itemList["highgradefemaleseed"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Female Seed", price: 10, weight: 1, nonStack: false, model:  "", image: "highgradefemaleseed.png", information: "What do I do with this?", deg: false }
+itemList["plantpot"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Plant Pot", price: 10, weight: 1, nonStack: false, model:  "", image: "plantpot.png", information: "What do I do with this?", deg: false }
+itemList["cr"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Security Card", price: 10, weight: 1, nonStack: false, model:  "", image: "cr.png", information: "What do I do with this?", deg: false }
+itemList["cb"]	= {fullyDegrades: false, decayrate: 0.003, displayname: "Security Card", price: 10, weight: 1, nonStack: false, model:  "", image: "cb.png", information: "What do I do with this?", deg: false }
+
+itemList["fishingrod"]	= {fullyDegrades: false, decayrate: 0.0, displayname: "Fishing Rod", price: 25, weight: 5, nonStack: false, model: "", image: "fishingrod.png", information: "Lets go fishing!" , deg: false}
+itemList["fish"]	= {fullyDegrades: false, decayrate: 0.5, displayname: "Fish", price: 0, weight: 2, nonStack: false, model: "", image: "fish.png", information: "Delicious" , deg: false}
