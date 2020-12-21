@@ -156,6 +156,8 @@ AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
 		TriggerServerEvent('hotel:load')
         TriggerServerEvent('refresh', cid)
         TriggerEvent("DoLongHudText", "Tax is currently set to: 15%", 1)
+        TriggerServerEvent("server-request-update", source);
+        TriggerServerEvent("server-update-item", source)
         TriggerServerEvent("irp-clothing:get_character_current")
         TriggerServerEvent("irp-clothing:get_character_face")
         TriggerServerEvent("irp-clothing:retrieve_tats")
