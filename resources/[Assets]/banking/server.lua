@@ -14,20 +14,6 @@ AddEventHandler('es:playerLoaded', function(source, user)
     TriggerClientEvent('isPed:UpdateCash', source, user.getMoney())
 end)
 
-
-RegisterServerEvent('playerSpawned')
-AddEventHandler('playerSpawned', function()
-  TriggerEvent('es:getPlayerFromId', source, function(user)
-    balances[source] = user.getBank()
-	  money = xPlayer.getMoney()
-	  TriggerClientEvent('banking:updateCash', source, money)
-    TriggerClientEvent('banking:updateBalance', source, user.getBank())
-    local xPlayer = URPCore.GetPlayerFromId(source)
-    TriggerClientEvent('isPed:UpdateCash', source, user.getMoney())
-  end)
-end)
-
-
 RegisterServerEvent('bank:getDetails')
 AddEventHandler('bank:getDetails', function()
   local _src = source
