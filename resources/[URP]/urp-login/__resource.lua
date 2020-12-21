@@ -33,3 +33,11 @@ files {
     'html/js/jquery-3.3.1.min.js',
     'html/js/bootstrap.min.js',
 }
+<<<<<<< HEAD:resources/[URP]/urp-login/__resource.lua
+=======
+
+dependencies {
+    'urp-core',
+    'urp-core'
+}
+>>>>>>> 98c92594de0bee67b443d6f677dd1682504994d4:resources/[URP]/urp-login/fxmanifest.lua
