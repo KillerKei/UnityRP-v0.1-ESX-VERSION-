@@ -207,3 +207,41 @@ function DrawText3Ds(x,y,z, text)
 		DrawRect(_x,_y+0.0120, factor, 0.026, 41, 11, 41, 68)
 	end
 end
+
+--URP-BLIPS 
+local blips = {
+	 {name="Clothing Shop", color=3, id=73, x=72.254, y=-1399.102, z=28.376},
+	 {name="Clothing Shop", color=3, id=73, x=-703.776,  y=-152.258,  z=36.415},
+	 {name="Clothing Shop", color=3, id=73, x=-167.863,  y=-298.969,  z=38.733},
+	 {name="Clothing Shop", color=3, id=73, x=428.694,   y=-800.106,  z=28.491},
+	 {name="Clothing Shop", color=3, id=73, x=-829.413,  y=-1073.710, z=10.328},
+	 {name="Clothing Shop", color=3, id=73, x=-1447.797, y=-242.461,  z=48.820},
+	 {name="Clothing Shop", color=3, id=73, x=11.632,    y=6514.224,  z=30.877},
+	 {name="Clothing Shop", color=3, id=73, x=123.646,   y=-219.440,  z=53.557},
+	 {name="Clothing Shop", color=3, id=73, x=1696.291,  y=4829.312,  z=41.063},
+	 {name="Clothing Shop", color=3, id=73, x=618.093,   y=2759.629,  z=41.088},
+	 {name="Clothing Shop", color=3, id=73, x=1190.550,  y=2713.441,  z=37.222},
+	 {name="Clothing Shop", color=3, id=73, x=-1193.429, y=-772.262,  z=16.324},
+	 {name="Clothing Shop", color=3, id=73, x=-3172.496, y=1048.133,  z=19.863},
+	 {name="Clothing Shop", color=3, id=73, x=-1108.441, y=2708.923,  z=18.107},
+     {name="Clothing Shop", color=3, id=73, x=1858.9041748047, y=3687.8701171875,  z=34.267036437988},
+     {name="Recycling plant", color=17, id=304, x = 746.75518798828, y=-1400.094482421, z=26.570837020874},
+     {name="Los Santos Courthouse", color=5, id=58, x=244.5550079345, y=-386.0076904298, z=45.402359008789315},
+     {name="The Winery", color=6, id=478,x = -1889.86, y = 2036.54, z = 140.83},
+	 {name="Clothing Shop", color=3, id=73, x=2435.4169921875, y=4965.6123046875,  z=46.810600280762}
+}
+
+Citizen.CreateThread(function()
+
+    for _, info in pairs(blips) do
+      info.blip = AddBlipForCoord(info.x, info.y, info.z)
+      SetBlipSprite(info.blip, info.id)
+      SetBlipDisplay(info.blip, 4)
+      SetBlipScale(info.blip, 0.7)
+      SetBlipColour(info.blip, info.color)
+      SetBlipAsShortRange(info.blip, true)
+	  BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString(info.name)
+      EndTextCommandSetBlipName(info.blip)
+    end
+end)
