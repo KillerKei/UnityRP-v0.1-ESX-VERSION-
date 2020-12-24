@@ -359,7 +359,7 @@ end)
          TriggerEvent("InteractSound_CL:PlayOnOne","seatbelt",0.1)
        else
          seatbelt = false
-         TriggerEvent('DoLongHudText', 'Seat Belt Disabled', 1)
+         TriggerEvent('DoLongHudText', 'Seat Belt Disabled', 2)
         TriggerEvent("InteractSound_CL:PlayOnOne","seatbeltoff",0.7)
        end
      end
