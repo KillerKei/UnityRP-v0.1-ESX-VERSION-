@@ -126,7 +126,7 @@ AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
     if isnew then
         IsChoosing = false
         SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z)
-        TriggerEvent('irp-identity:showRegisterIdentity')
+        TriggerEvent('urp-identity:showRegisterIdentity')
         TriggerEvent("hud:voice:transmitting", false)
         TriggerEvent('hud:voice:talking', false)
         SendNUIMessage({
@@ -158,9 +158,9 @@ AddEventHandler('urp-login:SpawnCharacter', function(spawn, isnew)
         TriggerEvent("DoLongHudText", "Tax is currently set to: 15%", 1)
         TriggerServerEvent("server-request-update", source);
         TriggerServerEvent("server-update-item", source)
-        TriggerServerEvent("irp-clothing:get_character_current")
-        TriggerServerEvent("irp-clothing:get_character_face")
-        TriggerServerEvent("irp-clothing:retrieve_tats")
+        TriggerServerEvent("urp-clothing:get_character_current")
+        TriggerServerEvent("urp-clothing:get_character_face")
+        TriggerServerEvent("urp-clothing:retrieve_tats")
         TriggerEvent("hud:voice:transmitting", false)
         TriggerEvent('hud:voice:talking', false)
         TriggerScreenblurFadeOut(0)
