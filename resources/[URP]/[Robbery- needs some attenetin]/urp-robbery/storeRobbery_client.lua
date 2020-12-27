@@ -285,7 +285,7 @@ local you = 0
 
 RegisterNetEvent("store:register")
 AddEventHandler("store:register", function(storeid,regid)
-	if CopsOnline >= 0 then
+	if CopsOnline >= 1 then
 		TriggerEvent("alert:noPedCheck", "storeRobbery")
 		TriggerServerEvent("police:camrobbery",storeid)
 		TriggerEvent("client:newStress",true,200)	

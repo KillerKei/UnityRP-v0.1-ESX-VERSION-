@@ -16,7 +16,7 @@ local IdentifierTables = {
     {table = "user_accounts", column = "identifier"},
     {table = "user_inventory2", column = "name"},
     {table = "user_licenses", column = "owner"},
-    {table = "__motels", column = "cid"},
+--    {table = "__motels", column = "cid"},
 }
 
 RegisterServerEvent("urp-login:SetupCharacters")

@@ -120,34 +120,34 @@ AddEventHandler('urp-society:washMoney', function(society, amount)
 
 end)
 
-RegisterServerEvent('urp-society:putVehicleInGarage')
-AddEventHandler('urp-society:putVehicleInGarage', function(societyName, vehicle)
-	local society = GetSociety(societyName)
+--RegisterServerEvent('urp-society:putVehicleInGarage')
+--AddEventHandler('urp-society:putVehicleInGarage', function(societyName, vehicle)
+--	local society = GetSociety(societyName)
+--
+--	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
+--		local garage = store.get('garage') or {}
+--		table.insert(garage, vehicle)
+--		store.set('garage', garage)
+--	end)
+--end)
 
-	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
-		local garage = store.get('garage') or {}
-		table.insert(garage, vehicle)
-		store.set('garage', garage)
-	end)
-end)
-
-RegisterServerEvent('urp-society:removeVehicleFromGarage')
-AddEventHandler('urp-society:removeVehicleFromGarage', function(societyName, vehicle)
-	local society = GetSociety(societyName)
-
-	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
-		local garage = store.get('garage') or {}
-
-		for i=1, #garage, 1 do
-			if garage[i].plate == vehicle.plate then
-				table.remove(garage, i)
-				break
-			end
-		end
-
-		store.set('garage', garage)
-	end)
-end)
+--RegisterServerEvent('urp-society:removeVehicleFromGarage')
+--AddEventHandler('urp-society:removeVehicleFromGarage', function(societyName, vehicle)
+--	local society = GetSociety(societyName)
+--
+--	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
+--		local garage = store.get('garage') or {}
+--
+--		for i=1, #garage, 1 do
+--			if garage[i].plate == vehicle.plate then
+--				table.remove(garage, i)
+--				break
+--			end
+--		end
+--
+--		store.set('garage', garage)
+--	end)
+--end)
 
 URPCore.RegisterServerCallback('urp-society:getSocietyMoney', function(source, cb, societyName)
 	local society = GetSociety(societyName)
@@ -302,13 +302,13 @@ URPCore.RegisterServerCallback('urp-society:getOnlinePlayers', function(source, 
 	cb(players)
 end)
 
-URPCore.RegisterServerCallback('urp-society:getVehiclesInGarage', function(source, cb, societyName)
-	local society = GetSociety(societyName)
-	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
-		local garage = store.get('garage') or {}
-		cb(garage)
-	end)
-end)
+--URPCore.RegisterServerCallback('urp-society:getVehiclesInGarage', function(source, cb, societyName)
+--	local society = GetSociety(societyName)
+--	TriggerEvent('urp-datastore:getSharedDataStore', society.datastore, function(store)
+--		local garage = store.get('garage') or {}
+--		cb(garage)
+--	end)
+--end)
 
 URPCore.RegisterServerCallback('urp-society:isBoss', function(source, cb, jobName)
 	local xPlayer = URPCore.GetPlayerFromId(source)

@@ -6,6 +6,10 @@ RegisterServerEvent('chat:removeSuggestion')
 RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
 RegisterServerEvent('__cfx_internal:commandFallback')
+
+URPCore = nil
+
+TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
  
 AddEventHandler('_chat:messageEntered', function(author, color, message)
     if not message or not author then
@@ -49,13 +53,22 @@ end)
 RegisterCommand('say', function(source, args, rawCommand)
     TriggerClientEvent('chatMessage', -1, (source == 0) and 'console' or GetPlayerName(source), { 255, 255, 255 }, rawCommand:sub(5))
 end)
+
+-- RegisterCommand('cardko', function(source, args, rawCommand)
+--     local xPlayer = URPCore.GetPlayerFromId(source)
+
+--     GetRPData(xPlayer, function(Firstname, Lastname, DOB, sex)
+--        -- print(Firstname, Lastname, DOB, sex)
+--         TriggerClientEvent('chat:showCID', -1 , { status = 1, Name = Firstname, Surname = Lastname, sex = sex, DOB = DOB, identifier = xPlayer.identifier})
+--       end)
+-- end)
  
 function GetRPData(playerId, data)
 	local Identifier = playerId.identifier
     print(playerId)
-	exports.ghmattimysql:execute("SELECT first_name, last_name, dob, gender FROM __characters WHERE identifier = @identifier", { ["@identifier"] = Identifier }, function(result)
+	exports.ghmattimysql:execute("SELECT firstname, lastname, dateofbirth, sex FROM characters WHERE identifier = @identifier", { ["@identifier"] = Identifier }, function(result)
         print(json.encode(result))
-		data(result[1].first_name, result[1].last_name, result[1].dob, result[1].gender)
+		data(result[1].firstname, result[1].lastname, result[1].dateofbirth, result[1].sex)
 
 	end)
 end

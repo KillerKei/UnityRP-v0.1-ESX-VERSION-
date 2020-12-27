@@ -279,7 +279,7 @@ AddEventHandler("robbery:scanLock", function(lockpick,cardType)
       
     else
       -- if CopsOnline >= 2 then
-      if CopsOnline >= 1 then
+      if CopsOnline >= 0 then
         local passCard = PassCard(cardType)
         local plyPos = GetEntityCoords(PlayerPedId())
         TriggerEvent("animation:PlayAnimation","id")
