@@ -163,3 +163,19 @@ function DrawText3Ds(x,y,z, text)
   local factor = (string.len(text)) / 370
   DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
 end
+
+Citizen.CreateThread(function()
+
+  local blip = AddBlipForCoord(vector3(172.78,-26.89,68.35))
+
+  SetBlipSprite (blip, 457)
+  SetBlipDisplay(blip, 4)
+  SetBlipScale  (blip, 0.8)
+  SetBlipColour (blip, 47)
+  SetBlipAsShortRange(blip, true)
+
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Job Center')
+  EndTextCommandSetBlipName(blip)
+
+end)
