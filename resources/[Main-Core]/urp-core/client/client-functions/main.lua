@@ -20,7 +20,7 @@ local pvpEnabled = false
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
+		Citizen.Wait(50)
 		local pos = GetEntityCoords(PlayerPedId())
 
 		if(oldPos ~= pos)then

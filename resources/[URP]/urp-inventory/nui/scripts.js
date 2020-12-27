@@ -51,19 +51,30 @@ $(document).ready(function () {
 
 
   document.onkeydown = function(data) {
-      if (data.which == 16) {
+      if (data.which == 73 || data.which == 27) {   //27 is ESC
+          closeInv()
+          console.log('closing inv')
+      } else if (data.which == 16) {
           shiftHeld = true
       } else if (data.which == 17) {
           CtrlHeld = true
-      }
+      } else if (data.which == 107) {
+        console.log('open up inventory')
+     }
   }
   document.onkeyup = function(data) {
-      if (data.which == 73 || data.which == 27) {
-          closeInv()
-      } else if (data.which == 16) {
+      if (data.which == 16) {
           shiftHeld = false
-      } else if (data.which == 17) {
+      }
+      if (data.which == 107) {
+        console.log(2)
+    }
+      if (data.which == 17) {
           CtrlHeld = false
+      }
+      else {
+        
+        searchUpdate()
       }
   }
 
@@ -112,14 +123,13 @@ $(document).ready(function () {
     } else if (item.response == "updateQuality") {
       UpdateQuality(item)
     } else if (item.response == "Populate") {
-      DisplayInventoryMultiple(item.playerinventory, item.itemCount, item.invName, item.targetinventory, item.targetitemCount, item.targetinvName, item.cash, item.StoreOwner);
+      DisplayInventoryMultiple(item.playerinventory, item.itemCount, item.invName, item.targetinventory, item.targetitemCount, item.targetinvName, item.cash, item.StoreOwner, item.plyID);
     } else if (item.response == "PopulateSingle") {
       PersonalWeight = 0
-      DisplayInventory(item.playerinventory, item.itemCount, item.invName, true)
+      DisplayInventory(item.playerinventory, item.itemCount, item.invName, true, item.plyID)
     } else if (item.response == "cashUpdate") {
       userCash = item.amount
       userWeaponLicense = item.weaponlicence
-      brought = item.brought
       isCop = item.cop;
     } else if (item.response == "DisableMouse") {
       clicking = false;
@@ -139,7 +149,7 @@ $(document).ready(function () {
       itemList = item.list
     } else if (item.response == "GiveItemChecks") {
       if (itemList[item.id]) {
-        $.post("http://urp-inventory/GiveItem", JSON.stringify([item.id, item.amount, item.generateInformation, true, itemList[item.id].nonStack, item.data]));
+        $.post("http://urp-inventory/GiveItem", JSON.stringify([item.id, item.amount, item.generateInformation, true, itemList[item.id].nonStack, item.data, itemList[item.id].weight]));
       } else {
         $.post("http://urp-inventory/GiveItem", JSON.stringify([item.id, item.amount, item.generateInformation, false, itemList[item.id].nonStack, item.data]));
       }
@@ -167,12 +177,17 @@ function UpdateQuality(data,penis) {
     let weight = parseInt(item.dataset.weight);
 
     let name = item.dataset.name;
+
     let itemcount = parseInt(item.dataset.amount);
+
     let itemid = item.dataset.itemid
+
     let image = itemList[itemid].image;
+
     let inventoryNumber = parseInt(item.dataset.inventory)
-    let info = JSON.parse(item.dataset.info)
+
     let creationDate = parseInt(item.dataset.creationDate)
+
 
     let quality = ConvertQuality(itemid,data.creationDate)
 
@@ -210,18 +225,18 @@ function UpdateQuality(data,penis) {
       itemMaxed = "class='destroyed"
     }
 
-    info = JSON.stringify(info)
-
+    info = JSON.stringify({}) //Dont forget about this 
+    
     let meta = item.dataset.metainformation
     let item_cost = item.dataset.fwewef
     let slot = item.dataset.currentslot
-
+    
     let nonStack = true
     let inventoryName = inventory
 
 
 
-    let htmlstring = "<div " + itemMaxed + " style='width:" + qualityWidth + "%'> " + qualityText + " </div>  <div class='itemname'> " + name + " </div> <div class='information'>  " + itemcount + " (" + weight + ".00) </div>          <img src='icons/" + image + "' data-info='" + info + "' data-inventory='" + inventoryNumber + "' data-quality='" + quality + "' data-name='" + name + "' data-metainformation='" + meta + "' data-itemid='" + itemid + "' data-fwewef='" + item_cost + "' data-inventory='" + inventoryNumber + "' data-currentslot='" + slot + "' data-stackable='" + nonStack + "' data-amount='" + itemcount + "' data-weight='" + weight + "' data-inventoryname='" + inventoryName + "' class='itemimage'>";
+    let htmlstring = "<div " + itemMaxed + " style='width:" + qualityWidth + "%'> " + qualityText + " </div>  <div class='itemname'> " + name + " </div> <div class='information'>  " + itemcount + " (" + weight + ".00) </div>          <img draggable='false' src='icons/" + image + "' data-info='" + info + "' data-inventory='" + inventoryNumber + "' data-quality='" + quality + "' data-name='" + name + "' data-metainformation='" + meta + "' data-itemid='" + itemid + "' data-fwewef='" + item_cost + "' data-inventory='" + inventoryNumber + "' data-currentslot='" + slot + "' data-stackable='" + nonStack + "' data-amount='" + itemcount + "' data-weight='" + weight + "' data-inventoryname='" + inventoryName + "' class='itemimage'>";
 
     document.getElementById(divslot).innerHTML = htmlstring;
 
@@ -251,7 +266,7 @@ function UseBar(itemid, text, amount) {
     fadeOut = id
     image = itemList[itemid].image;
     name = itemList[itemid].displayname;
-    htmlstring = " <div class='item2' > <div class='UseBarHead'> " + text + " " + amount + "x  </div> <div class='itemname2'> " + name + " </div> <img src='icons/" + image + "' class='itemimage'>  </div>";
+    htmlstring = " <div class='item2' > <div class='UseBarHead'> " + text + " " + amount + "x  </div> <div class='itemname2'> " + name + " </div> <img draggable='false' src='icons/" + image + "' class='itemimage'>  </div>";
 
     var p = document.getElementById('UseBar');
     var newElement = document.createElement(id);
@@ -295,10 +310,10 @@ function ToggleBar(toggle, boundItems, boundItemsAmmo) {
         name = name + " - (" + boundItemsAmmo[1] + ")"
       }
 
-      htmlstring = "<div id='bind1'> 1 </div> <div class='item3' > <div class='itemname3'> " + name + " </div> <img src='icons/" + image + "' class='itemimage'>  </div>";
+      htmlstring = "<div id='bind1'> 1 </div> <div class='item3' > <div class='itemname3'> " + name + " </div> <img draggable='false' src='icons/" + image + "' class='itemimage'>  </div>";
     } else {
 
-      htmlstring = "<div id='bind1'> 1 </div> <div class='item3' > <div class='itemname3'> unbound </div> <img src='icons/empty.png' class='itemimage'>  </div>";
+      htmlstring = "<div id='bind1'> 1 </div> <div class='item3' > <div class='itemname3'> unbound </div> <img draggable='false' src='icons/empty.png' class='itemimage'>  </div>";
     }
 
     for (let i = 2; i < 5; i++) {
@@ -311,10 +326,10 @@ function ToggleBar(toggle, boundItems, boundItemsAmmo) {
           name = name + " - (" + boundItemsAmmo[i] + ")"
         }
 
-        htmlstring = htmlstring + "<div id='bind" + i + "'> " + i + " </div><div class='item3' > <div class='itemname3'> " + name + " </div> <img src='icons/" + image + "' class='itemimage'>  </div>";
+        htmlstring = htmlstring + "<div id='bind" + i + "'> " + i + " </div><div class='item3' > <div class='itemname3'> " + name + " </div> <img draggable='false' src='icons/" + image + "' class='itemimage'>  </div>";
       } else {
 
-        htmlstring = htmlstring + "<div id='bind" + i + "'> " + i + " </div><div class='item3' > <div class='itemname3'> unbound </div> <img src='icons/empty.png' class='itemimage'>  </div>";
+        htmlstring = htmlstring + "<div id='bind" + i + "'> " + i + " </div><div class='item3' > <div class='itemname3'> unbound </div> <img draggable='false' src='icons/empty.png' class='itemimage'>  </div>";
       }
 
     }
@@ -341,6 +356,9 @@ function invStack(targetSlot, moveAmount, targetInventory, originSlot, originInv
 function invMove(targetSlot, originSlot, targetInventory, originInventory, purchase, itemCosts, itemidsent, amountmoving, crafting, weapon) {
   let arr = [targetSlot, originSlot, targetInventory, originInventory, purchase, itemCosts, itemidsent, amountmoving, crafting, weapon, PlayerStore];
   $.post("http://urp-inventory/move", JSON.stringify(arr));
+  document.getElementById('search-text').value = "";
+  searchUpdate();
+  
 };
 
 function invSwap(targetSlot, targetInventory, originSlot, originInventory) {
@@ -401,7 +419,7 @@ function isEmpty(obj) {
 function InventoryLog(string) {
   document.getElementById('Logs').innerHTML = string + "<br>" + document.getElementById('Logs').innerHTML;
 }
-
+let PlayerCIDName = "none";
 let PlayerInventoryName = "none";
 let TargetInventoryName = "none";
 let shop = "Shop";
@@ -412,14 +430,17 @@ let MyItemCount = 0
 let StoreOwner = false
 let PlayerStore = false
 // weights are done here, based on the string of the inventory name
-function DisplayInventoryMultiple(playerinventory, itemCount, invName, targetinventory, targetitemCount, targetinvName, cash, Owner) {
+function DisplayInventoryMultiple(playerinventory, itemCount, invName, targetinventory, targetitemCount, targetinvName, cash, Owner, plyID) {
   secondaryWeight = 0
-  StoreOwner = Owner
+  //StoreOwner = Owner
   PlayerStore = false
   userCash = parseInt(cash);
-  DisplayInventory(playerinventory, itemCount, invName, true)
+
+  DisplayInventory(playerinventory, itemCount, invName, true, plyID)
   MyInventory = playerinventory
   MyItemCount = itemCount
+
+
 
   if (targetinvName.indexOf("Drop") > -1) {
     secondaryMaxWeight = 1000.0
@@ -437,6 +458,9 @@ function DisplayInventoryMultiple(playerinventory, itemCount, invName, targetinv
   } else if (targetinvName.indexOf("securewarehouse2") > -1) {
     secondaryMaxWeight = 3500.0
     slotLimitTarget = 100;
+  } else if (targetinvName.indexOf("Shop") > -1) {
+    secondaryMaxWeight = 1000.0
+    slotLimitTarget = 40;
   } else if (targetinvName.indexOf("house") > -1) {
     secondaryMaxWeight = 700.0
     slotLimitTarget = 70;
@@ -475,13 +499,20 @@ function DisplayInventoryMultiple(playerinventory, itemCount, invName, targetinv
   } else if (targetinvName.indexOf("personal") > -1) {
     secondaryMaxWeight = 250.0
     slotLimitTarget = 5;
+  } else if (targetinvName.indexOf("backpack") > -1) {
+    secondaryMaxWeight = 150.0
+    slotLimitTarget = 20;
+  }
+    else if (targetinvName.indexOf("Stash") > -1) {
+      secondaryMaxWeight = 2000.0
+      slotLimitTarget = 200;
   } else {
     secondaryMaxWeight = 250.0
     slotLimitTarget = 40;
   }
 
   InventoryLog(targetinvName + " | " + invName)
-  DisplayInventory(targetinventory, targetitemCount, targetinvName, false)
+  DisplayInventory(targetinventory, targetitemCount, targetinvName, false, plyID)
 
 }
 
@@ -508,7 +539,7 @@ function produceInfo(data) {
   return string.replace(/[ | ](?=[^|]*$)/, '');
 }
 
-function DisplayInventory(sqlInventory, itemCount, invName, main) {
+function DisplayInventory(sqlInventory, itemCount, invName, main, plyID) {
 
   clicking = false
   sqlInventory = JSON.parse(sqlInventory)
@@ -720,9 +751,11 @@ function DisplayInventory(sqlInventory, itemCount, invName, main) {
   }
 
   InventoryLog("Loaded " + inventoryName + " without recorded Error.")
+  PlayerCIDName = plyID
   UpdateSetWeights()
   clicking = true
 }
+
 
 
 const TimeAllowed = 1000 * 60 * 40320; // 28 days, 
@@ -819,7 +852,7 @@ function DragToggle(slot,using) {
   let moveAmount = parseInt(document.getElementById("move-amount").value);
 
   if (!moveAmount) {
-    if (TargetInventoryName == "Shop" || TargetInventoryName == "Craft" || PlayerStore) {
+    if (TargetInventoryName == "Shop" || TargetInventoryName.indexOf("Craft") > -1 || PlayerStore || TargetInventoryName.indexOf("Shop") > -1) {
       document.getElementById("move-amount").value = 1;
       moveAmount = 1;
     } else {
@@ -912,17 +945,19 @@ function startCSSDrag() {
 
 function searchUpdate() {
   let searchInput = $("#search-text").val();
+
+
   $(".wrapmain").find("div[class*='itemname']").each(function (i, el) {
 
     let parent = el.parentElement.id;
-
+                                                            // this is grey
     document.getElementById(parent).style.backgroundColor = 'rgba(40,20,40,0.1)';
 
     curGPSLength = searchInput.length
     let dataSearched = el.innerHTML;
     let reg = new RegExp('(.*)' + searchInput + '(.*)', 'ig');
 
-    if (reg.test(dataSearched) && searchInput != "") {
+    if (reg.test(dataSearched) && searchInput != "") {        // this is green
       document.getElementById(parent).style.backgroundColor = 'rgba(40,110,40,0.5)';
     }
 
@@ -931,13 +966,13 @@ function searchUpdate() {
   searchInput = document.getElementById("search-text").value;
   $(".wrapsecondary").find("div[class*='itemname']").each(function (i, el) {
 
-    let parent = el.parentElement.id;
+    let parent = el.parentElement.id;       // this is grey
     $("#" + parent).css('background-color', 'rgba(40,20,40,0.1)');
     curGPSLength = searchInput.length
     let dataSearched = el.innerHTML;
     let reg = new RegExp('(.*)' + searchInput + '(.*)', 'ig');
 
-    if (reg.test(dataSearched) && searchInput != "") {
+    if (reg.test(dataSearched) && searchInput != "") {// this is green
       $("#" + parent).css('background-color', 'rgba(40,110,40,0.5)');
     }
 
@@ -1017,33 +1052,34 @@ function DropItem(slot, amountDropped) {
 
   InventoryLog("Dropped: " + name + " x(" + amountDropped + ") from slot " + slotusing + " of " + inventoryUsedNameText)
 
-  // $.post('http://urp-inventory/dropitem', JSON.stringify({
-  //  currentInventory: currentInventory,
-  //  weight: weight,
-  //  amount: amount,
-  //  name: name,
-  //  itemid: itemid,
-  //  inventoryUsedName: item.dataset.inventoryname,
-  //  slotusing: slotusing,
-  //  amountDropped: amountDropped,
-  // }));
+   //$.post('http://urp-inventory/dropitem', JSON.stringify({
+   // currentInventory: currentInventory,
+   // weight: weight,
+   // amount: amount,
+   // name: name,
+   // itemid: itemid,
+   // inventoryUsedName: item.dataset.inventoryname,
+   // slotusing: slotusing,
+   // amountDropped: amountDropped,
+   //}));
 
 }
 
 function ErrorMove() {
-  // $.post('http://urp-inventory/move:fail', JSON.stringify({}));
+  //$.post('http://urp-inventory/move:fail', JSON.stringify({}));
 }
 
 function SuccessMove() {
-  // $.post('http://urp-inventory/move:success', JSON.stringify({}));
+  //$.post('http://urp-inventory/move:success', JSON.stringify({}));
 }
 
 // we are splitting items from inv2,slot2,amount2 over to inv1,slot1,amount1
 // if amount2 is zero, we moved the entire stack.
-
+//Should create item check qualities so that items with less quality cant be added to items of higher quality.
 function CompileStacks(targetSlot, originSlot, inv1, inv2, originAmount, remainingAmount, targetAmount, purchase, itemCosts, itemidsent, moveAmount) {
   let penis = false
   if (TargetInventoryName == PlayerInventoryName) {
+    
     penis = true;
   }
 
@@ -1051,8 +1087,8 @@ function CompileStacks(targetSlot, originSlot, inv1, inv2, originAmount, remaini
     targetslot: targetSlot,
     origin: originSlot,
     itemid: itemidsent,
-    move: false,
-    MyInvMove: penis
+    move: true,
+    MyInvMove: true
   }));
 
   if (inv2 == "wrapmain") {
@@ -1068,14 +1104,12 @@ function CompileStacks(targetSlot, originSlot, inv1, inv2, originAmount, remaini
   }
 
   var isWeapon = false
-  if (itemList[itemidsent].weapon != null && !exluded[itemidsent] && !isCop) {
-    brought = true
     isWeapon = itemList[itemidsent].weapon
-  }
 
   invStack(targetSlot, moveAmount, targetInventory, originSlot, originInventory, purchase, itemCosts, itemidsent, moveAmount, crafting, isWeapon, remainingAmount);
 
-  InventoryLog("Changed Slot: " + targetSlot + "(" + targetAmount + ") of " + inv2 + " to " + originSlot + "(" + originAmount + ") of " + inv1 + " ")
+
+  InventoryLog("Changed Slot: " + originSlot + "(" + originAmount + ") of " + targetInventory + " to " + targetSlot + "(" + targetAmount + ") of " + originInventory + " ")
   UpdateSetWeights()
   if (crafting) {
     removeCraftItems(itemidsent, moveAmount)
@@ -1088,13 +1122,12 @@ function MoveStack(targetSlot, originSlot, inv1, inv2, purchase, itemCosts, item
   if (TargetInventoryName == PlayerInventoryName) {
     myInv = true;
   }
-
   $.post("http://urp-inventory/SlotJustUsed", JSON.stringify({
     targetslot: targetSlot,
     origin: originSlot,
     itemid: itemidsent,
     move: true,
-    MyInvMove: myInv
+    MyInvMove: true
   }));
 
   if (inv2 == "wrapmain") {
@@ -1110,13 +1143,11 @@ function MoveStack(targetSlot, originSlot, inv1, inv2, purchase, itemCosts, item
   }
 
   var isWeapon = false
-  if (itemList[itemidsent].weapon != null && !exluded[itemidsent] && !isCop) {
-    brought = true
     isWeapon = itemList[itemidsent].weapon
-  }
 
   invMove(targetSlot, originSlot, targetInventory, originInventory, purchase, itemCosts, itemidsent, moveAmount, crafting, isWeapon);
-  InventoryLog("Moved Slot " + targetSlot + " of " + targetInventory + " to " + originSlot + " of " + originInventory + " #" + itemidsent)
+
+  InventoryLog("Moved Slot " + originSlot + " of " + originInventory + " to " + targetSlot + " of " + targetInventory + " #" + itemidsent)
   UpdateSetWeights()
   if (crafting) {
     removeCraftItems(itemidsent, moveAmount)
@@ -1144,7 +1175,7 @@ function SwapStacks(targetSlot, originSlot, inv1, inv2) {
     origin: originSlot,
     itemid: itemid,
     move: false,
-    MyInvMove: penis
+    MyInvMove: true
   }));
 
   if (inv2 == "wrapmain") {
@@ -1161,7 +1192,7 @@ function SwapStacks(targetSlot, originSlot, inv1, inv2) {
 
   invSwap(targetSlot, targetInventory, originSlot, originInventory);
 
-  InventoryLog("Swapped Slot " + targetSlot + " of " + targetInventory + " and " + originSlot + " of " + originInventory + " ")
+  InventoryLog("Swapped Slot " + originSlot + " of " + originInventory + " and " + targetSlot + " of " + targetInventory + " ")
   UpdateSetWeights()
 }
 
@@ -1181,7 +1212,7 @@ function closeInv(pIsItemUsed = false) {
 function CountItems(ItemIdToCheck) {
   let sqlInventory = JSON.parse(MyInventory);
   let amount = 0
-  for (let i = 0; i < parseInt(MyItemCount); i++) {
+  for (i in sqlInventory) {
     if (sqlInventory[i].item_id == ItemIdToCheck) {
       amount = amount + sqlInventory[i].amount
     }
@@ -1199,6 +1230,7 @@ function CheckCraftFail(itemid, moveAmount) {
   for (let i = 0; i < requirements.length; i++) {
 
     let requiredAmount = Math.ceil(moveAmount * requirements[i]["amount"])
+
     let itemNeededId = requirements[i]["itemid"]
     let countedItems = CountItems(itemNeededId)
 
@@ -1267,22 +1299,28 @@ function AttemptDropInFilledSlot(slot) {
   if (stacking == false) {
     // If the item is being stacked, we do not calculate the return weight here as no item will be returned to the starting inventory.
     result2 = ErrorCheck(returnItemInventory, inventoryReturnItemDropName, movementReturnItemWeight)
-  } else {
+  }
+  if (slot == NaN) {
+    console.log("Slot was NaN")
+    result2 = "Error"
+    result = "You cant drop items in here"
+  } 
+  else {
     // the item was stacked so its automatically successful for return item weight.
     result2 = "Success"
   }
-
+ 
   if (stacking && moveAmount > amount) {
     document.getElementById("move-amount").value = 0;
     result2 = "Warning"
     result = "You do not have that amount!"
   }
 
-  if (inventoryDropName == "wrapsecondary" && TargetInventoryName == "Shop" || (!StoreOwner && PlayerStore && inventoryDropName == "wrapsecondary")) {
+  if (inventoryDropName == "wrapsecondary" && TargetInventoryName.indexOf("Shop") > -1 || (!StoreOwner && PlayerStore && inventoryDropName == "wrapsecondary")) {
     result = "You can not drop items into the shop!";
 
   }
-  if (TargetInventoryName == "Craft") {
+  if (TargetInventoryName == "Craft" || TargetInventoryName.indexOf("Craft") > -1) {
     result = "You can not drop items into the craft table or stack items that are crafted!";
 
   }
@@ -1333,7 +1371,7 @@ function AttemptDropInFilledSlot(slot) {
 
       let purchaseCost = parseInt(item.dataset.fwewef) * parseInt(moveAmount);
 
-      if (TargetInventoryName == "Shop" || (!StoreOwner && PlayerStore)) {
+      if (TargetInventoryName == "Shop" || TargetInventoryName.indexOf("Shop") > -1 || (!StoreOwner && PlayerStore)) {
         InventoryLog("eh: PURCHASE")
         if (purchaseCost > userCash) {
           result = "You cant afford this.!";
@@ -1342,22 +1380,23 @@ function AttemptDropInFilledSlot(slot) {
           EndDragError(slot);
           return
         } else {
+         
           if (itemList[itemidsent].weapon) {
-            if (!exluded[itemidsent] && !userWeaponLicense) {
+
+            if (exports.isPed.isPed('job') == 'Police') {
+              userWeaponLicense = true
+            } 
+            
+             
+            if (!exluded[itemidsent] /*&& !userWeaponLicense*/) {
+              print(userWeaponLicense + exports.isPed.isPed('job'))
               result = "You do not have a license.!";
               result2 = "You do not have a license.!";
               InventoryLog("Error: " + result)
               EndDragError(slot);
               return
             }
-
-            if (!exluded[itemidsent] && brought && !isCop) {
-              result = "You can only buy one gun a day!";
-              InventoryLog("Error: " + result)
-              EndDragError(slot);
-              return
-            }
-          }
+        }
 
           if (currentInventory == 2 && inventoryDropName == "wrapmain") {
             userCash = userCash - purchaseCost;
@@ -1403,12 +1442,13 @@ function AttemptDropInFilledSlot(slot) {
         data.slot = parseInt(slot.replace(/\D/g, ''))
         data.information = item.dataset.info
         data.information.quality = startQuality
+
         UpdateQuality(data,startQuality)
       }
 
     } else {
 
-      if (TargetInventoryName == "Shop" || TargetInventoryName == "Craft" || (!StoreOwner && PlayerStore)) {
+      if (TargetInventoryName == "Shop" || TargetInventoryName.indexOf("Shop") > -1 || TargetInventoryName == "Craft" || (!StoreOwner && PlayerStore) || TargetInventoryName.indexOf("Craft") > -1) {
         result = "You can not drop items into the shop!";
         EndDragError(slot);
         InventoryLog("Error: " + result2 + " | " + result)
@@ -1538,10 +1578,15 @@ function AttemptDropInEmptySlot(slot, isDropped, half) {
     result = "Error: can not drop a dropped item"
   }
 
-  if (inventoryDropName == "wrapsecondary" && TargetInventoryName == "Shop" || (inventoryDropName == "wrapsecondary" && !StoreOwner && PlayerStore)) {
+  if (slot == 'move-amount' || slot == 'search-text') {
+
+    result = "You cant drop items in here"
+  } 
+
+  if (inventoryDropName == "wrapsecondary" && TargetInventoryName.indexOf("Shop") > -1 || (inventoryDropName == "wrapsecondary" && !StoreOwner && PlayerStore)) {
     result = "You can not drop items into the shop!";
   }
-  if (inventoryDropName == "wrapsecondary" && TargetInventoryName == "Craft") {
+  if (inventoryDropName == "wrapsecondary" && TargetInventoryName.indexOf("Craft") > -1 ) {
     result = "You can not drop items into the craft shop!";
   }
 
@@ -1590,7 +1635,7 @@ function AttemptDropInEmptySlot(slot, isDropped, half) {
 
     let purchaseCost = parseInt(item.dataset.fwewef) * parseInt(moveAmount);
     InventoryLog(item.dataset.fwewef + " | " + purchaseCost + " | " + moveAmount);
-    if (TargetInventoryName == "Shop" || (!StoreOwner && PlayerStore)) {
+    if (TargetInventoryName == "Shop" || TargetInventoryName.indexOf("Shop") > -1 || (!StoreOwner && PlayerStore)) {
       InventoryLog("eh: PURCHASE")
       if (purchaseCost > userCash) {
         result = "You cant afford that, bitch!";
@@ -1600,20 +1645,14 @@ function AttemptDropInEmptySlot(slot, isDropped, half) {
       } else {
 
         if (itemList[itemidsent].weapon) {
+          
           if (!exluded[itemidsent] && !userWeaponLicense) {
             result = "You do not have a license.!";
             InventoryLog("Error: " + result)
             EndDragError(slot);
             return
           }
-
-          if (!exluded[itemidsent] && brought && !isCop) {
-            result = "You can only buy one gun a day!";
-            InventoryLog("Error: " + result)
-            EndDragError(slot);
-            return
-          }
-        }
+      }
 
         if (currentInventory == 2 && inventoryDropName == "wrapmain") {
           userCash = userCash - purchaseCost;
@@ -1623,16 +1662,21 @@ function AttemptDropInEmptySlot(slot, isDropped, half) {
       }
     }
 
-    if (TargetInventoryName == "Craft") {
+    if (TargetInventoryName == "Craft" || TargetInventoryName.indexOf("Craft") > -1) {
       InventoryLog("eh: Crafting")
 
       if (CheckCraftFail(itemidsent, moveAmount)) {
         result = "You dont have the required materials.!";
         EndDragError(slot);
         InventoryLog("Error: " + result)
+        
       } else {
+        //After fucking the crafting by trying to craft more than a craftable amount, it completely fuckes the system.  Not entirely sure if the best method of action would be to set crafting to true outside of this conditional.  Look over this again.
         if (currentInventory == 2 && inventoryDropName == "wrapmain") {
           InventoryLog("Attempted to craft item with itemid: " + itemidsent)
+          crafting = true;
+        }
+        else {
           crafting = true;
         }
       }
@@ -1641,6 +1685,7 @@ function AttemptDropInEmptySlot(slot, isDropped, half) {
     if (splitMove) {
 
       if (!isDropped) {
+
         document.getElementById(slot).innerHTML = document.getElementById(draggingid).innerHTML;
       }
 
@@ -1733,7 +1778,9 @@ function DisplayDataSet(slot) {
 }
 
 function RequestItemData() {
+
   let item = document.getElementById(draggingid).getElementsByTagName('img')[0];
+
   currentInventory = item.dataset.inventory;
   weight = item.dataset.weight;
   amount = item.dataset.amount;
@@ -1755,13 +1802,16 @@ function EndDragUsage(type) {
 }
 
 function useitem() {
+
   if (dragging != false) {
     RequestItemData()
     let isWeapon = itemList[itemid].weapon;
     if (isWeapon === undefined) {
       isWeapon = false;
     }
+
     if (inventoryUsedName == PlayerInventoryName) {
+      
       let arr = [inventoryUsedName, itemid, slotusing, isWeapon]
       $.post("http://urp-inventory/invuse", JSON.stringify(arr));
       InventoryLog("Using item: " + name + "(" + amount + ") from " + inventoryUsedName + " | slot " + slotusing)

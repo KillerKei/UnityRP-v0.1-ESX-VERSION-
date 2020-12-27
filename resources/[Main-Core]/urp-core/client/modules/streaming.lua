@@ -5,7 +5,7 @@ function URPCore.Streaming.RequestModel(modelHash, cb)
 		RequestModel(modelHash)
 
 		while not HasModelLoaded(modelHash) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 	end
 
@@ -19,7 +19,7 @@ function URPCore.Streaming.RequestStreamedTextureDict(textureDict, cb)
 		RequestStreamedTextureDict(textureDict)
 
 		while not HasStreamedTextureDictLoaded(textureDict) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 	end
 
@@ -33,7 +33,7 @@ function URPCore.Streaming.RequestNamedPtfxAsset(assetName, cb)
 		RequestNamedPtfxAsset(assetName)
 
 		while not HasNamedPtfxAssetLoaded(assetName) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 	end
 
@@ -47,7 +47,7 @@ function URPCore.Streaming.RequestAnimSet(animSet, cb)
 		RequestAnimSet(animSet)
 
 		while not HasAnimSetLoaded(animSet) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 	end
 
@@ -61,7 +61,7 @@ function URPCore.Streaming.RequestAnimDict(animDict, cb)
 		RequestAnimDict(animDict)
 
 		while not HasAnimDictLoaded(animDict) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 	end
 

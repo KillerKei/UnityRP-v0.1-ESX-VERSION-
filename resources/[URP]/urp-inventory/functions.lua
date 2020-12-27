@@ -1,27 +1,36 @@
+URPCore = nil
+
+Citizen.CreateThread(function()
+	while URPCore == nil do
+		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
+		Citizen.Wait(0)
+	end
+end)
+
 local fixingvehicle = false
 local justUsed = false
 local retardCounter = 0
 local lastCounter = 0 
 local HeadBone = 0x796e;
 
-local jailBounds = PolyZone:Create({
-  vector2(1855.8966064453, 2701.9802246094),
-  vector2(1775.4013671875, 2770.5339355469),
-  vector2(1646.7535400391, 2765.9870605469),
-  vector2(1562.7836914063, 2686.6459960938),
-  vector2(1525.3662109375, 2586.5190429688),
-  vector2(1533.7038574219, 2465.5300292969),
-  vector2(1657.5997314453, 2386.9389648438),
-  vector2(1765.8286132813, 2404.4763183594),
-  vector2(1830.1740722656, 2472.1193847656),
-  vector2(1855.7557373047, 2569.0361328125)
-}, {
-    name = "jail_bounds",
-    minZ = 30,
-    maxZ = 70.5,
-    debugGrid = false,
-    gridDivisions = 25
-})
+-- local jailBounds = PolyZone:Create({
+--   vector2(1855.8966064453, 2701.9802246094),
+--   vector2(1775.4013671875, 2770.5339355469),
+--   vector2(1646.7535400391, 2765.9870605469),
+--   vector2(1562.7836914063, 2686.6459960938),
+--   vector2(1525.3662109375, 2586.5190429688),
+--   vector2(1533.7038574219, 2465.5300292969),
+--   vector2(1657.5997314453, 2386.9389648438),
+--   vector2(1765.8286132813, 2404.4763183594),
+--   vector2(1830.1740722656, 2472.1193847656),
+--   vector2(1855.7557373047, 2569.0361328125)
+-- }, {
+--     name = "jail_bounds",
+--     minZ = 30,
+--     maxZ = 70.5,
+--     debugGrid = false,
+--     gridDivisions = 25
+-- })
 
 local validWaterItem = {
     ["oxygentank"] = true,
@@ -57,44 +66,306 @@ local validWaterItem = {
 
 
 Citizen.CreateThread(function()
+
+    
     TriggerServerEvent("inv:playerSpawned");
 end)
 
+
 Citizen.CreateThread(function()
-    while true do
+    while true do 
+     Citizen.Wait(0)
+     if IsControlJustPressed(0, 289) then 
+         TriggerEvent("OpenInv")
+      end
+    end
+end)
+RegisterNetEvent('inventory:bandage')
+AddEventHandler('inventory:bandage', function()
+    TriggerEvent('urp-ambulancejob:heal', 'small', true)
+    TriggerEvent('urp-hospital:client:RemoveBleed')
+end)
+
+RegisterNetEvent('HealSlow')
+AddEventHandler("HealSlow", function()
+    local player = PlayerPedId()
+    for i = 1, 30 do
+
+        if GetEntityHealth(player) >= 200 then
+            break
+        end
+        
+        SetEntityHealth(player, GetEntityHealth(player) + 1)
+        Citizen.Wait(math.random(500, 1000))
+    end
+end)
+
+local applying = false
+RegisterNetEvent('ApplyArmor')
+AddEventHandler('ApplyArmor', function()
+    print("triggering")
+    while applying == true do
         Citizen.Wait(0)
-        if IsControlJustPressed(0, 311) then
-            TriggerEvent("OpenInv")
-        end
+        print("triggering2")
+        SetCurrentPedWeapon(PlayerPedId(), `WEAPON_UNARMED`, true)
     end
 end)
 
-RegisterNetEvent('inventory-jail')
-AddEventHandler('inventory-jail', function(startPosition, cid, name)
-    if (hasEnoughOfItem("okaylockpick",1,false)) then
-        local plyPed = PlayerPedId()
-        local coord = GetPedBoneCoords(plyPed, HeadBone)
-        local inPoly = jailBounds:isPointInside(coord)
-        if inPoly  then
-             TriggerServerEvent("server-inventory-open", startPosition, cid, "1", name);
+RegisterNetEvent('hadcocaine')
+AddEventHandler('hadcocaine', function(arg1,arg2,arg3)
+    dstamina = 0
+
+	if math.random(100) > 50 then
+		Drugs1()
+	else
+		Drugs2()
+    end
+
+	SetRunSprintMultiplierForPlayer(PlayerId(), 1.1)
+	dstamina = 200
+
+    while dstamina > 0 do
+
+        Citizen.Wait(1000)
+        RestorePlayerStamina(PlayerId(), 1.0)
+        dstamina = dstamina - 1
+
+        if IsPedRagdoll(PlayerPedId()) then
+            SetPedToRagdoll(PlayerPedId(), math.random(5), math.random(5), 3, 0, 0, 0)
         end
+
+        local armor = GetPedArmour(PlayerPedId())
+        SetPedArmour(PlayerPedId(),armor+3)
+
+	  	if math.random(500) < 3 then
+	  		if math.random(100) > 50 then
+	  			Drugs1()
+	  		else
+	  			Drugs2()
+	  		end
+		  	Citizen.Wait(math.random(30000))
+		end
+
+        if math.random(100) > 91 and IsPedRunning(PlayerPedId()) then
+            SetPedToRagdoll(PlayerPedId(), math.random(1000), math.random(1000), 3, 0, 0, 0)
+        end
+        
+    end
+
+    dstamina = 0
+
+    if IsPedRunning(PlayerPedId()) then
+        SetPedToRagdoll(PlayerPedId(),1000,1000, 3, 0, 0, 0)
+    end
+
+    SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+
+end)
+
+RegisterNetEvent('hadcrack')
+AddEventHandler('hadcrack', function(arg1,arg2,arg3)
+    dstamina = 0
+    Citizen.Wait(1000)
+
+	if math.random(100) > 50 then
+		Drugs1()
+	else
+		Drugs2()
+	end
+	SetRunSprintMultiplierForPlayer(PlayerId(), 1.35)
+	dstamina = 30
+
+    while dstamina > 0 do
+
+        Citizen.Wait(1000)
+        RestorePlayerStamina(PlayerId(), 1.0)
+        dstamina = dstamina - 1
+
+        if IsPedRagdoll(PlayerPedId()) then
+            SetPedToRagdoll(PlayerPedId(), math.random(5), math.random(5), 3, 0, 0, 0)
+        end
+
+	  	if math.random(500) < 100 then
+	  		if math.random(100) > 50 then
+	  			Drugs1()
+	  		else
+	  			Drugs2()
+	  		end
+		  	Citizen.Wait(math.random(30000))
+		end
+
+        if math.random(100) > 91 and IsPedRunning(PlayerPedId()) then
+            SetPedToRagdoll(PlayerPedId(), math.random(1000), math.random(1000), 3, 0, 0, 0)
+        end
+        
+    end
+
+    dstamina = 0
+
+    if IsPedRunning(PlayerPedId()) then
+        SetPedToRagdoll(PlayerPedId(),6000,6000, 3, 0, 0, 0)
+    end
+
+    SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+
+end)
+ 
+-- DRUG FUNCS
+function Drugs1()
+	StartScreenEffect("DrugsMichaelAliensFightIn", 3.0, 0)
+	Citizen.Wait(5000)
+	SetPedMoveRateOverride(PlayerId(), 10.0)
+    SetRunSprintMultiplierForPlayer(PlayerId(), 1.49)
+	StartScreenEffect("DrugsMichaelAliensFight", 3.0, 0)
+	Citizen.Wait(8000)
+	StartScreenEffect("DrugsMichaelAliensFightOut", 3.0, 0)
+	Citizen.Wait(12000)
+	StopScreenEffect("DrugsMichaelAliensFightIn")
+	StopScreenEffect("DrugsMichaelAliensFight")
+	StopScreenEffect("DrugsMichaelAliensFightOut")
+
+end
+
+function Drugs2()
+	StartScreenEffect("DrugsTrevorClownsFightIn", 3.0, 0)
+	StartScreenEffect("DrugsTrevorClownsFight", 3.0, 0)
+	Citizen.Wait(8000)
+	StartScreenEffect("DrugsTrevorClownsFightOut", 3.0, 0)
+	Citizen.Wait(8000)
+	SetPedMoveRateOverride(PlayerId(), 0.0)
+    SetRunSprintMultiplierForPlayer(PlayerId(), 1.0)
+	Citizen.Wait(100000)
+	StopScreenEffect("DrugsTrevorClownsFight")
+	StopScreenEffect("DrugsTrevorClownsFightIn")
+	StopScreenEffect("DrugsTrevorClownsFightOut")
+end
+
+-- RegisterNetEvent('inventory-jail')
+-- AddEventHandler('inventory-jail', function(startPosition, cid, name)
+--     if (hasEnoughOfItem("okaylockpick",1,false)) then
+--         local plyPed = PlayerPedId()
+--         local coord = GetPedBoneCoords(plyPed, HeadBone)
+--         local inPoly = jailBounds:isPointInside(coord)
+--         if inPoly  then
+--              TriggerServerEvent("server-inventory-open", startPosition, cid, "1", name);
+--         end
+--     end
+-- end)
+
+function GetClosestPlayer()
+	local players = GetPlayers()
+	local closestDistance = -1
+	local closestPlayer = -1
+	local ply = PlayerPedId()
+	local plyCoords = GetEntityCoords(ply, 0)
+	if not IsPedInAnyVehicle(PlayerPedId(), false) then
+
+		for index,value in ipairs(players) do
+			local target = GetPlayerPed(value)
+			if(target ~= ply) then
+				local targetCoords = GetEntityCoords(GetPlayerPed(value), 0)
+				local distance = #(vector3(targetCoords["x"], targetCoords["y"], targetCoords["z"]) - vector3(plyCoords["x"], plyCoords["y"], plyCoords["z"]))
+				if(closestDistance == -1 or closestDistance > distance) and not IsPedInAnyVehicle(target, false) then
+					closestPlayer = value
+					closestDistance = distance
+				end
+			end
+		end
+		
+		return closestPlayer, closestDistance
+
+	else
+		TriggerEvent("DoLongHudText","Inside Vehicle.",2)
+	end
+
+end
+
+RegisterCommand('steal', function()
+    local cid = "ply-"..exports["isPed"]:isPed("cid")
+    local closestPlayer, closestDistance = GetClosestPlayer()
+    RequestAnimDict("random@shop_robbery")
+    while not HasAnimDictLoaded("random@shop_robbery") do
+        Citizen.Wait(0)
+	end
+    if closestPlayer ~= -1 and closestDistance <= 3.0 then
+        if ( IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "dead", "dead_a", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "amb@code_human_cower_stand@male@base", "base", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "amb@code_human_cower@male@base", "base", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "random@arrests@busted", "idle_a", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "mp_arresting", "idle", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "random@mugging3", "handsup_standing_base", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "missfbi5ig_22", "hands_up_anxious_scientist", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "missfbi5ig_22", "hands_up_loop_scientist", 3) or IsEntityPlayingAnim(GetPlayerPed(closestPlayer), "missminuteman_1ig_2", "handsup_base", 3) ) then
+            if IsPedArmed(GetPlayerPed(-1), 7) then
+                TaskPlayAnim(GetPlayerPed(-1), "random@shop_robbery", "robbery_action_b", 8.0, -8, -1, 16, 0, 0, 0, 0)
+                local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+                local finished = exports["urp-taskbar"]:taskBar(3000,"Robbing",false,false,playerVeh)
+                if (finished == 100) then
+                    TriggerServerEvent('urp-inventory:openInventorySteal', GetPlayerServerId(closestPlayer))
+                    ClearPedTasks(GetPlayerPed(-1))
+                end
+            end
+        end
+    else
+        TriggerEvent("DoLongHudText", "Too far", 2)
     end
 end)
 
+RegisterNetEvent('urp-inventory:openInventorySteal')
+AddEventHandler('urp-inventory:openInventorySteal', function(data)
+    local cid = "ply-"..exports["isPed"]:isPed("cid")
+    TriggerServerEvent('server-inventory-open', GetEntityCoords(PlayerPedId()), cid, "1", "ply-"..data.id)
+end)
+
+--RegisterNetEvent('cash:remove')
+--AddEventHandler('cash:remove', function(cash)
+--    local src = source
+--    local player = URPCore.GetPlayerData()
+--    local closestPlayer, closestDistance = URPCore.Game.GetClosestPlayer(
+--    print(Player.id)
+--    LocalPlayer:removeCash(Player.id, cash)
+--end)
+
+--RegisterNetEvent('cash:add')
+--AddEventHandler('cash:add', function(cash)
+--    local src = source
+--    local player = URPCore.GetPlayerData()
+--    local closestPlayer, closestDistance = URPCore.Game.GetClosestPlayer(
+--    print(Player.id)
+--    LocalPlayer:addCash(Player.id, cash)
+--end)
+
+--RegisterNetEvent('cash:removeall')
+--AddEventHandler('cash:removeall', function(cash)
+--    local src = source
+--    local player = URPCore.GetPlayerData()
+--    local closestPlayer, closestDistance = URPCore.Game.GetClosestPlayer(
+--    print(Player.id)
+--    LocalPlayer:setCash(Player.id, cash)
+--end)
+
+RegisterCommand('search', function()
+    local player = URPCore.GetPlayerData()
+    local closestPlayer, closestDistance = URPCore.Game.GetClosestPlayer()
+    if URPCore.GetPlayerData().job.name == 'police' then
+        local closestPlayer, closestDistance = GetClosestPlayer()
+        if closestPlayer ~= -1 and closestDistance <= 3.0 then
+            TriggerServerEvent('urp-inventory:openInventorySteal', GetPlayerServerId(closestPlayer))
+        else
+            TriggerEvent("DoLongHudText", "Too far", 2)
+        end
+    else
+        TriggerEvent("DoLongHudText", "Not Police", 2)
+    end
+end)
 
 RegisterNetEvent('RunUseItem')
 AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
-
     if itemid == nil then
         return
     end
     local ItemInfo = GetItemInfo(slot)
-    if tonumber(ItemInfo.quality) < 1 then
-        TriggerEvent("DoLongHudText","Item is too worn.",2) 
-        if isWeapon then
-            TriggerEvent("brokenWeapon")
-        end
-        return
+    if tonumber(ItemInfo.quality) ~= nil then
+     if tonumber(ItemInfo.quality) < 1 then
+         TriggerEvent("DoLongHudText","Item is too worn.",2) 
+         if isWeapon then
+             TriggerEvent("brokenWeapon")
+         end
+         return
+     end
     end
 
     if justUsed then
@@ -108,13 +379,13 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
 
     justUsed = true
 
-    if (not hasEnoughOfItem(itemid,1,false)) then
-        TriggerEvent("DoLongHudText","You dont appear to have this item on you?",2) 
-        justUsed = false
-        retardCounter = 0
-        lastCounter = 0
-        return
-    end
+    -- if (not hasEnoughOfItem(itemid,1,false)) then
+    --     TriggerEvent("DoLongHudText","You dont appear to have this item on you?",2) 
+    --     justUsed = false
+    --     retardCounter = 0
+    --     lastCounter = 0
+    --     return
+    -- end
 
     if itemid == "-72657034" then
         TriggerEvent("equipWeaponID",itemid,ItemInfo.information,ItemInfo.id)
@@ -141,9 +412,7 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
 
     
     if (isWeapon) then
-        if tonumber(ItemInfo.quality) > 0 then
-            TriggerEvent("equipWeaponID",itemid,ItemInfo.information,ItemInfo.id)
-        end
+        TriggerEvent("equipWeaponID",itemid,ItemInfo.information,ItemInfo.id)
         justUsed = false
         retardCounter = 0
         lastCounter = 0
@@ -185,7 +454,6 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
     end
 
     local remove = false
-    local itemreturn = false
     local drugitem = false
     local fooditem = false
     local drinkitem = false
@@ -200,11 +468,12 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
     end
 
     if (itemid == "tuner") then
-
-      local finished = exports["urp-taskbar"]:taskBar(2000,"Connecting Tuner Laptop",false,false,playerVeh)
-      if (finished == 100) then
-        TriggerEvent("tuner:open")
-      end
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(2000,"Connecting Tuner Laptop",false,false,playerVeh)
+        if (finished == 100) then
+        --  if (finished == 100) then
+            TriggerEvent("tuner:open")
+        end
     end
 
     if (itemid == "electronickit" or itemid == "lockpick") then
@@ -212,7 +481,7 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
       
     end
     if (itemid == "locksystem") then
-      TriggerServerEvent("robbery:triggerItemUsedServer",itemid)
+      TriggerEvent('urp-robbery:legionPressure')
     end
 
     if (itemid == "thermite") then
@@ -237,21 +506,21 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
 
     if (itemid == "lsdtab" or itemid == "badlsdtab") then
         TriggerEvent("animation:PlayAnimation","pill")
+        remove = true
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(3000,"Placing LSD Strip on 👅",false,false,playerVeh)
         if (finished == 100) then
             TriggerEvent("Evidence:StateSet",2,1200)
             TriggerEvent("Evidence:StateSet",24,1200)
             TriggerEvent("fx:run", "lsd", 180, nil, (itemid == "badlsdtab" and true or false))
-            remove = true
         end
     end
 
-    if (itemid == "decryptersess" or itemid == "decrypterfv2" or itemid == "decrypterenzo") then
+    --[[if (itemid == "decryptersess" or itemid == "decrypterfv2" or itemid == "decrypterenzo") then
       if (#(GetEntityCoords(player) - vector3( 1275.49, -1710.39, 54.78)) < 3.0) then
-          local finished = exports["urp-taskbar"]:taskBar(25000,"Decrypting Data",false,false,playerVeh)
-          if (finished == 100) then
+        exports["urp_taskbar"]:StartDelayedFunction("Decrypting Data", 25000, function()
             TriggerEvent("pixerium:check",3,"robbery:decrypt",true)
-          end
+        end)
       end
 
       if #(GetEntityCoords(player) - vector3( 2328.94, 2571.4, 46.71)) < 3.0 then
@@ -289,6 +558,68 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
           end
       end
     end
+    ]]--
+
+    -- DRUGS BELOW 
+
+    if (itemid == "wateringcan") then
+        TriggerServerEvent('urp-DopePlant:wateringcan')
+    end
+
+    if (itemid == "purifiedwater") then
+        TriggerServerEvent('urp-DopePlant:purifiedwater')
+    end
+
+    if (itemid == "lowgradefert") then
+        TriggerServerEvent('urp-DopePlant:lowgradefert')
+    end
+
+    if (itemid == "highgradefert") then
+        TriggerServerEvent('urp-DopePlant:highgradefert')
+    end
+
+    if (itemid == "lowgrademaleseed") then
+        if hasEnoughOfItem('plantpot', 1) then
+            TriggerServerEvent('urp-DopePlant:lowgrademaleseed')
+        end
+    end
+
+    if (itemid == "highgrademaleseed") then
+        if hasEnoughOfItem('plantpot', 1) then
+            TriggerServerEvent('urp-DopePlant:highgrademaleseed')
+        end
+    end
+
+    if (itemid == "lowgradefemaleseed") then
+        if hasEnoughOfItem('plantpot', 1) then
+            TriggerServerEvent('urp-DopePlant:lowgradefemaleseed')
+        end
+    end
+
+    if (itemid == "dopebag") then
+        if hasEnoughOfItem('drugscales', 1) and hasEnoughOfItem('trimmedweed', 5) then
+            TriggerServerEvent('urp-DopePlant:dopebag')
+        end
+    end
+
+    if (itemid == "highgradefemaleseed") then
+        if hasEnoughOfItem('plantpot', 1) then
+            TriggerServerEvent('urp-DopePlant:highgradefemaleseed')
+        end
+    end
+
+    --END DRUGS HERE
+    if (itemid == "dnaanalyzer") then
+        TriggerEvent('urp_dna:AnalyzeDNA')
+    end
+
+    if (itemid == 'ammoanalyzer') then
+        TriggerEvent('urp_dna:AnalyzeAmmo')
+    end
+
+    if (itemid == "fishingrod") then
+        TriggerEvent('fishing:fishstart')
+    end
 
 
     if (itemid == "femaleseed") then
@@ -304,45 +635,66 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
     end
 
     if (itemid == "weedoz") then
- 
-      local finished = exports["urp-taskbar"]:taskBar(5000,"Packing Q Bags",false,false,playerVeh)
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(5000,"Packing Q Bags",false,false,playerVeh)
         if (finished == 100) then
-            CreateCraftOption("weedq", 40, true)
+            CreateCraftOption("weedq", 100, true)
         end
         
     end
 
-    if ( itemid == "smallbud" and hasEnoughOfItem("qualityscales",1,false) ) then
-        local finished = exports["urp-taskbar"]:taskBar(1000,"Packing Joint",false,false,playerVeh)
+    if (itemid == "weed12oz") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(5000,"Packing Bags",false,false,playerVeh)
         if (finished == 100) then
-            CreateCraftOption("joint2", 80, true)    
+            CreateCraftOption("weed5oz", 100, true)
         end
+        
+    end
+
+    if (itemid == "weed5oz") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(5000,"Packing Bags",false,false,playerVeh)
+        if (finished == 100) then
+            CreateCraftOption("weedoz", 100, true)
+        end
+        
     end
 
     if (itemid == "weedq") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(1000,"Rolling Joints",false,false,playerVeh)
         if (finished == 100) then
-            CreateCraftOption("joint", 80, true)    
+            CreateCraftOption("joint", 100, true)    
         end
+        
     end
 
     if (itemid == "lighter") then
         TriggerEvent("animation:PlayAnimation","lighter")
-          local finished = exports["urp-taskbar"]:taskBar(2000,"Starting Fire",false,false,playerVeh)
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(2000,"Starting Fire",false,false,playerVeh)
         if (finished == 100) then
-            
+            ClearPedTasks(PlayerPedId())
         end
+        
+    end
+    
+    if (itemid == "radio") then
+        TriggerEvent('radioGui')
     end
 
-    if (itemid == "joint" or itemid == "joint2") then
+    if (itemid == "joint") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(2000,"Smoking Joint",false,false,playerVeh)
         if (finished == 100) then
+            remove = true
             Wait(200)
             TriggerEvent("animation:PlayAnimation","weed")
+            TriggerEvent('client:newStress', false)
+            AddArmourToPed(GetPlayerPed(-1), 20)
             TriggerEvent("Evidence:StateSet",3,600)
             TriggerEvent("Evidence:StateSet",4,600)        
-            TriggerEvent("stress:timed",1000,"WORLD_HUMAN_SMOKING_POT")
-            remove = true
         end
     end
 
@@ -358,6 +710,10 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
         AttachPropAndPlayAnimation("amb@world_human_drinking@coffee@male@idle_a", "idle_c", 49,6000,"Drink","coffee:drink",true,itemid,playerVeh)
     end
 
+    if (itemid == "chips") then
+        TaskItem("mp_player_inteat@burger", "mp_player_int_eat_burger", 49,6000,"Eating","food:Condiment",true,itemid,playerVeh)
+    end
+
     if (itemid == "fishtaco") then
         AttachPropAndPlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 49,6000,"Eating","food:FishTaco",true,itemid,playerVeh)
     end
@@ -371,7 +727,7 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
     end
 
     if (itemid == "greencow") then
-        AttachPropAndPlayAnimation("amb@world_human_drinking@coffee@male@idle_a", "idle_c", 49,6000,"Drink","food:Condiment",true,itemid,playerVeh)
+        AttachPropAndPlayAnimation("amb@world_human_drinking@coffee@male@idle_a", "idle_c", 49,6000,"Drink","changethirst",true,itemid,playerVeh)
     end
 
     if (itemid == "donut" or itemid == "eggsbacon") then
@@ -385,10 +741,9 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
 
 
     if (itemid == "advlockpick") then
-             
-        local myJob = exports["isPed"]:isPed("myJob")
+        local myJob = exports["isPed"]:isPed("job")
         if myJob ~= "news" then
-            TriggerEvent('inv:advancedLockpick',inventoryName,slot)
+            TriggerEvent('urp-robbery:advLockpickUse')
         else
             TriggerEvent("DoLongHudText","Nice news reporting, you shit lord idiot.")
         end   
@@ -398,220 +753,78 @@ AddEventHandler('RunUseItem', function(itemid, slot, inventoryName, isWeapon)
 
     if (itemid == "Gruppe6Card") then
 
-        local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
-        local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 100.0, 0.0)
-        local countpolice = exports["isPed"]:isPed("countpolice")
-        local targetVehicle = getVehicleInDirection(coordA, coordB)
-        if targetVehicle ~= 0 and GetHashKey("stockade") == GetEntityModel(targetVehicle) and countpolice > 2 then
-            local entityCreatePoint = GetOffsetFromEntityInWorldCoords(targetVehicle, 0.0, -4.0, 0.0)
-            local coords = GetEntityCoords(GetPlayerPed(-1))
-            local aDist = GetDistanceBetweenCoords(coords["x"], coords["y"],coords["z"], entityCreatePoint["x"], entityCreatePoint["y"],entityCreatePoint["z"])
-            if aDist < 2.0 then
-                TriggerEvent("alert:noPedCheck", "banktruck")
-                local finished = exports["urp-taskbar"]:taskBar(45000,"Unlocking Vehicle",false,false,playerVeh)
-                if finished == 100 then
-                    remove = true
-                    TriggerEvent("sec:AttemptHeist", targetVehicle)
-                else
-                    TriggerEvent("evidence:bleeding")
-                end
-                
-            else
-                TriggerEvent("DoLongHudText","You need to do this from behind the vehicle.")
-            end
-        end
+        TriggerEvent('urp-doors:UseRedKeycard') 
+        TriggerServerEvent('urp-banktruck:hitTruck')
+        remove = true
 
     end
 
 
     if (itemid == "usbdevice") then
-        local finished = exports["urp-taskbar"]:taskBar(15000,"Scanning For Networks",false,false,playerVeh)
-        if (finished == 100) then
-            TriggerEvent("hacking:attemptHack")
-        end
-        
-    end
-
-    if (itemid == "weed12oz") then
-        TriggerServerEvent("exploiter", "Someone ate a box with 12oz of weed for no reason / removing item in unintended way")
-        TriggerEvent("inv:weedPacking") -- cannot find the end of this call anywhere
-        remove = true
+        TriggerEvent("t1ger_drugs:UsableItem")
     end
 
     if (itemid == "heavyammo") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(5000,"Reloading",false,false,playerVeh)
         if (finished == 100) then
-            TriggerEvent("actionbar:ammo",1788949567,50,true)
             remove = true
+            TriggerEvent("actionbar:ammo",1788949567,50,true)
         end
     end
 
     if (itemid == "pistolammo") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(5000,"Reloading",false,false,playerVeh)
         if (finished == 100) then
-            TriggerEvent("actionbar:ammo",1950175060,50,true)
             remove = true
+            TriggerEvent("actionbar:ammo",1950175060,50,true)
         end
     end
 
     if (itemid == "rifleammo") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(5000,"Reloading",false,false,playerVeh)
         if (finished == 100) then
-            TriggerEvent("actionbar:ammo",218444191,50,true)
             remove = true
+            TriggerEvent("actionbar:ammo",218444191,50,true)
         end
     end
 
     if (itemid == "shotgunammo") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(5000,"Reloading",false,false,playerVeh)
         if (finished == 100) then
-            TriggerEvent("actionbar:ammo",-1878508229,50,true)
             remove = true
+            TriggerEvent("actionbar:ammo",-1878508229,50,true)
         end
     end
 
     if (itemid == "subammo") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(5000,"Reloading",false,false,playerVeh)
         if (finished == 100) then
-            TriggerEvent("actionbar:ammo",1820140472,50,true)
             remove = true
+            TriggerEvent("actionbar:ammo",1820140472,50,true)
         end
     end
 
 
     if (itemid == "armor") then
-        local finished = exports["urp-taskbar"]:taskBar(10000,"Armor",true,false,playerVeh)
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        applying = true
+        local finished = exports["urp-taskbar"]:taskBar(10000,"Armor",false,false,playerVeh)
         if (finished == 100) then
+            remove = true
+            TriggerEvent("ApplyArmor")
             SetPlayerMaxArmour(PlayerId(), 60 )
-            SetPedArmour( player, 60 )
+            SetPedArmour( PlayerPedId(), 60 )
             TriggerEvent("UseBodyArmor")
-            remove = true
-        end
-    end
-
-    if (itemid == "bodybag") then
-        local finished = exports["urp-taskbar"]:taskBar(10000,"Opening bag",true,false,playerVeh)
-        if (finished == 100) then
-            remove = true
-            TriggerEvent( "player:receiveItem", "humanhead", 1 )
-            TriggerEvent( "player:receiveItem", "humantorso", 1 )
-            TriggerEvent( "player:receiveItem", "humanarm", 2 )
-            TriggerEvent( "player:receiveItem", "humanleg", 2 )
-        end
-    end
-
-    if (itemid == "bodygarbagebag") then
-            local finished = exports["urp-taskbar"]:taskBar(10000,"Opening trash bag",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerServerEvent('loot:useItem', itemid)
-            end
-    end
-
-    if (itemid == "foodsupplycrate") then
-        TriggerEvent("DoLongHudText","Make sure you have a ton of space in your inventory! 100 or more.",2)
-        local finished = exports["urp-taskbar"]:taskBar(20000,"Opening the crate (ESC to Cancel)",false,false,playerVeh)
-        if (finished == 100) then
-            remove = true
-            TriggerEvent( "player:receiveItem", "heartstopper", 10 )
-            TriggerEvent( "player:receiveItem", "moneyshot", 10 )
-            TriggerEvent( "player:receiveItem", "bleederburger", 10 )
-            TriggerEvent( "player:receiveItem", "fries", 10 )
-            TriggerEvent( "player:receiveItem", "cola", 10 )
-        end
-end
-
-    if (itemid == "organcooler") then
-        local finished = exports["urp-taskbar"]:taskBar(5000,"Opening cooler",true,false,playerVeh)
-        if (finished == 100) then
-            remove = true
-            TriggerEvent( "player:receiveItem", "humanheart", 1 )
-            TriggerEvent( "player:receiveItem", "organcooleropen", 1 )
-        end
-    end
-
-    if itemid == "humanhead" then
-        TaskItem("mp_player_inteat@burger", "mp_player_int_eat_burger", 49, 10000, "Eating (ESC to Cancel)", "inv:wellfed", true,itemid,playerVeh,true,"humanskull")
-    end
-
-    if (itemid == "humantorso" or itemid == "humanarm" or itemid == "humanhand" or itemid == "humanleg" or itemid == "humanfinger") then
-        TaskItem("mp_player_inteat@burger", "mp_player_int_eat_burger", 49, 10000, "Eating (ESC to Cancel)", "inv:wellfed", true,itemid,playerVeh,true,"humanbone")
-    end
-
-    if (itemid == "humanear" or itemid == "humanintestines" or itemid == "humanheart" or itemid == "humaneye" or itemid == "humanbrain" or itemid == "humankidney" or itemid == "humanliver" or itemid == "humanlungs" or itemid == "humantongue" or itemid == "humanpancreas") then
-        TaskItem("mp_player_inteat@burger", "mp_player_int_eat_burger", 49, 10000, "Eating (ESC to Cancel)", "inv:wellfed", true,itemid)
-    end
-
-    if (itemid == "Bankbox") then
-        if (hasEnoughOfItem("locksystem",1,false)) then
-            local finished = exports["urp-taskbar"]:taskBar(10000,"Opening bank box.",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerEvent("inventory:removeItem","locksystem", 1)  
-
-                TriggerServerEvent('loot:useItem', itemid)
-            end
+            applying = false
         else
-            TriggerEvent("DoLongHudText","You are missing something to open the box with",2)
+            applying = false
         end
     end
-
-    if (itemid == "Securebriefcase") then
-        if (hasEnoughOfItem("Bankboxkey",1,false)) then
-            local finished = exports["urp-taskbar"]:taskBar(5000,"Opening briefcase.",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerEvent("inventory:removeItem","Bankboxkey", 1)  
-
-                TriggerServerEvent('loot:useItem', itemid)
-            end
-        else
-            TriggerEvent("DoLongHudText","You are missing something to open the briefcase with",2)
-        end
-    end
-
-    if (itemid == "Largesupplycrate") then
-        if (hasEnoughOfItem("2227010557",1,false)) then
-            local finished = exports["urp-taskbar"]:taskBar(15000,"Opening supply crate.",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerEvent("inventory:removeItem","2227010557", 1)  
-
-                TriggerServerEvent('loot:useItem', itemid)
-            end
-        else
-            TriggerEvent("DoLongHudText","You are missing something to open the crate with",2)
-        end
-    end
-
-    if (itemid == "Smallsupplycrate") then
-        if (hasEnoughOfItem("2227010557",1,false)) then
-            local finished = exports["urp-taskbar"]:taskBar(15000,"Opening supply crate.",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerEvent("inventory:removeItem","2227010557", 1)  
-
-                TriggerServerEvent('loot:useItem', itemid)
-            end
-        else
-            TriggerEvent("DoLongHudText","You are missing something to open the crate with",2)
-        end
-    end
-
-    if (itemid == "Mediumsupplycrate") then
-        if (hasEnoughOfItem("2227010557",1,false)) then
-            local finished = exports["urp-taskbar"]:taskBar(15000,"Opening supply crate.",false,false,playerVeh)
-            if (finished == 100) then
-                remove = true
-                TriggerEvent("inventory:removeItem","2227010557", 1)  
-
-                TriggerServerEvent('loot:useItem', itemid)
-            end
-        else
-            TriggerEvent("DoLongHudText","You are missing something to open the crate with",2)
-        end
-    end
-
 
     if (itemid == "binoculars") then 
         TriggerEvent("binoculars:Activate")
@@ -622,7 +835,11 @@ end
         TriggerEvent("camera:Activate")
     end
 
-    if (itemid == "nitrous") then
+    if (itemid == "idcard") then
+        TriggerServerEvent('idcard:run', ItemInfo.information)
+    end
+
+    --[[if (itemid == "nitrous") then
         local currentVehicle = GetVehiclePedIsIn(player, false)
         
         if not IsToggleModOn(currentVehicle,18) then
@@ -648,16 +865,18 @@ end
                 TriggerEvent("DoLongHudText","You can't drive and hook up nos at the same time.",2)
             end
         end
-    end
+    end]]--
 
     if (itemid == "lockpick") then
-        local myJob = exports["isPed"]:isPed("myJob")
+
+        local myJob = exports["isPed"]:isPed("job")
         if myJob ~= "news" then
             TriggerEvent("inv:lockPick",false,inventoryName,slot)
 
         else
             TriggerEvent("DoLongHudText","Nice news reporting, you shit lord idiot.")
-        end
+        end       
+        
     end
 
     if (itemid == "umbrella") then
@@ -674,27 +893,42 @@ end
       TriggerEvent('veh:repairing',inventoryName,slot,itemid)
            
     end
-    if (itemid == "securityblue" or itemid == "securityblack" or itemid == "securitygreen" or itemid == "securitygold" or itemid == "securityred")  then
-        TriggerEvent("robbery:scanLock",false,itemid)       
+    if (itemid == "securityblue")  then
+        TriggerEvent('urp-robbery:securityBlueUsed')       
+    end
+
+    if (itemid == "Largesupplycrate") then
+        if (hasEnoughOfItem("2227010557",1,false)) then
+            local finished = exports["urp-taskbar"]:taskBar(15000,"Opening supply crate.",false,false,playerVeh)
+            if (finished == 100) then
+                remove = true
+                TriggerEvent("inventory:removeItem","2227010557", 1)  
+
+                TriggerServerEvent('loot:useItem', itemid)
+            end
+        else
+            TriggerEvent("DoLongHudText","You are missing something to open the crate with",2)
+        end
     end
 
     if (itemid == "Gruppe6Card2")  then
         TriggerServerEvent("robbery:triggerItemUsedServer",itemid)
     end
 
-    if (itemid == "Gruppe6Card222")  then
-        TriggerServerEvent("robbery:triggerItemUsedServer",itemid)
+    if (itemid == "Gruppe6Card22")  then
+        TriggerEvent("urp-robbery:legionHack")
     end    
 
     if (itemid == "ciggy") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(1000,"Lighting Up",false,false,playerVeh)
         if (finished == 100) then
-            Wait(300)
             TriggerEvent("animation:PlayAnimation","smoke")
         end
     end
 
     if (itemid == "cigar") then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
         local finished = exports["urp-taskbar"]:taskBar(1000,"Lighting Up",false,false,playerVeh)
         if (finished == 100) then
             Wait(300)
@@ -703,15 +937,17 @@ end
     end
 
     if (itemid == "oxygentank") then
-        local finished = exports["urp-taskbar"]:taskBar(30000,"Oxygen Tank",true,false,playerVeh)
-        if (finished == 100) then        
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(30000,"Oxygen Tank",false,false,playerVeh)
+        if (finished == 100) then
+            remove = true  
             TriggerEvent("UseOxygenTank")
-            remove = true
         end
     end
 
     if (itemid == "bandage") then
-        TaskItem("amb@world_human_clipboard@male@idle_a", "idle_c", 49,10000,"Healing","healed:minors",true,itemid,playerVeh)
+        TaskItem("amb@world_human_clipboard@male@idle_a", "idle_c", 49,10000,"Healing","inventory:bandage",true,itemid,playerVeh)
+        --TriggerEvent('gen-hospital:items:bandage')
     end
 
     if (itemid == "coke50g") then
@@ -726,11 +962,6 @@ end
     if (itemid == "glucose") then 
         CreateCraftOption("1gcocaine", 80, true)
         
-    end
-
-    if (itemid == "idcard") then 
-        local ItemInfo = GetItemInfo(slot)
-        TriggerServerEvent("police:showID",ItemInfo.information)   
     end
 
     if (itemid == "drivingtest") then 
@@ -763,24 +994,35 @@ end
     end
 
     if (itemid == "IFAK") then
-        TaskItem("amb@world_human_clipboard@male@idle_a", "idle_c", 49,2000,"Applying IFAK","healed:useOxy",true,itemid,playerVeh)
+        loadAnimDict("amb@world_human_clipboard@male@idle_a")
+        TaskPlayAnim( PlayerPedId(), "amb@world_human_clipboard@male@idle_a", "idle_c", 3.0, 1.0, 5000, 49, 0, 0, 0, 0 ) 
+        Citizen.Wait(5000)
+        TriggerEvent('urp-hospital:client:UsePainKiller', 1)
+        ClearPedTasks(PlayerPedId())
+        remove = true
+        TriggerEvent('HealSlow')
     end
 
+    if (itemid == "notepad") then
+        TriggerEvent('urp-notepad:note')
+        TriggerEvent('urp-notepad:OpenNotepadGui')
+    end
 
     if (itemid == "oxy") then
-        TriggerEvent("animation:PlayAnimation","pill")
-        TriggerEvent("useOxy")
-        TriggerEvent("healed:useOxy")
+        loadAnimDict("mp_suicide")
+        TaskPlayAnim( PlayerPedId(), "mp_suicide", "pill", 3.0, 1.0, 2500, 49, 0, 0, 0, 0 ) 
+        Citizen.Wait(2500)
+        TriggerEvent('HealSlow')
+        TriggerEvent('urp-hospital:client:UsePainKiller', 1)
+        ClearPedTasks(PlayerPedId())
         remove = true
     end
 
     if (itemid == "sandwich" or itemid == "hamburger") then
-        AttachPropAndPlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 49,6000,"Eating","changehunger",true,itemid,playerVeh)
+        AttachPropAndPlayAnimation("mp_player_inteat@burger", "mp_player_int_eat_burger", 49,6000,"Eating","food:Condiment",true,itemid,playerVeh)
     end
 
     if (itemid == "cola" or itemid == "water") then
-        --attachPropsToAnimation(itemid, 6000)
-        --TaskItem("amb@world_human_drinking@coffee@male@idle_a", "idle_c", 49,6000,"Drink","changethirst",true,itemid)
         AttachPropAndPlayAnimation("amb@world_human_drinking@beer@female@idle_a", "idle_e", 49,6000,"Drink","changethirst",true,itemid,playerVeh)
     end
 
@@ -812,13 +1054,19 @@ end
         local finished = exports["urp-taskbarskill"]:taskBar(2500,math.random(5,20))
         if (finished == 100) then    
             TriggerEvent("police:uncuffMenu")
+            ClearPedTasks(PlayerPedId())
         end
         lockpicking = false
         remove = true
     end
 
+    if (itemid == "cuffs") then
+        remove = true
+        TriggerEvent('urp_handcuffs:cuffcheck')
+    end
+
     if (itemid == "watch") then
-        TriggerEvent("carHud:compass")
+        CreateCraftOption("electronics", 40, true)
     end
 
     if (itemid == "harness") then
@@ -830,7 +1078,12 @@ end
         end
     end
 
-    if remove then
+    if (itemid == "backpack") then
+        local info = json.decode(ItemInfo.information)
+        TriggerEvent('server-inventory-open', "1", "backpack-" .. info.serial)
+    end
+
+    if remove == true then
         TriggerEvent("inventory:removeItem",itemid, 1)
     end
 
@@ -840,6 +1093,10 @@ end
 
 
 end)
+
+function GetIdentifierWithoutSteam(Identifier)
+    return string.gsub(Identifier, "steam:", "")
+end
 
 function AttachPropAndPlayAnimation(dictionary,animation,typeAnim,timer,message,func,remove,itemid,vehicle)
     if itemid == "hamburger" or itemid == "heartstopper" or itemid == "bleederburger" then
@@ -858,7 +1115,6 @@ function AttachPropAndPlayAnimation(dictionary,animation,typeAnim,timer,message,
         TriggerEvent("attachItem", "cup")
     end
     TaskItem(dictionary, animation, typeAnim, timer, message, func, remove, itemid,vehicle)
-    TriggerEvent("destroyProp")
 end
 
 RegisterNetEvent('randPickupAnim')
@@ -890,7 +1146,7 @@ end)
 function GetItemInfo(checkslot)
     for i,v in pairs(clientInventory) do
         if (tonumber(v.slot) == tonumber(checkslot)) then
-            local info = {["information"] = v.information,["id"] = v.id, ["quality"] = v.quality }
+            local info = {["information"] = v.information,["id"] = v.item_id, ["quality"] = v.quality }
             return info
         end
     end
@@ -910,25 +1166,24 @@ function loadAnimDict( dict )
     end
 end
 
-function TaskItem(dictionary,animation,typeAnim,timer,message,func,remove,itemid,playerVeh,itemreturn,itemreturnid)
+function TaskItem(dictionary,animation,typeAnim,timer,message,func,remove,itemid,playerVeh)
     loadAnimDict( dictionary ) 
     TaskPlayAnim( PlayerPedId(), dictionary, animation, 8.0, 1.0, -1, typeAnim, 0, 0, 0, 0 )
     local timer = tonumber(timer)
     if timer > 0 then
-        local finished = exports["urp-taskbar"]:taskBar(timer,message,true,false,playerVeh)
-        if finished == 100 or timer == 0 then
+        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local finished = exports["urp-taskbar"]:taskBar(timer,message,false,false,playerVeh)
+        if (finished == 100) then
             TriggerEvent(func)
-
-            if remove then
-                TriggerEvent("inventory:removeItem",itemid, 1)
-            end
-            if itemreturn then
-                TriggerEvent( "player:receiveItem",itemreturnid, 1 )
-            end
-
+            ClearPedTasks(PlayerPedId())
+            TriggerEvent("destroyProp")
         end
     else
         TriggerEvent(func)
+    end
+
+    if remove then
+        TriggerEvent("inventory:removeItem",itemid, 1)
     end
 end
 
@@ -952,25 +1207,28 @@ function getQuantity(itemid)
     local amount = 0
     for i,v in pairs(clientInventory) do
         if (v.item_id == itemid) then
-            amount = amount + v.amount
+            if v.quality < 1 then
+                -- add no amount
+            else
+                amount = amount + v.amount
+            end
         end
     end
     return amount
 end
 
-function hasEnoughOfItem(itemid,amount,shouldReturnText)
+function hasEnoughOfItem(itemid, amount, shouldReturnText)
     if shouldReturnText == nil then shouldReturnText = true end
-    if itemid == nil or itemid == 0 or amount == nil or amount == 0 then if shouldReturnText then TriggerEvent("DoLongHudText","I dont seem to have " .. itemid .. " in my pockets.",2) end return false end
+    if itemid == nil or itemid == 0 or amount == nil or amount == 0 then if shouldReturnText then TriggerEvent("DoLongHudText","I dont seem to have " .. tostring(itemid) .. " in my pockets.",2) end return false end
     amount = tonumber(amount)
     local slot = 0
     local found = false
-
     if getQuantity(itemid) >= amount then
         return true
     end
     if (shouldReturnText) then
-        TriggerEvent("DoLongHudText","I dont have enough of that item...",2) 
-    end    
+        TriggerEvent("DoLongHudText","I dont have enough of that item or too worn",2) 
+    end
     return false
 end
 
@@ -1010,6 +1268,15 @@ function isValidUseCase(itemID,isWeapon)
 
     return true
 end
+
+-- Citizen.CreateThread(function()
+--     while true do
+--         if IsControlPressed(0, 289) then
+--             print('this is inventory')
+--             SendNUIMessage({openInventory = t})
+--         end
+--     end
+-- end)
 
 
 
@@ -1165,18 +1432,6 @@ function DrawText3Ds(x,y,z, text)
     DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
 
 end
-
-local burgies = 0
-RegisterNetEvent('inv:wellfed')
-AddEventHandler('inv:wellfed', function()
-    TriggerEvent("Evidence:StateSet",25,3600)
-    TriggerEvent("changehunger")
-    TriggerEvent("changehunger")
-    TriggerEvent("client:newStress",false,10)
-    TriggerEvent("changehunger")
-    TriggerEvent("changethirst")
-    burgies = 0
-end)
 
 
 RegisterNetEvent('animation:lockpickinvtestoutside')
@@ -1344,8 +1599,8 @@ AddEventHandler('inv:lockPick', function(isForced,inventoryName,slot)
             carTimer = math.ceil(carTimer / 3)
 
 
-            local myJob = exports["isPed"]:isPed("myJob")
-            if myjob == "towtruck" then
+            local myJob = exports["isPed"]:isPed("job")
+            if myjob == "mecano" then
                 carTimer = 4000
             end
 
@@ -1384,7 +1639,7 @@ AddEventHandler('inv:lockPick', function(isForced,inventoryName,slot)
 
                     local plate = GetVehicleNumberPlateText(targetVehicle)
                     SetVehicleDoorsLocked(targetVehicle, 1)
-                    TriggerEvent("keys:addNew",targetVehicle,plate)
+                    TriggerServerEvent("garage:addKeys", plate)
                     TriggerEvent("DoLongHudText", "Ignition Working.",1)
                     SetEntityAsMissionEntity(targetVehicle,false,true)
                     SetVehicleHasBeenOwnedByPlayer(targetVehicle,true)
@@ -1488,8 +1743,8 @@ AddEventHandler('veh:repairing', function(inventoryName,slot,itemid)
 
             if finished == 100 then
                 
-                local myJob = exports["isPed"]:isPed("myJob")
-                if myJob == "towtruck" then
+                local myJob = exports["isPed"]:isPed("job")
+                if myJob == "mecano" then
 
                     SetVehicleEngineHealth(targetVehicle, 1000.0)
                     SetVehicleBodyHealth(targetVehicle, 1000.0)
@@ -1597,23 +1852,23 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        DisableControlAction(0, 199, true) 
-    end
-end)
-
-RegisterCommand("mycid", function(source, args, rawCommand)
-    local cid = exports["isPed"]:isPed("cid")
-    print(cid)
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
         BlockWeaponWheelThisFrame()
         HideHudComponentThisFrame(19)
         HideHudComponentThisFrame(20)
         HideHudComponentThisFrame(17)
-        DisableControlAction(0, 37, true)
-        DisableControlAction(0, 199, true) 
+        DisableControlAction(0, 37, true) --Disable Tab
+        -- for k, v in pairs(keys) do
+        --     if IsDisabledControlJustReleased(0, v) then
+        --         UseItem(k)
+        --     end
+        -- end
+        -- if IsDisabledControlJustReleased(0, 37) then
+        --     ESX.TriggerServerCallback('disc-inventoryhud:GetItemsInSlotsDisplay', function(items)
+        --         SendNUIMessage({
+        --             action = 'showActionBar',
+        --             items = items
+        --         })
+        --     end)
+        -- end
     end
 end)

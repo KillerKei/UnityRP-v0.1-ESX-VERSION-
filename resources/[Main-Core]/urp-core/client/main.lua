@@ -55,7 +55,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(6)
 		local ply = PlayerPedId()
 		local plyCoords = GetEntityCoords(ply, 0)
 		local payDst = #(vector3(-1083.176, -248.0483, 37.76324) - vector3(plyCoords["x"], plyCoords["y"], plyCoords["z"]))
@@ -132,7 +132,7 @@ end)
 
 AddEventHandler('playerSpawned', function()
 	while not URPCore.PlayerLoaded do
-		Citizen.Wait(1)
+		Citizen.Wait(10)
 	end
 
 	local playerPed = PlayerPedId()
@@ -159,7 +159,7 @@ end)
 
 AddEventHandler('skinchanger:modelLoaded', function()
 	while not URPCore.PlayerLoaded do
-		Citizen.Wait(1)
+		Citizen.Wait(10)
 	end
 
 	TriggerEvent('urp:restoreLoadout')
@@ -202,7 +202,7 @@ AddEventHandler('urp:teleport', function(pos)
 
 	while not HasCollisionLoadedAroundEntity(PlayerPedId()) do
 		RequestCollisionAtCoord(pos.x, pos.y, pos.z)
-		Citizen.Wait(1)
+		Citizen.Wait(10)
 	end
 
 	SetEntityCoords(PlayerPedId(), pos.x, pos.y, pos.z)
@@ -240,7 +240,7 @@ AddEventHandler('urp:playAnim', function(dict, anim)
 		RequestAnimDict(dict)
 
 		while not HasAnimDictLoaded(dict) do
-			Citizen.Wait(1)
+			Citizen.Wait(10)
 		end
 
 		TaskPlayAnim(playerPed, dict, anim, 1.0, -1.0, 20000, 0, 1, true, true, true)
@@ -346,7 +346,7 @@ AddEventHandler('urp:spawnPed', function(model)
 		RequestModel(model)
 
 		while not HasModelLoaded(model) do
-			Citizen.Wait(1)
+			Citizen.Wait(1000)
 		end
 
 		CreatePed(5, model, x, y, z, 0.0, true, false)
@@ -371,7 +371,7 @@ end)
 if Config.EnableHud then
 	Citizen.CreateThread(function()
 		while true do
-			Citizen.Wait(300)
+			Citizen.Wait(80)
 
 			if IsPauseMenuActive() and not isPaused then
 				isPaused = true
@@ -392,7 +392,7 @@ end
 if Config.DisableWantedLevel then
 	Citizen.CreateThread(function()
 		while true do
-			Citizen.Wait(0)
+			Citizen.Wait(50)
 
 			local playerId = PlayerId()
 			if GetPlayerWantedLevel(playerId) ~= 0 then
@@ -406,14 +406,14 @@ end
 -- Pickups
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(25)
 
 		local playerPed = PlayerPedId()
 		local coords = GetEntityCoords(playerPed)
 		
 		-- if there's no nearby pickups we can wait a bit to save performance
 		if next(pickups) == nil then
-			Citizen.Wait(500)
+			Citizen.Wait(10)
 		end
 
 		for k,v in pairs(pickups) do
@@ -434,7 +434,7 @@ Citizen.CreateThread(function()
 				local dict = "pickup_object"		
         		RequestAnimDict(dict)
         		while not HasAnimDictLoaded(dict) do
-            		Citizen.Wait(0)
+            		Citizen.Wait(1000)
         		end
         		TaskPlayAnim(GetPlayerPed(-1), dict, "pickup_low", 8.0, 8.0, -1, 0, 1, false, false, false)
 				TriggerServerEvent('urp:onPickup', v.id)
@@ -448,7 +448,7 @@ end)
 -- Last position
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
+		Citizen.Wait(50)
 		local playerPed = PlayerPedId()
 
 		if URPCore.PlayerLoaded and isPlayerSpawned then

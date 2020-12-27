@@ -6,7 +6,7 @@
 -- end)
 
 
-CurrentWeather = "XMAS"
+CurrentWeather = "CLEAR"
 
 RegisterServerEvent('aidsarea')
 AddEventHandler("audsarea", function(add,x,y,z,h)

@@ -1,6 +1,6 @@
 Citizen.CreateThread(function()
-	Citizen.Wait(500)
-	print('\27[32m[urp-core]\27[0m Loaded All Data Successfully')
+	Citizen.Wait(1000)
+	print('\27[32m[urp-core]\27[0m Started Successfully.')
 end)
 
 AddEventHandler('es:playerLoaded', function(source, _player)

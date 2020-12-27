@@ -264,7 +264,7 @@ URPCore.Game.GetPedMugshot = function(ped)
 	local mugshot = RegisterPedheadshot(ped)
 
 	while not IsPedheadshotReady(mugshot) do
-		Citizen.Wait(0)
+		Citizen.Wait(1000)
 	end
 
 	return mugshot, GetPedheadshotTxdString(mugshot)
@@ -275,7 +275,7 @@ URPCore.Game.Teleport = function(entity, coords, cb)
 
 	while not HasCollisionLoadedAroundEntity(entity) do
 		RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-		Citizen.Wait(0)
+		Citizen.Wait(1000)
 	end
 
 	SetEntityCoords(entity, coords.x, coords.y, coords.z)
@@ -342,7 +342,7 @@ URPCore.Game.SpawnVehicle = function(modelName, coords, heading, cb)
 
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-			Citizen.Wait(0)
+			Citizen.Wait(1000)
 		end
 
 		SetVehRadioStation(vehicle, 'OFF')
@@ -369,7 +369,7 @@ URPCore.Game.SpawnLocalVehicle = function(modelName, coords, heading, cb)
 
 		while not HasCollisionLoadedAroundEntity(vehicle) do
 			RequestCollisionAtCoord(coords.x, coords.y, coords.z)
-			Citizen.Wait(0)
+			Citizen.Wait(1000)
 		end
 
 		SetVehRadioStation(vehicle, 'OFF')
@@ -1026,7 +1026,7 @@ end)
 -- SetTimeout
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(1000)
 		local currTime = GetGameTimer()
 
 		for i=1, #URPCore.TimeoutCallbacks, 1 do
