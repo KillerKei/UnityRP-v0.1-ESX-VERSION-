@@ -24,7 +24,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(15)
 
         if veh ~= 0 then
-            if IsControlPressed(0,14) then
+            if IsControlPressed(0,15) then
                 local engine = not GetIsVehicleEngineRunning(veh)
                 print(engine)
                 if engine == true then
