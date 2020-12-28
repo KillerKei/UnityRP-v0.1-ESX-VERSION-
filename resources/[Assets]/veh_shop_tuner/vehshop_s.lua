@@ -50,12 +50,12 @@ end)
 RegisterServerEvent('CheckMoneyForVeh69')
 AddEventHandler('CheckMoneyForVeh69', function(name, model,price,financed)
 	local user = URPCore.GetPlayerFromId(source)
-    local idk = exports["urp-core"]:getCurrentCharacter(source)
+    local idk = exports["urp-base"]:getCurrentCharacter(source)
     local uCash = idk.money
     if financed then
         local financedPrice = math.ceil(price / 4)
         if uCash >= financedPrice then
-            TriggerEvent('urp-core:removeCash', user.source, financedPrice)
+            TriggerEvent('urp-base:removeCash', user.source, financedPrice)
             TriggerClientEvent('FinishMoneyCheckForVeh69', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)
@@ -63,7 +63,7 @@ AddEventHandler('CheckMoneyForVeh69', function(name, model,price,financed)
         end
     else
         if uCash >= price then
-            TriggerEvent('urp-core:removeCash', user.source, price)
+            TriggerEvent('urp-base:removeCash', user.source, price)
             TriggerClientEvent('FinishMoneyCheckForVeh69', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)

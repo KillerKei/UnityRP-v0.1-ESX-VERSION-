@@ -31,7 +31,7 @@ local isadded = false
 
 local hspLocs = {
 	[1] = { ['x'] = 309.23,['y'] = -593.03,['z'] = 43.36,['h'] = 209.52, ["name"] = "[E] Check In", ["fnc"] = "DrawText3DTest" },
-	[2] = { ["x"] = 307.93, ["y"] = -594.99, ["z"] = 43.29, ["h"] = 192.33, ["name"] = "[E] Prescriptions", ["fnc"] = "DrawText3DTest" },
+	[2] = { ["x"] = 308.26, ["y"] = -595.54, ["z"] = 43.28, ["h"] = 66.5, ["name"] = "[E] Prescriptions", ["fnc"] = "DrawText3DTest" },
 
 	[3] = { ["x"] = 326.2477722168, ["y"] = -583.00897216797, ["z"] = 43.317371368408, ["h"] = 330.01126098633, ["name"] = "None", ["fnc"] = "RandomNPC" },
 	[4] = { ["x"] = 308.50784301758, ["y"] = -596.73718261719, ["z"] = 43.291816711426, ["h"] = 9.658652305603, ["name"] = "None", ["fnc"] = "RandomNPC" },
@@ -45,7 +45,7 @@ local hspLocs = {
 	[10] = { ["x"] = 315.22637939453, ["y"] = -593.30419921875, ["z"] = 43.291805267334, ["h"] = 115.40777587891, ["name"] = "None", ["fnc"] = "aiSCAN" },
 	[11] = { ["x"] = 353.38198852539, ["y"] = -588.38922119141, ["z"] = 43.315010070801, ["h"] = 61.995723724365, ["name"] = "None", ["fnc"] = "aiSCAN" },
 
-	[12] = { ['x'] = 312.3,['y'] = -592.4,['z'] = 43.29,['h'] = 156.45, ["name"] = "[E] Results", ["fnc"] = "DrawText3DTest" },
+	[12] = { ['x'] = 312.33,['y'] = -592.88,['z'] = 43.28,['h'] = 160.95, ["name"] = "[E] Results", ["fnc"] = "DrawText3DTest" },
 	[13] = { ['x'] = 343.77,['y'] = -591.44,['z'] = 43.29, ["h"] = 164.47006225586, ["name"] = "[E] Check Up", ["fnc"] = "DrawText3DTest" },
 
 }
@@ -141,7 +141,7 @@ Citizen.CreateThread( function()
 				TriggerEvent("SpawnPeds")
 			end
 			local displayText = (curDoctors > 0 and not isTriageEnabled) and 'Press [E] to page a doctor' or hspLocs[1]["name"]
-			if hspDist < 2 then
+			if hspDist < 1.3 then
 			DrawText3DTest(hspLocs[1]["x"],hspLocs[1]["y"],hspLocs[1]["z"], displayText)
 			if IsControlJustPressed(0, 38) then
 				TriggerEvent('event:control:hospitalization', 1)
@@ -149,20 +149,20 @@ Citizen.CreateThread( function()
 		end
 
 		end
-		if hspDist2 < 2 then	
+		if hspDist2 < 1.5 then	
 			DrawText3DTest(hspLocs[2]["x"],hspLocs[2]["y"],hspLocs[2]["z"], hspLocs[2]["name"])
 			if IsControlJustPressed(0, 38) then
 				TriggerEvent('event:control:hospitalization', 2)
 			end
 	end
 
-		if hspDist3 < 2 then
+		if hspDist3 < 1 then
 			DrawText3DTest(hspLocs[12]["x"],hspLocs[12]["y"],hspLocs[12]["z"], hspLocs[12]["name"])
 			if IsControlJustPressed(0, 38) then
 				TriggerEvent('event:control:hospitalization', 3)
 			end
 	end
-		if hspDist4 < 2 then
+		if hspDist4 < 1 then
 			DrawText3DTest(hspLocs[13]["x"],hspLocs[13]["y"],hspLocs[13]["z"], hspLocs[13]["name"])
 			if IsControlJustPressed(0, 38) then
 				TriggerEvent('event:control:hospitalization', 4)
@@ -279,8 +279,8 @@ function ICUscreen(dying)
 end
 
 function logout()
-	TriggerEvent("urp-core:clearStates")
-	exports["urp-core"]:getModule("SpawnManager"):Initialize()
+	TriggerEvent("urp-base:clearStates")
+	exports["urp-base"]:getModule("SpawnManager"):Initialize()
 end
 
 Citizen.CreateThread( function()

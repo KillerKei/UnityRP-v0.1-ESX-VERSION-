@@ -224,10 +224,10 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		if(Vdist( 308.85, -592.15, 43.29, pos.x, pos.y, pos.z) < 20.0)then
+		if(Vdist( 306.73, -601.8, 43.32, pos.x, pos.y, pos.z) < 20.0)then
 			found = true
-			DrawMarker(27,  308.85, -592.15, 43.29 - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, 1.5001, 0, 25, 165, 165, 0,0, 0,0)
-			if(Vdist( 308.85, -592.15, 43.29, pos.x, pos.y, pos.z) < 2.0)then
+			DrawMarker(27,  306.73, -601.8, 43.32 - 1, 0, 0, 0, 0, 0, 0, 1.0001, 1.0001, 1.5001, 0, 25, 165, 165, 0,0, 0,0)
+			if(Vdist( 306.73, -601.8, 43.32, pos.x, pos.y, pos.z) < 2.0)then
 				local job = exports["isPed"]:isPed("myjob")
 				DisplayHelpText("Press ~INPUT_CONTEXT~ to open the ~g~shop.")
 				if IsControlJustPressed(1, 38) then	

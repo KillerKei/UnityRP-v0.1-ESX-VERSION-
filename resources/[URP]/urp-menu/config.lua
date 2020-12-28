@@ -206,7 +206,7 @@ rootMenuConfig =  {
         displayName = "DA Actions",
         icon = "#judge-actions",
         enableMenu = function()
-            --return (not isDead and exports["urp-core"]:getModule("LocalPlayer"):getVar("job") == "district attorney")
+            --return (not isDead and exports["urp-base"]:getModule("LocalPlayer"):getVar("job") == "district attorney")
         end,
         subMenus = { "police:cuff", "cuffs:uncuff", "general:escort", "cuffs:checkinventory"}
     },

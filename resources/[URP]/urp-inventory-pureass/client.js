@@ -105,8 +105,8 @@ on("onResourceStart", async (resource) => {
     }
 });
 
-RegisterNetEvent('urp-core:playerSpawned')
-on('urp-core:playerSpawned', (broughtData) => {
+RegisterNetEvent('urp-base:playerSpawned')
+on('urp-base:playerSpawned', (broughtData) => {
 	let cid = exports.isPed.isPed("cid")
 	emitNet("server-request-update",cid)
 	SendNuiMessage(JSON.stringify({ response: "SendItemList", list: itemList}))

@@ -12,6 +12,6 @@ server_scripts {
 }
 
 dependencies {
-	'urp-core',
+	'urp-base',
 	'mysql-async'
 }

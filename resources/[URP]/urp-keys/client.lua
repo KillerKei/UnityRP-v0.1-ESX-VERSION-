@@ -46,11 +46,11 @@ local vehicleBlacklist = {
       TriggerEvent('urp:getSharedObject', function(obj)
           URPCore = obj
       end)
-      Citizen.Wait(0)
+      Citizen.Wait(1000)
   end
 
   while URPCore.GetPlayerData().job == nil do
-      Citizen.Wait(10)
+      Citizen.Wait(1000)
   end
 
   URPCore.PlayerData = URPCore.GetPlayerData()
@@ -107,7 +107,7 @@ Citizen.CreateThread(function()
              disableF = false
             end
         end
-        Citizen.Wait(0)
+        Citizen.Wait(500)
     end
 end)
 
@@ -119,7 +119,7 @@ end)
 
 Citizen.CreateThread(function()
  while true do
-  Citizen.Wait(5)
+  Citizen.Wait(500)
 
   if not IsPedInAnyVehicle(PlayerPedId(), false) then
    showText = true
@@ -145,7 +145,7 @@ Citizen.CreateThread(function()
      TaskLeaveVehicle(targetPed, vehicle, 256)
 
      while IsPedInAnyVehicle(targetPed, false) do
-      Citizen.Wait(5)
+      Citizen.Wait(500)
      end
 
      RequestAnimDict('missfbi5ig_22')
@@ -198,7 +198,7 @@ end)
 
 Citizen.CreateThread(function()
  while true do
-  Citizen.Wait(5)
+  Citizen.Wait(10)
 
   if IsPedShooting(PlayerPedId()) then
    hasKilledNPC = true
@@ -210,7 +210,7 @@ Citizen.CreateThread(function()
 
    if DoesEntityExist(vehicle) and not hasVehicleKey(plate) and GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() and not vehicleHotwired[plate] and not vehicleBlacklist[GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))] then
     while not IsPedInAnyVehicle(PlayerPedId(), false) do
-     Citizen.Wait(5)
+     Citizen.Wait(500)
     end
 
     SetVehicleEngineOn(vehicle, false, false)
@@ -308,7 +308,7 @@ end
 
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(0)
+    Citizen.Wait(100)
     if IsControlJustReleased(0, Keys['L']) then
       ToggleLocks()
     end
@@ -483,7 +483,7 @@ AddEventHandler('animation:hotwire', function(disable)
 
  RequestAnimDict("mini@repair")
  while not HasAnimDictLoaded("mini@repair") do
-  Citizen.Wait(0)
+  Citizen.Wait(500)
  end
  if disable ~= nil then
   if not disable then
@@ -636,7 +636,7 @@ end
 
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(0)
+    Citizen.Wait(50)
     local playerPed = GetPlayerPed(-1)
     local vehicle = GetVehiclePedIsIn(playerPed)
     local plate = GetVehicleNumberPlateText(vehicle)

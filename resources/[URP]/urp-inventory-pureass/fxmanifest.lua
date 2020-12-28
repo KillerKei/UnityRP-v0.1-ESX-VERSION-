@@ -25,8 +25,8 @@ client_script 'functions.lua'
 server_script 'server.js'
 server_script 'sv_functions.lua'
 server_script '@mysql-async/lib/MySQL.lua'
-server_script '@urp-core/locale.lua'
-client_script '@urp-core/locale.lua'
+server_script '@urp-base/locale.lua'
+client_script '@urp-base/locale.lua'
 
 exports{
 	'getCash',

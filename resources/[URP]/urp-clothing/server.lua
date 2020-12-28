@@ -343,7 +343,7 @@ end)
 RegisterServerEvent("clothing:checkMoney")
 AddEventHandler("clothing:checkMoney", function(menu,askingPrice)
     local src = source
-    local user = exports["urp-core"]:getCurrentCharacter(src)
+    local user = exports["urp-base"]:getCurrentCharacter(src)
     local uCash = user.money
 
     if not askingPrice
@@ -352,7 +352,7 @@ AddEventHandler("clothing:checkMoney", function(menu,askingPrice)
     end
 
     if (tonumber(uCash) >= askingPrice) then
-        TriggerEvent('urp-core:removeCash', src, askingPrice)
+        TriggerEvent('urp-base:removeCash', src, askingPrice)
         TriggerClientEvent('DoLongHudText', src, "You Paid $"..askingPrice, 1)
         TriggerClientEvent("urp-clothing:hasEnough",src,menu)
     else

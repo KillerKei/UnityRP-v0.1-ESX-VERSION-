@@ -70,13 +70,13 @@ RegisterServerEvent('garages:CheckForSpawnVeh')
 AddEventHandler('garages:CheckForSpawnVeh', function(veh_id, garageCost)
 	local src = source
 	local user = URPCore.GetPlayerFromId(source)
-	local user = exports["urp-core"]:getCurrentCharacter(src)
+	local user = exports["urp-base"]:getCurrentCharacter(src)
     local uCash = user.money
 	if uCash >= garageCost then
 	if garageCost >= 1 then
-		TriggerEvent('urp-core:removeCash', src, garageCost)
+		TriggerEvent('urp-base:removeCash', src, garageCost)
 	else
-		TriggerEvent('urp-core:removeCash', src, 0)
+		TriggerEvent('urp-base:removeCash', src, 0)
 	end
 		local veh_id = veh_id
 		local player = user.identifier

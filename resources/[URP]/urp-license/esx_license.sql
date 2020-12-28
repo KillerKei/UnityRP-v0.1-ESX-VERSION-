@@ -1,4 +1,4 @@
-USE `urp-core`;
+USE `urp-base`;
 
 CREATE TABLE `licenses` (
 	`type` varchar(60) NOT NULL,

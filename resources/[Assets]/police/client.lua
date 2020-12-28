@@ -138,7 +138,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		local coords = GetEntityCoords(PlayerPedId())
-		TriggerServerEvent("urp-core:updatecoords",coords.x,coords.y,coords.z)
+		TriggerServerEvent("urp-base:updatecoords",coords.x,coords.y,coords.z)
 		Wait(13000)
 	end
 end)
@@ -279,8 +279,8 @@ Citizen.CreateThread(function()
 						TransitionToBlurred(500)
 						DoScreenFadeOut(500)
 						Wait(1000)
-						-- haha cry i have urp-core
-						-- haha ağla amk cocu urp-core-i olmayan da ne bileyim
+						-- haha cry i have urp-base
+						-- haha ağla amk cocu urp-base-i olmayan da ne bileyim
 						TriggerServerEvent('kashactersS:SetupCharacters')
 						--TriggerEvent('loaf_character:loadCharacters')
 						print('idk the event for changing char')
