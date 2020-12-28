@@ -50,3 +50,21 @@ TriggerEvent('es:addGroupCommand', 'clearall', 'admin', function(source, args, u
 end, function(source, args, user)
 	TriggerClientEvent('chatMessagess', source, 'SYSTEM: ', 3, 'Insufficient Permissions.')
 end, {help = _U('chat_clear_all')})
+
+TriggerEvent('es:addGroupCommand', 'tp', 'admin', function(source, args, user)
+	local x = tonumber(args[1])
+	local y = tonumber(args[2])
+	local z = tonumber(args[3])
+	
+	if x and y and z then
+		TriggerClientEvent('urp:teleport', source, {
+			x = x,
+			y = y,
+			z = z
+		})
+	else
+		TriggerClientEvent('chatMessagess', source, 'SYSTEM: ', 3, 'Invalid coordinates.')
+	end
+	end, function(source, args, user)
+		TriggerClientEvent('chatMessagess', source, 'SYSTEM: ', 3, 'Insufficient Permissions.')
+	end, {help = "Teleport to coordinates", params = {{name = "x", help = "X coords"}, {name = "y", help = "Y coords"}, {name = "z", help = "Z coords"}}})
