@@ -75,11 +75,12 @@ end)
 Citizen.CreateThread(function()
     while true do 
      Citizen.Wait(0)
-     if IsControlJustPressed(0, 289) then 
+     if IsControlJustPressed(0, 311) then 
          TriggerEvent("OpenInv")
       end
     end
 end)
+
 RegisterNetEvent('inventory:bandage')
 AddEventHandler('inventory:bandage', function()
     TriggerEvent('urp-ambulancejob:heal', 'small', true)

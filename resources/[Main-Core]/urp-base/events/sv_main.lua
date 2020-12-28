@@ -1,6 +1,15 @@
 Citizen.CreateThread(function()
-	Citizen.Wait(1000)
+	Citizen.Wait(2000)
 	print('\27[32m[urp-base]\27[0m Started Successfully.')
+	Citizen.Wait(1000)
+	print('\27[32m[urp-base]\27[0m Obtaining Player CIDs.')
+	local luck = math.random(1,3)
+	if luck == 3 then
+		Citizen.Wait(math.random(1000,2000))
+		print('\27[32m[urp-base]\27[0m CID Obtaining Taking Longer then usual..')
+		end
+	Citizen.Wait(math.random(4000,10000))
+	print('\27[32m[urp-base]\27[0m Player CIDs Successfully Obtained.')
 end)
 
 AddEventHandler('es:playerLoaded', function(source, _player)

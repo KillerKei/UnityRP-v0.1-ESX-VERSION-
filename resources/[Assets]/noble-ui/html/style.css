@@ -1,0 +1,88 @@
+body {
+    background-color: transparent !important;
+}
+
+.font {
+    font-family: "Courier New", Courier, monospace;
+    font-weight:0;
+    font-size:13.5px;
+  
+    margin-left:auto;
+    margin-right:auto;
+    text-align:center;
+    letter-spacing:1px;
+    color:#E6E6E5;
+    width:100%;
+    opacity:1;
+    margin-top:3.5%;
+  
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.7px;
+    /* font-size:16px; */
+    font-weight: 600;
+    text-decoration: none;
+    font-style: normal;
+    font-variant: small-caps;
+    text-transform: none;
+    /* text-shadow: 1px 1px 1px rgba(1,1,1,1); */
+    position: relative;
+    z-index: 99;
+}
+
+.ui {
+    width: 20%;
+    position: absolute;
+    right: 93.5%;
+    top: 50%;
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    background-color: red;
+    display: inline-block !important;
+    padding: 0.6vw;
+    padding-top: 0.6vw;
+    padding-bottom: 0vw;
+    margin: 0.1vw;
+    margin-left: 0.4vw;
+    border-radius: 3px;
+    width: fit-content;
+    max-width: 100%;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+.success {
+    background-color: rgba(21, 100, 15, 0.95);    
+    color: #fff;
+}
+
+.inform {
+    background-color: rgba(51, 112, 165, 0.85);
+    color: #ffffff;
+}
+
+.purple {
+    background-color: rgba(107, 15, 228, 0.75);
+    color: #ffffff;
+}
+
+.error {
+    background-color: rgba(181, 82, 85, 0.85);
+    color: #fff;
+}
+
+.muhittin {
+    background: rgb(255,255,0);
+    color: #000000;
+}
+
+.telefon {
+    background: rgb(240,113,28);
+    color: #FFFFFF;
+}
+
+
+.yemek {
+    background: rgb(204,204,255);
+    color: #FFFFCC;
+}

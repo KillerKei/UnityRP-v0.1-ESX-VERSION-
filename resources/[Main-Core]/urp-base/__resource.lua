@@ -51,8 +51,8 @@ client_scripts {
 	'shared/modules/mod_scaleform.lua',
 	'shared/modules/mod_streaming.lua',
 
-	'playermanager/modules/math.lua',
-	'playermanager/modules/table.lua',
+	'playermanager/modules/event_tables.lua',
+	'playermanager/modules/serverevents.lua',
 	'playermanager/functions.lua',
 	'shared/client-functions/func_main.lua',
 	"@urp-errorlog/client/cl_errorlog.lua"

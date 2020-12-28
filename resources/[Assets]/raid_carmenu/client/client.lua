@@ -33,7 +33,7 @@ Citizen.CreateThread(function()
                 else
                     TriggerEvent('toggleit')
                     Citizen.Wait(10)
-                    TriggerEvent('DoLongHudText', 'Engine Off.')
+                    TriggerEvent('DoLongHudText', 'Engine Off.', 2)
                 end
             -- IsControlPressed(0, 21) and
             end
@@ -164,8 +164,10 @@ RegisterNUICallback('openDoor', function(data, cb)
         if lockStatus == 1 or lockStatus == 0 then
             if (GetVehicleDoorAngleRatio(veh, doorIndex) == 0) then
                 SetVehicleDoorOpen(veh, doorIndex, false, false)
+                TriggerEvent('DoLongHudText', 'Door Opened')
             else
                 SetVehicleDoorShut(veh, doorIndex, false)
+                TriggerEvent('DoLongHudText', 'Door Closed', 2)
             end
         end
     end
@@ -179,6 +181,7 @@ RegisterNUICallback('switchSeat', function(data, cb)
     if veh ~= 0 then
         -- May need to check if another player is in seat?
         SetPedIntoVehicle(player, veh, seatIndex)
+        TriggerEvent('DoLongHudText', 'Switched Seats')
     end
     cb('ok')
 end)
@@ -190,11 +193,14 @@ RegisterNUICallback('togglewindow', function(data, cb)
     if veh ~= 0 then
         if not IsVehicleWindowIntact(veh, windowIndex) then
             RollUpWindow(veh, windowIndex)
+            TriggerEvent('DoLongHudText', 'Window Rolled Up')
             if not IsVehicleWindowIntact(veh, windowIndex) then
                 RollDownWindow(veh, windowIndex)
+                TriggerEvent('DoLongHudText', 'Window Rolled Down', 2)
             end
         else
             RollDownWindow(veh, windowIndex)
+            TriggerEvent('DoLongHudText', 'Window Rolled Down', 2)
         end
     end
     cb('ok')
@@ -212,15 +218,12 @@ RegisterNUICallback('toggleengine', function(data, cb)
             -- local engine = not GetIsVehicleEngineRunning(veh)
             print(engine)
             if engine == true then
-                TriggerEvent('toggleit')
                 TriggerEvent('DoLongHudText', 'Engine On.')
             else
-                TriggerEvent('toggleit')
                 Citizen.Wait(10)
-                TriggerEvent('DoLongHudText', 'Engine Off.')
+                TriggerEvent('DoLongHudText', 'Engine Off.', 2)
             end
             if engine then
-                print('BREASTYBUM')
                 SetVehicleFuelLevel(veh, vehicle_fuel)
             else
                 SetVehicleFuelLevel(veh, 0)
