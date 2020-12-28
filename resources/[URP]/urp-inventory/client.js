@@ -763,7 +763,7 @@ function OpenGui() {
 	openedInv = true
 	SendNuiMessage( JSON.stringify({ response: "openGui" })) 
 	SetNuiFocus(true,true)
-	cash = exports.isPed.isPed("cash")
+	cash = exports.isPed.isPed("mycash")
 	weaponsLicence = true
 	let cop = false
 	if(exports.isPed.isPed("job") == "police") {

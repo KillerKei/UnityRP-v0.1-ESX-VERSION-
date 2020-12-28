@@ -1,3 +1,10 @@
+URPCore = nil
+local balances = {}
+
+TriggerEvent('urp:getSharedObject', function(obj)
+    URPCore = obj
+end)
+
 Citizen.CreateThread(function()
     Citizen.Wait(2000)
     print('[urp-inventory]: Authorized.')
@@ -7,6 +14,48 @@ RegisterServerEvent('server-inventory-request-identifier')
 AddEventHandler('server-inventory-request-identifier', function()
     local src = source
     TriggerClientEvent('inventory-client-identifier', src)
+end)
+
+RegisterServerEvent('people-search')
+AddEventHandler('people-search', function(target)
+    local source = source
+    local xPlayer = URPCore.GetPlayerFromId(target)
+    local identifier = xPlayer.identifier
+	TriggerClientEvent("server-inventory-open", source, "1", identifier)
+
+end)
+
+RegisterServerEvent('police:SeizeCash')
+AddEventHandler('police:SeizeCash', function(target)
+    local src = source
+    local xPlayer = URPCore.GetPlayerFromId(src)
+    local identifier = xPlayer.identifier
+    local zPlayer = URPCore.GetPlayerFromId(target)
+
+    if not xPlayer.job.name == 'police' then
+        print('steam:'..identifier..' User attempted sieze cash')
+        return
+    end
+    TriggerClientEvent("banking:addBalance", src, zPlayer.getMoney())
+    TriggerClientEvent("banking:removeBalance", target, zPlayer.getMoney())
+    zPlayer.setMoney(0)
+end)
+
+RegisterServerEvent('Stealtheybread')
+AddEventHandler('Stealtheybread', function(target)
+    local src = source
+    local xPlayer = URPCore.GetPlayerFromId(src)
+    local identifier = xPlayer.identifier
+    local zPlayer = URPCore.GetPlayerFromId(target)
+
+    if not xPlayer.job.name == 'police' then
+        print('steam:'..identifier..' User attempted sieze cash')
+        return
+    end
+    TriggerClientEvent("banking:addBalance", src, zPlayer.getMoney())
+    TriggerClientEvent("banking:removeBalance", target, zPlayer.getMoney())
+    xPlayer.addMoney(zPlayer.getMoney())
+    zPlayer.setMoney(0)
 end)
 
 --RegisterServerEvent('urp-inventory:openInventorySteal')
