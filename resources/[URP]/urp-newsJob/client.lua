@@ -1,27 +1,27 @@
-irpCore = nil
+URPCore = nil
 lol = false
 PlayerData = {}
 
 Citizen.CreateThread(function()
-	while irpCore == nil do
-		TriggerEvent('irp:getSharedObject', function(obj) irpCore = obj end)
+	while URPCore == nil do
+		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
 		Citizen.Wait(10)
 	end
 
-	while irpCore.GetPlayerData().job == nil do
+	while URPCore.GetPlayerData().job == nil do
 		Citizen.Wait(10)
 	end
 
-	PlayerData = irpCore.GetPlayerData()
+	PlayerData = URPCore.GetPlayerData()
 end)
 
-RegisterNetEvent('irp:playerLoaded')
-AddEventHandler('irp:playerLoaded', function(xPlayer)
+RegisterNetEvent('urp:playerLoaded')
+AddEventHandler('urp:playerLoaded', function(xPlayer)
 	PlayerData = xPlayer
 end)
 
-RegisterNetEvent('irp:setJob')
-AddEventHandler('irp:setJob', function(job)
+RegisterNetEvent('urp:setJob')
+AddEventHandler('urp:setJob', function(job)
   PlayerData.job = job
 end)
 
@@ -208,12 +208,20 @@ AddEventHandler('camera:setCamera', function()
 	currentHolding = "camera"
 end)
 
+RegisterCommand("mic", function()
+	ToggleMic()
+end)
+
 RegisterNetEvent('camera:setMic')
 AddEventHandler('camera:setMic', function()
 	--hold("handMic")
 	print("sex")
 	TriggerEvent('event:control:newsJob', 1)
 	currentHolding = "handMic"
+end)
+
+RegisterCommand("boom", function()
+	ToggleBoom()
 end)
 
 RegisterNetEvent('camera:setBoom')
