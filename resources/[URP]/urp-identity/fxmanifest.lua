@@ -6,12 +6,12 @@ version '1.0.0'
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
-	'@urp-core/locale.lua',
+	'@urp-base/locale.lua',
 	'server/main.lua'
 }
 
 client_scripts {
-	'@urp-core/locale.lua',
+	'@urp-base/locale.lua',
 	'client/main.lua',
 	"@urp-errorlog/client/cl_errorlog.lua"
 }
@@ -25,4 +25,4 @@ files {
 	'html/img/esx_identity.png'
 }
 
-dependency 'urp-core'
+dependency 'urp-base'
