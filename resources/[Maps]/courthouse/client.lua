@@ -22,13 +22,11 @@ function DrawText3Ds(x, y, z, text)
     ClearDrawOrigin()
 end
 
-
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5)
 		local Getmecuh = PlayerPedId()
-		local drawtext = "~b~ E ~w~- Giris"
+		local drawtext = "~b~ E ~w~- Enter courthouse"
 		local plyCoords = GetEntityCoords(Getmecuh)
 		local x,y,z = 233.0308, -411.045, 48.11195
 		local distance = GetDistanceBetweenCoords(plyCoords.x,plyCoords.y,plyCoords.z,x,y,z ,false)
@@ -55,7 +53,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5)
 		local Getmecuh = PlayerPedId()
-		local drawtext = "~b~ E ~w~- Giris"
+		local drawtext = "~b~ E ~w~- To enter courthouse"
 		local plyCoords = GetEntityCoords(Getmecuh)
 		local x,y,z = 237.8211, -413.0868, 48.11193
 		local distance = GetDistanceBetweenCoords(plyCoords.x,plyCoords.y,plyCoords.z,x,y,z ,false)
@@ -82,7 +80,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5)
 		local Getmecuh = PlayerPedId()
-		local drawtext2 = "~b~ E ~w~- Çıkıs"
+		local drawtext2 = "~b~ E ~w~- Exit courthouse"
 		local x,y,z = 227.449, -423.1863, -16.00754
 		local plyCoords = GetEntityCoords(Getmecuh)
 		local distance = GetDistanceBetweenCoords(plyCoords.x,plyCoords.y,plyCoords.z,x,y,z ,false)
