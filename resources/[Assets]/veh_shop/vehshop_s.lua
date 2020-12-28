@@ -56,12 +56,12 @@ end)
 RegisterServerEvent('CheckMoneyForVeh')
 AddEventHandler('CheckMoneyForVeh', function(name, model,price,financed)
 	local user = URPCore.GetPlayerFromId(source)
-    local idk = exports["urp-base"]:getCurrentCharacter(source)
+    local idk = exports["urp-core"]:getCurrentCharacter(source)
     local uCash = idk.money
     if financed then
         local financedPrice = math.ceil(price / 4)
         if uCash >= financedPrice then
-            TriggerEvent('urp-base:removeCash', user.source, financedPrice)
+            TriggerEvent('urp-core:removeCash', user.source, financedPrice)
             TriggerClientEvent('FinishMoneyCheckForVeh', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)
@@ -69,7 +69,7 @@ AddEventHandler('CheckMoneyForVeh', function(name, model,price,financed)
         end
     else
         if uCash >= price then
-            TriggerEvent('urp-base:removeCash', user.source, price)
+            TriggerEvent('urp-core:removeCash', user.source, price)
             TriggerClientEvent('FinishMoneyCheckForVeh', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)
@@ -142,7 +142,7 @@ AddEventHandler('RS7x:phonePayment', function(plate)
     local src = source
     local pPlate = plate
     local xPlayer = URPCore.GetPlayerFromId(src)
-    local idk = exports["urp-base"]:getCurrentCharacter(src)
+    local idk = exports["urp-core"]:getCurrentCharacter(src)
     local uCash = idk.money
     local group = MySQL.Sync.fetchAll("SELECT shop FROM owned_vehicles WHERE plate=@plate", {['@plate'] = plate})
     print(group[1].shop)
@@ -153,7 +153,7 @@ AddEventHandler('RS7x:phonePayment', function(plate)
                 if pPlate == v.plate then
                     local price = (v.buy_price / 10)
                     if uCash >= price then
-                        TriggerEvent('urp-base:removeCash', src, price)
+                        TriggerEvent('urp-core:removeCash', src, price)
                         fuck = true
                     else
                         fuck = false

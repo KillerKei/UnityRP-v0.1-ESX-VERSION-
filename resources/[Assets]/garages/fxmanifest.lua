@@ -8,13 +8,13 @@ version '1.0.0'
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
-	'@urp-base/locale.lua',
+	'@urp-core/locale.lua',
 	'server/server.lua',
 	'server/s_chopshop.lua'
 }
 
 client_script {
-	'@urp-base/locale.lua',
+	'@urp-core/locale.lua',
 	'client/client.lua',
 	'client/illegal_parts.lua',
 	'client/chopshop.lua',

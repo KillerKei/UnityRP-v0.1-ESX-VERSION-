@@ -77,7 +77,7 @@ end)
 --        exports.ghmattimysql:execute('SELECT cash FROM __characters WHERE id = ?', {char.id}, function(data)
 --            TriggerClientEvent('cash:add', source, data[1].cash)
 --        end)
---        TriggerClientEvent('urp-base:setCash', target, char.id, 0)
+--        TriggerClientEvent('urp-core:setCash', target, char.id, 0)
 --        TriggerClientEvent('urp-inventory:openInventorySteal', source, char)
 --    end
 --end)

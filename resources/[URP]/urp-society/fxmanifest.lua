@@ -3,7 +3,7 @@ games { 'gta5' }
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',
-	'@urp-base/locale.lua',
+	'@urp-core/locale.lua',
 	'locales/en.lua',
 	'locales/fi.lua',
 	'locales/fr.lua',
@@ -14,7 +14,7 @@ server_scripts {
 }
 
 client_scripts {
-	'@urp-base/locale.lua',
+	'@urp-core/locale.lua',
 	'locales/en.lua',
 	'locales/fi.lua',
 	'locales/fr.lua',
@@ -26,7 +26,7 @@ client_scripts {
 }
 
 dependencies {
-	'urp-base',
+	'urp-core',
 	'cron',
 	'urp-addonaccount'
 }

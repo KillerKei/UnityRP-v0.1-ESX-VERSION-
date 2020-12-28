@@ -145,7 +145,7 @@ end)
 RegisterServerEvent('government:bill')
 AddEventHandler('government:bill', function(data)
 	local xPlayer = URPCore.GetPlayerFromId(source)
-	TriggerEvent('urp-base:removeCash', source, data)
+	TriggerEvent('urp-core:removeCash', source, data)
 end)
 
 RegisterServerEvent('sniffAccepted')

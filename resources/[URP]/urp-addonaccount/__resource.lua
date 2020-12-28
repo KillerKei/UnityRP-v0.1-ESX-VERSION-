@@ -11,4 +11,4 @@ server_scripts {
 	'server/main.lua'
 }
 
-dependency 'urp-base'
+dependency 'urp-core'
