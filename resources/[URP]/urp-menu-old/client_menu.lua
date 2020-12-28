@@ -131,8 +131,161 @@ AddEventHandler("menu:menuexit", function()
     SetNuiFocus(false, false)
 end)
 
-RegisterNetEvent("menu:VehReq")
-AddEventHandler("menu:VehReq", function()
-    print("VEHICLE REQUEST")
-    TriggerEvent('veh:requestUpdate')
+RegisterNetEvent('FlipVehicle')
+AddEventHandler('FlipVehicle', function()
+	local finished = exports["urp-taskbar"]:taskBar(5000,"Flipping Vehicle Over",false,true)	
+
+	if finished == 100 then
+		local playerped = PlayerPedId()
+	    local coordA = GetEntityCoords(playerped, 1)
+	    local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 100.0, 0.0)
+		local targetVehicle = getVehicleInDirection(coordA, coordB)
+		local pPitch, pRoll, pYaw = GetEntityRotation(playerped)
+		local vPitch, vRoll, vYaw = GetEntityRotation(targetVehicle)
+		SetEntityRotation(targetVehicle, pPitch, vRoll, vYaw, 1, true)
+		Wait(10)
+		SetVehicleOnGroundProperly(targetVehicle)
+	end
 end)
+
+function deleteVeh(ent)
+
+	SetVehicleHasBeenOwnedByPlayer(ent, true)
+	NetworkRequestControlOfEntity(ent)
+	local finished = exports["urp-taskbar"]:taskBar(1000,"Impounding",false,true)	
+	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(ent))
+	DeleteEntity(ent)
+	DeleteVehicle(ent)
+	SetEntityAsNoLongerNeeded(ent)
+end
+
+RegisterNetEvent('impoundVehicle')
+AddEventHandler('impoundVehicle', function()
+	playerped = PlayerPedId()
+    coordA = GetEntityCoords(playerped, 1)
+    coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 100.0, 0.0)
+    targetVehicle = getVehicleInDirection(coordA, coordB)
+	licensePlate = GetVehicleNumberPlateText(targetVehicle)
+
+	TriggerServerEvent("garages:SetVehImpounded",targetVehicle,licensePlate,false)
+	TriggerEvent("DoLongHudText","Impounded with retrieval price of $100",1)
+	deleteVeh(targetVehicle)
+end)
+
+
+
+RegisterNetEvent('fullimpoundVehicle')
+AddEventHandler('fullimpoundVehicle', function()
+	playerped = PlayerPedId()
+    coordA = GetEntityCoords(playerped, 1)
+    coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 100.0, 0.0)
+   	targetVehicle = getVehicleInDirection(coordA, coordB)
+	licensePlate = GetVehicleNumberPlateText(targetVehicle)
+	TriggerServerEvent("garages:SetVehImpounded",targetVehicle,licensePlate,true)
+	TriggerEvent("DoLongHudText","Impounded with retrieval price of $1500",1)
+	deleteVeh(targetVehicle)
+end)
+
+
+function getVehicleInDirection(coordFrom, coordTo)
+	local offset = 0
+	local rayHandle
+	local vehicle
+
+	for i = 0, 100 do
+		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z + offset, 10, PlayerPedId(), 0)	
+		a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+		
+		offset = offset - 1
+
+		if vehicle ~= 0 then break end
+	end
+	
+	local distance = Vdist2(coordFrom, GetEntityCoords(vehicle))
+	
+	if distance > 25 then vehicle = nil end
+
+    return vehicle ~= nil and vehicle or 0
+end
+
+RegisterNetEvent('unseatPlayerCiv')
+AddEventHandler('unseatPlayerCiv', function()
+    local playerped = PlayerPedId()
+    coordA = GetEntityCoords(playerped, 1)
+    coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 20.0, 0.0)
+        
+    targetVehicle = getVehicleInDirection(coordA, coordB)
+    if(targetVehicle ~= nil) then
+
+      local plate = GetVehicleNumberPlateText(targetVehicle)
+      local allow = hasKey(plate)
+
+      t, distance = GetClosestPlayer()
+      if(distance ~= -1 and distance < 10 and allow ) then
+          TriggerServerEvent('unseatAccepted',GetPlayerServerId(t))
+          TriggerEvent("DoLongHudText", 'Unseating',1)
+      else
+          TriggerEvent("DoLongHudText", 'No Player Found or you have No Keys',2)
+      end
+
+    else
+        TriggerEvent("DoLongHudText", 'Car doesnt exist',2)
+    end
+
+end)
+
+RegisterNetEvent('towgarage:triggermenu')
+AddEventHandler('towgarage:triggermenu', function(degradation)
+    print("bok")
+
+
+	local temp = degradation:split(",")
+	if(temp[1] ~= nil) then	
+
+
+		for i,v in ipairs(temp) do
+			if i == 1 then
+				degHealth.breaks = tonumber(v)
+				if degHealth.breaks == nil then
+					degHealth.breaks = 0
+				end
+			elseif i == 2 then
+				degHealth.axle = tonumber(v)
+			elseif i == 3 then
+				degHealth.radiator = tonumber(v)
+			elseif i == 4 then
+				degHealth.clutch = tonumber(v)
+			elseif i == 5 then
+				degHealth.transmission = tonumber(v)
+			elseif i == 6 then
+				degHealth.electronics = tonumber(v)
+			elseif i == 7 then
+				degHealth.fuel_injector = tonumber(v)
+			elseif i == 8 then	
+				degHealth.fuel_tank = tonumber(v)
+			end
+		end
+	end
+
+	local playerped = PlayerPedId()
+	local coordA = GetEntityCoords(playerped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+	local targetVehicle = getVehicleInDirection(coordA, coordB)
+
+
+
+	if targetVehicle ~= nil  and targetVehicle ~= 0 then
+		engineHealth = GetVehicleEngineHealth(targetVehicle) 
+		bodyHealth = GetVehicleBodyHealth(targetVehicle)
+		currentVeh = targetVehicle
+		local strng = "\n Brakes (Rubber) - " .. round(degHealth["breaks"] / 10,2) .. "/10.0" .. " \n Axle (Scrap) - " .. round(degHealth["axle"] / 10,2) .. "/10.0" .. " \n Radiator (Scrap) - " .. round(degHealth["radiator"] / 10,2) .. "/10.0" .. " \n Clutch (Scrap) - " .. round(degHealth["clutch"] / 10,2) .. "/10.0" .. " \n Transmission (Aluminium) - " .. round(degHealth["transmission"] / 10,2) .. "/10.0" .. " \n Electronics (Plastic) - " .. round(degHealth["electronics"] / 10,2) .. "/10.0" .. " \n Injector (Copper) - " .. round(degHealth["fuel_injector"] / 10,2) .. "/10.0" .. " \n Fuel (Steel) - " .. round(degHealth["fuel_tank"] / 10,2) .. "/10.0" .. " \n Body (Glass) - " .. round((bodyHealth / 10) / 10,2) .. "/10.0" .. " \n Engine (Scrap) - " .. round((engineHealth / 10) / 10,2) .. "/10.0"
+		TriggerEvent("customNotification",strng)
+
+	end
+end)
+
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end

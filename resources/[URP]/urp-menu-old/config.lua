@@ -1,27 +1,56 @@
+URP = nil
+
+Citizen.CreateThread(function()
+	while URP == nil do
+		TriggerEvent('urp:getSharedObject', function(obj) URP = obj end)
+		Citizen.Wait(10)
+	end
+
+	while URP.GetPlayerData().job == nil do
+		Citizen.Wait(10)
+	end
+
+	PlayerData = URP.GetPlayerData()
+end)
+
+RegisterNetEvent('urp:playerLoaded')
+AddEventHandler('urp:playerLoaded', function(xPlayer)
+	PlayerData = xPlayer
+end)
+
+RegisterNetEvent('urp:setJob')
+AddEventHandler('urp:setJob', function(job)
+  PlayerData.job = job
+end)
+
+
+local isJudge = false
+local isPolice = false
+local isMedic = false
+local isDoctor = false
+local isNews = false
 local isDead = false
 local isInstructorMode = false
 local myJob = "unemployed"
 local isHandcuffed = false
 local isHandcuffedAndWalking = false
 local hasOxygenTankOn = false
-local gangNum = 0
+local gangNum = 1
 local cuffStates = {}
+local entity = PlayerPedId()
 
-
-URPCore                           = nil
-local PlayerData              = {}
 Citizen.CreateThread(function()
-
-	while URPCore == nil do
-		TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
-		Citizen.Wait(0)
+	while true do
+		Citizen.Wait(1000)
+		local job = exports["isPed"]:isPed("myjob")
+		if job == "offems" then isMedic = false isPolice = false isJudge = false isNews = false end
+		if job == "offpolice" then isPolice = false isMedic = false isJudge = false isNews = false end
+		if job == "news" then isNews = true isJudge = false isMedic = false isPolice = false end
+		if job == "police" then isPolice = true isMedic = false isJudge = false isNews = false end
+		if job == "ems" then isMedic = true isPolice = false isJudge = false isNews = false end
+        if job == "judge" then isJudge = true isNews = false isMedic = false isPolice = false end 
+        if job == "offjudge" then isJudge = false isNews = false isMedic = false isPolice = false end 
 	end
-
-end)
-
-RegisterNetEvent('urp:playerLoaded')
-AddEventHandler('urp:playerLoaded', function(xPlayer)
-  PlayerData = xPlayer
 end)
 
 rootMenuConfig =  {
@@ -30,86 +59,36 @@ rootMenuConfig =  {
         displayName = "General",
         icon = "#globe-europe",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             return not isDead
         end,
-        subMenus = {"general:escort", "general:putinvehicle", "general:unseatnearest", "general:flipvehicle",  "general:keysgive",  "general:emotes",  "general:checkvehicle", "general:askfortrain", "general:apartgivekey", "general:apartremovekey",  }
+        subMenus = {"general:putinvehicle", "general:unseatnearest", "general:flipvehicle",  "general:checkoverself", "general:checktargetstates",  "general:keysgive",  "general:emotes",  "general:checkvehicle", "general:askfortrain", "general:apartgivekey",  }
     },
     {
         id = "police-action",
         displayName = "Police Actions",
         icon = "#police-action",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            return (URPCore.GetPlayerData().job.name == 'police' and not isDead)
+            return (isPolice and not isDead)
         end,
-        subMenus = {"general:putinvehicle", "general:escort", "medic:revive2", "police:panic", "cuffs:remmask", "police:checkbank", "cuffs:checkinventory" }
+        subMenus = {"general:putinvehicle", "general:escort", "medic:revive", "cuffs:remmask"}
     },
     {
-        id = "mdt",
-        displayName = "MDT",
-        icon = "#mdt",
-        functionName = "warrantsGui",
+        id = "police-check",
+        displayName = "Police Checks",
+        icon = "#police-check",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            return not isDead and URPCore.GetPlayerData().job.name == 'police'
-        end
+            return (isPolice and not isDead)
+        end,
+        subMenus = {"general:checktargetstates", "police:checkbank", "police:checklicenses", "cuffs:checkinventory", "police:gsr", "police:dnaswab" }
     },
     {
         id = "police-vehicle",
         displayName = "Police Vehicle",
         icon = "#police-vehicle",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            return (URPCore.GetPlayerData().job.name == 'police' and not isDead and IsPedInAnyVehicle(PlayerPedId(), false))
+            return (isPolice and not isDead and IsPedInAnyVehicle(PlayerPedId(), false))
         end,
         subMenus = {"general:unseatnearest", "police:runplate", "police:toggleradar"}
-    },
-    {
-        id = "cuff",
-        displayName = "Cuff Actions",
-        icon = "#cuffs",
-        enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            if not isDead and not IsPlayerFreeAiming(PlayerId()) and not IsPedInAnyVehicle(PlayerPedId(), false) and not isHandcuffed and not isHandcuffedAndWalking then
-                if URPCore.GetPlayerData().job.name == 'police' then
-                     return true
-                elseif exports["urp-inventory"]:hasEnoughOfItem("cuffs",1,false) then
-                    t, distance = GetClosestPlayer()
-                    local serverId = GetPlayerServerId(t)
-                    if(distance ~= -1 and distance < 3 and not IsPedRagdoll(PlayerPedId())) then
-                        if cuffStates[serverId] == nil then
-                            return false
-                        else
-                            return cuffStates[serverId]
-                        end
-                    end
-                end
-            end
-            return false
-        end,
-        subMenus = { "cuffs:uncuff", "cuffs:remmask", "cuffs:unseat", "police:seat" }
-    },
-    {
-        id = "cuff",
-        displayName = "Cuff",
-        icon = "#cuffs-cuff",
-        functionName = "civ:cuffFromMenu",
-        enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-         return (not isDead and not isHandcuffed and not isHandcuffedAndWalking and (exports["urp-inventory"]:hasEnoughOfItem("cuffs",1,false) or URPCore.GetPlayerData().job.name == 'police'))
-       
-        end
-    },
-    {
-        id = "medic",
-        displayName = "Medical",
-        icon = "#medic",
-        enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            return (URPCore.GetPlayerData().job.name == 'ambulance' and not isDead)
-        end,
-        subMenus = {"medic:revive", "medic:heal", "medic:bigheal", "general:escort", "general:putinvehicle", "general:unseatnearest", "police:panic" }
     },
     {
         id = "policeDeadA",
@@ -117,8 +96,8 @@ rootMenuConfig =  {
         icon = "#police-dead",
         functionName = "police:tenThirteenA",
         enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'police' and downed end
+            return (isPolice and isDead)
+        end
     },
     {
         id = "policeDeadB",
@@ -126,8 +105,8 @@ rootMenuConfig =  {
         icon = "#police-dead",
         functionName = "police:tenThirteenB",
         enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'police' and downed end
+            return (isPolice and isDead)
+        end
     },
     {
         id = "emsDeadA",
@@ -135,8 +114,8 @@ rootMenuConfig =  {
         icon = "#ems-dead",
         functionName = "police:tenForteenA",
         enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'ambulance' and downed end
+            return (isMedic and isDead)
+        end
     },
     {
         id = "emsDeadB",
@@ -144,26 +123,17 @@ rootMenuConfig =  {
         icon = "#ems-dead",
         functionName = "police:tenForteenB",
         enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'ambulance' and downed end
+            return (isMedic and isDead)
+        end
     },
     {
-        id = "uberdriver",
-        displayName = "Start Delivery",
-        icon = "#uber-driver",
-        functionName = "urp-uberdelivery:start",
+        id = "k9",
+        displayName = "K9",
+        icon = "#k9",
         enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'uberdriver' and not downed end
-    },
-    {
-        id = "uberdriver",
-        displayName = "End Delivery",
-        icon = "#uber-driver2",
-        functionName = "urp-uberdelivery:end",
-        enableMenu = function()
-            downed = exports["urp-ambulancejob"]:GetDeath()
-            return URPCore.GetPlayerData().job.name == 'uberdriver' and not downed end
+            return (isPolice and not isDead)
+        end,
+        subMenus = {"k9:follow", "k9:vehicle",  "k9:sniffvehicle", "k9:huntfind", "k9:sit", "k9:stand", "k9:sniff", "k9:lay",  "k9:spawn", "k9:delete", }
     },
     {
         id = "animations",
@@ -182,7 +152,6 @@ rootMenuConfig =  {
         displayName = "Expressions",
         icon = "#expressions",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             return not isDead
         end,
         subMenus = { "expressions:normal", "expressions:drunk", "expressions:angry", "expressions:dumb", "expressions:electrocuted", "expressions:grumpy", "expressions:happy", "expressions:injured", "expressions:joyful", "expressions:mouthbreather", "expressions:oneeye", "expressions:shocked", "expressions:sleeping", "expressions:smug", "expressions:speculative", "expressions:stressed", "expressions:sulking", "expressions:weird", "expressions:weird2"}
@@ -194,7 +163,112 @@ rootMenuConfig =  {
         enableMenu = function()
             return not isDead
         end,
-        subMenus = {"blips:trainstations", "blips:garages", 'blips:gasstations'}
+        subMenus = { "blips:gasstations", "blips:trainstations", "blips:garages", "blips:barbershop", "blips:tattooshop"}
+    },
+    {
+        id = "drivinginstructor",
+        displayName = "Driving Instructor",
+        icon = "#drivinginstructor",
+        enableMenu = function()
+            return (not isDead and isInstructorMode)
+        end,
+        subMenus = { "drivinginstructor:drivingtest", "drivinginstructor:submittest", }
+    },
+    {
+        id = "judge-raid",
+        displayName = "Judge Raid",
+        icon = "#judge-raid",
+        enableMenu = function()
+            return (not isDead and isJudge)
+        end,
+        subMenus = { "judge-raid:checkowner", "judge-raid:seizeall", "judge-raid:takecash", "judge-raid:takedm"}
+    },
+    {
+        id = "judge-licenses",
+        displayName = "Judge Licenses",
+        icon = "#judge-licenses",
+        enableMenu = function()
+            return (not isDead and isJudge)
+        end,
+        subMenus = { "police:checklicenses", "judge:grantDriver", "judge:grantBusiness", "judge:grantWeapon", "judge:grantHouse", "judge:grantBar", "judge:grantDA", "judge:removeDriver", "judge:removeBusiness", "judge:removeWeapon", "judge:removeHouse", "judge:removeBar", "judge:removeDA", "judge:denyWeapon", "judge:denyDriver", "judge:denyBusiness", "judge:denyHouse" }
+    },
+    {
+        id = "judge-actions",
+        displayName = "Judge Actions",
+        icon = "#judge-actions",
+        enableMenu = function()
+            return (not isDead and isJudge)
+        end,
+        subMenus = { "police:cuff", "cuffs:uncuff", "general:escort", "cuffs:checkinventory", "police:checkbank"}
+    },
+    {
+        id = "da-actions",
+        displayName = "DA Actions",
+        icon = "#judge-actions",
+        enableMenu = function()
+            --return (not isDead and exports["urp-core"]:getModule("LocalPlayer"):getVar("job") == "district attorney")
+        end,
+        subMenus = { "police:cuff", "cuffs:uncuff", "general:escort", "cuffs:checkinventory"}
+    },
+    {
+        id = "cuff",
+        displayName = "Cuff Actions",
+        icon = "#cuffs",
+        enableMenu = function()
+            if not isDead and not IsPlayerFreeAiming(PlayerId()) and not IsPedInAnyVehicle(PlayerPedId(), false) and not isHandcuffed and not isHandcuffedAndWalking then
+                if isPolice then
+                    return true
+                elseif exports["urp-inventory"]:hasEnoughOfItem("cuffs",1,false) then
+                    t, distance = GetClosestPlayer()
+                    local serverId = GetPlayerServerId(t)
+                    if(distance ~= -1 and distance < 3 and not IsPedRagdoll(PlayerPedId())) then
+                        if cuffStates[serverId] == nil then
+                            return false
+                        else
+                            return cuffStates[serverId]
+                        end
+                    end
+                end
+            end
+            return false
+        end,
+        subMenus = { "cuffs:uncuff", "cuffs:remmask", "cuffs:unseat", "lmao:bindir", "cuffs:checkphone" }
+    },
+    {
+        id = "cuff",
+        displayName = "Cuff",
+        icon = "#cuffs-cuff",
+        functionName = "civ:cuffFromMenu",
+        enableMenu = function()
+            return (not isDead and not isHandcuffed and not isHandcuffedAndWalking and (exports["urp-inventory"]:hasEnoughOfItem("cuffs",1,false) or isPolice))
+        end
+    },
+    {
+        id = "medic",
+        displayName = "Medical",
+        icon = "#medic",
+        enableMenu = function()
+            return (not isDead and isMedic)
+        end,
+        subMenus = {"medic:revive", "medic:heal", "general:escort", "general:putinvehicle", "general:unseatnearest", "general:checktargetstates" }
+    },
+    {
+        id = "doctor",
+        displayName = "Doctor",
+        icon = "#doctor",
+        enableMenu = function()
+            return (not isDead and isDoctor)
+        end,
+        subMenus = { "general:escort", "medic:revive", "medic:stomachpump", "general:checktargetstates", "medic:heal" }
+    },
+    {
+        id = "news",
+        displayName = "News",
+        icon = "#news",
+        enableMenu = function()
+            return (not isDead and isNews)
+        end,
+        subMenus = { "news:setCamera", "news:setMicrophone", "news:setBoom" }
     },
     {
         id = "vehicle",
@@ -202,8 +276,20 @@ rootMenuConfig =  {
         icon = "#vehicle-options-vehicle",
         functionName = "veh:options",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             return (not isDead and IsPedInAnyVehicle(PlayerPedId(), false))
+        end
+    },{
+        id = "train",
+        displayName = "Request Train",
+        icon = "#general-ask-for-train",
+        functionName = "AskForTrain",
+        enableMenu = function()
+            for _,d in ipairs(trainstations) do
+                if #(vector3(d[1],d[2],d[3]) - GetEntityCoords(PlayerPedId())) < 25 and not isDead then
+                    return true
+                end
+            end
+            return false
         end
     }, {
         id = "impound",
@@ -211,7 +297,6 @@ rootMenuConfig =  {
         icon = "#impound-vehicle",
         functionName = "impoundVehicle",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             if not isDead and myJob == "towtruck" and #(GetEntityCoords(PlayerPedId()) - vector3(549.47796630859, -55.197559356689, 71.069190979004)) < 10.599 then
                 return true
             end
@@ -220,10 +305,9 @@ rootMenuConfig =  {
     }, {
         id = "oxygentank",
         displayName = "Remove Oxygen Tank",
-        icon = "#oxyurp-mask",
+        icon = "#oxygen-mask",
         functionName = "RemoveOxyTank",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             return not isDead and hasOxygenTankOn
         end
     }, {
@@ -232,8 +316,7 @@ rootMenuConfig =  {
         icon = "#cocaine-status",
         functionName = "cocaine:currentStatusServer",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
-            if not isDead and gangNum == 2 and #(GetEntityCoords(PlayerPedId()) - vector3(1087.3937988281,-3194.2138671875,-38.993473052979)) < 0.5 then
+            if not isDead and gangNum == 2 and #(GetEntityCoords(PlayerPedId()) - vector3(1087.3937988281,-3194.2138671875,-38.993473052979)) < 1 then
                 return true
             end
             return false
@@ -244,11 +327,18 @@ rootMenuConfig =  {
         icon = "#cocaine-crate",
         functionName = "cocaine:methCrate",
         enableMenu = function()
-            isDead = exports["urp-ambulancejob"]:GetDeath()
             if not isDead and gangNum == 2 and #(GetEntityCoords(PlayerPedId()) - vector3(1087.3937988281,-3194.2138671875,-38.993473052979)) < 0.5 then
                 return true
             end
             return false
+        end
+    }, {
+        id = "mdt",
+        displayName = "MDT",
+        icon = "#mdt",
+        functionName = "warrantsGui",
+        enableMenu = function()
+            return isPolice
         end
     }
 
@@ -265,31 +355,26 @@ newSubMenus = {
     ['general:keysgive'] = {
         title = "Give Key",
         icon = "#general-keys-give",
-        functionName = "keys:give"
+        functionName = "lol:shit"
     },
     ['general:apartgivekey'] = {
         title = "Give Key",
         icon = "#general-apart-givekey",
-        functionName = "urp-housing:client:giveHouseKey"
-    },
-    ['general:apartremovekey'] = {
-        title = "Remove Key",
-        icon = "#general-apart-givekey",
-        functionName = "urp-housing:client:removeHouseKey"
+        functionName = "apart:giveKey"
     },
     ['general:askfortrain'] = {
         title = "Request Train",
         icon = "#general-ask-for-train",
         functionName = "AskForTrain",
-        enableMenu = function()
-            for _,d in ipairs(trainstations) do
-                if #(vector3(d[1],d[2],d[3]) - GetEntityCoords(PlayerPedId())) < 25 then
-                    return true
-                else
-                    return false
-                end
-            end
-        end
+        -- enableMenu = function()
+        --     for _,d in ipairs(trainstations) do
+        --         if #(vector3(d[1],d[2],d[3]) - GetEntityCoords(PlayerPedId())) < 25 then
+        --             return true
+        --         else
+        --             return false
+        --         end
+        --     end
+        -- end
     },
     ['general:checkoverself'] = {
         title = "Examine Self",
@@ -304,12 +389,12 @@ newSubMenus = {
     ['general:checkvehicle'] = {
         title = "Examine Vehicle",
         icon = "#general-check-vehicle",
-        functionName = "menu:VehReq"
+        functionName = "lsrp:examine"
     },
     ['general:escort'] = {
         title = "Escort",
         icon = "#general-escort",
-        functionName = "escortPlayer"
+        functionName = "lmao:cuff"
     },
     ['general:putinvehicle'] = {
         title = "Seat Vehicle",
@@ -319,7 +404,7 @@ newSubMenus = {
     ['general:unseatnearest'] = {
         title = "Unseat Nearest",
         icon = "#general-unseat-nearest",
-        functionName = "unseatPlayer"
+        functionName = "lmao:indir"
     },    
     ['general:flipvehicle'] = {
         title = "Flip Vehicle",
@@ -632,6 +717,7 @@ newSubMenus = {
         icon = "#k9-huntfind",
         functionName = "K9:Huntfind"
     },
+    -- Gas Stations çalışıyor güzelce
     ['blips:gasstations'] = {
         title = "Gas Stations",
         icon = "#blips-gasstations",
@@ -655,12 +741,7 @@ newSubMenus = {
     ['blips:tattooshop'] = {
         title = "Tattoo Shop",
         icon = "#blips-tattooshop",
-        functionName = "hairDresser:ToggleTattoo"
-    },
-    ['blips:clotheshop'] = {
-        title = "Clothes Shop",
-        icon = "#blips-clotheshop",
-        functionName = "hairDresser:ToggleClothes"
+        functionName = "tattoo:ToggleTattoo"
     },
     ['drivinginstructor:drivingtest'] = {
         title = "Driving Test",
@@ -715,32 +796,67 @@ newSubMenus = {
     ['cuffs:unseat'] = {
         title = "Unseat",
         icon = "#cuffs-unseat-player",
-        functionName = "unseatPlayerCiv"
+        functionName = "lmao:indir"
     },
     ['cuffs:checkphone'] = {
         title = "Read Phone",
         icon = "#cuffs-check-phone",
         functionName = "police:checkPhone"
     },
-    ['medic:revive2'] = {
-        title = "Revive",
-        icon = "#medic-revive",
-        functionName = "tp:pdrevive"
-    },
     ['medic:revive'] = {
         title = "Revive",
         icon = "#medic-revive",
-        functionName = "tp:emsRevive"
+        functionName = "revive"
     },
     ['medic:heal'] = {
-        title = "Patch Small",
+        title = "Heal",
         icon = "#medic-heal",
-        functionName = "tp:emssmallheal"
+        functionName = "ems:heal"
     },
-    ['medic:bigheal'] = {
-        title = "Patch Big",
-        icon = "#medic-bigheal",
-        functionName = "tp:emsbigheal"
+    ['medic:stomachpump'] = {
+        title = "Stomach pump",
+        icon = "#medic-stomachpump",
+        functionName = "ems:stomachpump"
+    },
+    -- Officer Down Urgent
+    ['police:panic1'] = {
+        title = "10-13A",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenThirteenA"
+    },
+    -- Panic Button
+    ['police:panic2'] = {
+        title = "Alert A",
+        icon = "#cuffs-cuff",
+        functionName = "police:panic"
+    },
+    -- Officer Down Red
+    ['police:panic3'] = {
+        title = "10-13B",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenThirteenB"
+    },
+    -- Medic Down Urgent
+    ['police:panic4'] = {
+        title = "10-14A",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenForteenA"
+    },
+    -- Medic Down Red
+    ['police:panic5'] = {
+        title = "10-14B",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenForteenB"
+    },
+    ['police:panic6'] = {
+        title = "Down",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenFortySeven"
+    },
+    ['police:panic7'] = {
+        title = "Car Crash",
+        icon = "#cuffs-cuff",
+        functionName = "police:tenFifty"
     },
     ['police:cuff'] = {
         title = "Cuff",
@@ -784,9 +900,15 @@ newSubMenus = {
     },
     ['police:panic'] = {
         title = "Panic",
-        icon = "#police-action-panic",
+        icon = "#police-action-frisk",
         functionName = "police:panic"
     },
+    ['police:frisk'] = {
+        title = "Frisk",
+        icon = "#police-action-frisk",
+        functionName = "police:frisk"
+    },
+
     ['judge:grantDriver'] = {
         title = "Grant Drivers",
         icon = "#judge-licenses-grant-drivers",
@@ -1033,6 +1155,16 @@ AddEventHandler("isJudgeOff", function()
     isJudge = false
 end)
 
+RegisterNetEvent('isDeadOff')
+AddEventHandler('isDeadOff', function()
+    isDead = false
+end)
+
+RegisterNetEvent('isDeadOn')
+AddEventHandler('isDeadOn', function()
+    isDead = true
+end)
+
 RegisterNetEvent('pd:deathcheck')
 AddEventHandler('pd:deathcheck', function()
     if not isDead then
@@ -1040,14 +1172,6 @@ AddEventHandler('pd:deathcheck', function()
     else
         isDead = false
     end
-end)
-
-RegisterNetEvent('pd:deathcheck:revive')
-AddEventHandler('pd:deathcheck:revive', function()
-    isDead = false
-    Citizen.Wait(3000)
-    print('coming here to activate isdead to false')
-    isDead = false
 end)
 
 RegisterNetEvent("drivingInstructor:instructorToggle")
@@ -1073,17 +1197,10 @@ AddEventHandler('enablegangmember', function(pGangNum)
     gangNum = pGangNum
 end)
 
-RegisterNetEvent('warrantsGui')
-AddEventHandler('warrantsGui', function()
-
-    --TriggerEvent('urp-mdt:hotKeyOpen')
-    ExecuteCommand("mdt")
-end)
-
 function GetPlayers()
     local players = {}
 
-    for i = 0, 256 do
+    for i = 0, 255 do
         if NetworkIsPlayerActive(i) then
             players[#players+1]= i
         end
