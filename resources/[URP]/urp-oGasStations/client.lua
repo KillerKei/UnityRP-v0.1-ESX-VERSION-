@@ -96,6 +96,7 @@ AddEventHandler('CarPlayerHud:ToggleGas', function()
 end)
 
 Citizen.CreateThread(function()
+    Citizen.Wait(20)
     showGasStations = true
     TriggerEvent('CarPlayerHud:ToggleGas')
 end)
@@ -734,6 +735,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
+    Citizen.Wait(10)
     local bool = false
     local counter = 0
     while true do
