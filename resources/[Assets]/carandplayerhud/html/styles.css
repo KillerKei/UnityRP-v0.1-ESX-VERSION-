@@ -169,7 +169,7 @@
     background: rgba(207, 0, 0, 0.5) !important;
 }
 
-.watermark {
+.fade {
     display: flex;
     width: 100vw;
     align-items: flex-start;
@@ -177,7 +177,7 @@
     position: fixed;
 }
 
-.watermark .container {
+.fade .container {
     display: flex;
     padding: .75vh 1vw;
     align-items: center;
@@ -187,13 +187,13 @@
     box-shadow: var(--default-box-shadow);
 }
 
-.watermark .container p {
+.fade .container p {
     font-size: 0.6vw;
     font-weight: 600;
-    color: #FFF;
+    color: rgb(7, 123, 255);
 }
 
-.watermark .container span {
+.fade .container span {
     margin-left: .25vw;
     font-weight: 300;
 }
@@ -206,7 +206,19 @@
     justify-content: space-between;
 }
 
-:root {
+.fade {
+    color: rgb(7, 123, 255);
+    opacity: 1;             //set opacity to 1 so it will be fully visible
+    transition: all 0.25s; //you can change the duration of the transition
+}
+
+.fade .container span {
+    color: rgb(7, 123, 255);
+    opacity: 1;             //set opacity to 1 so it will be fully visible
+    transition: all 0.25s; //you can change the duration of the transition
+}
+
+/* :root {
     --main-bkg-color: rgba(17, 17, 17, .3);
     --default-blur: .14vw;
     --default-box-shadow: inset 0px 0px 12px 0px rgba(17, 17, 17, 0.25);
@@ -216,4 +228,4 @@
     --red-color: #FC4445; /*#F33439*/
     --violet-color: #8860D0;
     --purple-color: #E64398;
-}
+} */
