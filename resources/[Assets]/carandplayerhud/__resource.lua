@@ -9,7 +9,7 @@ server_script "@urp-infinity/server/sv_lib.lua"
 client_script 'carhud.lua'
 server_script 'carhud_server.lua'
 client_script 'cl_autoKick.lua'
-server_script 'sr_autoKick.lua'
+server_script 'server.lua'
 client_script 'newsStands.lua'
 
 ui_page('html/index.html')

@@ -2426,3 +2426,31 @@ Citizen.CreateThread( function()
 	end
 
 end)
+
+RegisterNetEvent("roll")
+AddEventHandler("roll",function(times,weight)
+
+    times = tonumber(times)
+    weight = tonumber(weight)
+    rollAnim()
+    local strg = ""
+    for i = 1, times do
+        if i == 1 then
+            strg = strg .. " " .. math.random(weight) .. "/" .. weight
+        else
+            strg = strg .. " | " .. math.random(weight) .. "/" .. weight
+        end
+
+    end
+    TriggerServerEvent("3dme:shareDisplay", "Dice rolled " .. strg, GetPlayerServerId(PlayerId()))
+end)
+
+function rollAnim()
+    loadAnimDict( "anim@mp_player_intcelebrationmale@wank" ) 
+    Citizen.Wait(500)
+    TaskPlayAnim( PlayerPedId(), "anim@mp_player_intcelebrationmale@wank", "wank", 8.0, 1.0, -1, 49, 0, 0, 0, 0 )
+    Citizen.Wait(1500)
+    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 2.0, 'dice', 0.1)
+    ClearPedTasks(PlayerPedId())
+    Citizen.Wait(500)
+end
