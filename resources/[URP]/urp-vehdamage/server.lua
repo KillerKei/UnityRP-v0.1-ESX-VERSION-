@@ -20,11 +20,10 @@ AddEventHandler('veh.examine', function(plate)
     MySQL.Async.fetchAll('SELECT * FROM owned_vehicles WHERE plate = @plate', {
         ['@plate'] = plate
       }, function (result) 
-        --print(result[1].engine_damage, result[1].body_damage)
+       -- print(result[1].engine_damage, result[1].body_damage)
         if result[1] ~= nil then
-            print('trgger client menu', result[1].degredation)
+            --print('trgger client menu', result[1].degredation)
             TriggerClientEvent('towgarage:triggermenu',_src, result[1].degredation, result[1].engine_damage, result[1].body_damage)
-            print(result[1].engine_damage, result[1].body_damage)
         else
             TriggerClientEvent("DoLongHudTexts",_src, "This vehicle is not listed",2) 
         end

@@ -59,6 +59,10 @@ function Menu.updateSelection()
 			Menu.selection = Menu.buttonCount-1
 		end	
 		PlaySound(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 0, 0, 1)
+	elseif IsControlJustPressed(1,174) then --Arrow Left
+		TriggerEvent('notification', 'You press Left Arrow', 2)
+	elseif IsControlJustPressed(1,175) then --Arrow Right
+		TriggerEvent('notification', 'You press Right Arrow', 2)
 	elseif IsControlJustPressed(1,Controlkey["generalUse"][1]) or IsControlJustPressed(1,Controlkey["generalUseSecondary"][1]) then
 		MenuCallFunction(Menu.GUI[Menu.selection +1]["func"], Menu.GUI[Menu.selection +1]["args"])
 		PlaySound(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 0, 0, 1)
@@ -101,6 +105,7 @@ function Menu.renderButtons()
 		if(settings["extra"] == "In") then
 			boxColor = {44,88,44,230}
 		elseif(settings["extra"] == "Impound Lot") then
+			boxColor = {255,51,51,230}
 		elseif (settings["extra"] ~= "Out") then
 			movetext = -0.025
 		end
@@ -113,7 +118,7 @@ function Menu.renderButtons()
 			SetTextEntry("STRING") 
 			AddTextComponentString(string.upper(settings["plate"]))
 			DrawText(0.595, (settings["ymin"] - 0.012 )) 
-			DrawRect(0.598, settings["ymin"], 0.06, settings["ymax"]-0.002, 255,255,255,199)
+			DrawRect(0.598, settings["ymin"], 0.06, settings["ymax"]-0.002, 255,255,102,199)
 		else
 		end
 
@@ -157,10 +162,17 @@ function Menu.renderButtons()
 			AddTextComponentString(settings["bodydamages"])
 			DrawText(0.845, (settings["ymin"] - 0.012 )) 
 
-
+			--[[SetTextFont(4)
+			SetTextScale(0.31, 0.31)
+			SetTextColour(11, 11, 11, 255)
+			SetTextCentre(true)
+			SetTextEntry("STRING") 
+			AddTextComponentString(settings["plate"])
+			DrawText(0.595, (settings["ymin"] - 0.012 )) ]]
 
 			DrawRect(0.832, settings["ymin"], 0.11, settings["ymax"]-0.002, 255,255,255,199)
-
+			--DrawRect(0.598, settings["ymin"], 0.06, settings["ymax"]-0.002, 255,255,102,199)
+			--Global.DrawRect(x, y, width, height, r, g, b, a)
 		else
 			SetTextFont(4)
 			SetTextScale(0.34, 0.34)

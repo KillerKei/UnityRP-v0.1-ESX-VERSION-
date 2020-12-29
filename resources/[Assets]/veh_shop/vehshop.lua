@@ -549,8 +549,8 @@ local myspawnedvehs = {}
 RegisterNetEvent("car:testdrive")
 AddEventHandler("car:testdrive", function()
 
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' or #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 then
+	local pData = URPCore.GetPlayerData()
+	if pData.job.name ~= 'pdm' or #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 then
 		return
 	end
 
@@ -603,8 +603,8 @@ end)
 
 RegisterNetEvent("buyEnable")
 AddEventHandler("buyEnable", function()
-	local pData = exports["isPed"]:isPed("myJob")
-	if #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 and pData == 'pdm' then
+	local pData = URPCore.GetPlayerData()
+	if #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 and pData.job.name == 'pdm' then
 		return
 	end
 
@@ -633,8 +633,8 @@ end)
 
 RegisterNetEvent("commission")
 AddEventHandler("commission", function(newAmount)
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' or #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 then
+	local pData = URPCore.GetPlayerData()
+	if pData.job.name ~= 'pdm' or #(vector3(-51.51, -1077.96, 26.92) - GetEntityCoords(PlayerPedId())) > 50.0 then
 		return
 	end
 
@@ -734,10 +734,10 @@ function DrawPrices()
 			local commission = carTable[i]["commission"]
 			local baseprice = carTable[i]["baseprice"]
 			local price = baseprice + (baseprice * commission/100)
-			local pData = exports["isPed"]:isPed("myJob")
+			local pData = URPCore.GetPlayerData()
 			local veh = GetClosestVehicle(carspawns[i]["x"],carspawns[i]["y"],carspawns[i]["z"], 3.000, 0, 70)
 			local addplate = GetVehicleNumberPlateText(veh)
-			if pData == 'pdm' then
+			if pData.job.name == 'pdm' then
 				if financedPlates[addplate] ~= nil and buyPlate[addplate] ~= nil then
 					DrawText3D(carspawns[i]["x"],carspawns[i]["y"],carspawns[i]["z"],"$" .. math.ceil(price) .. " | Com: %" ..commission.. " | [E] to change | [G] to buy | [F] to Finance ")
 				elseif financedPlates[addplate] ~= nil then
@@ -781,9 +781,10 @@ end
 function SpawnSaleVehicles()
 	if not hasspawned then
 		TriggerServerEvent("carshop:requesttable")
+--		print("requesting table")
 		Citizen.Wait(1500)
 	end
-	DespawnSaleVehicles(true)
+	DespawnSaleVehicles()
 	hasspawned = true
 	for i = 1, #carTable do
 		local model = GetHashKey(carTable[i]["model"])
@@ -791,7 +792,6 @@ function SpawnSaleVehicles()
 		while not HasModelLoaded(model) do
 			Citizen.Wait(0)
 		end
-
 		local veh = CreateVehicle(model,carspawns[i]["x"],carspawns[i]["y"],carspawns[i]["z"]-1,carspawns[i]["h"],false,false)
 		SetModelAsNoLongerNeeded(model)
 		SetVehicleOnGroundProperly(veh)
@@ -799,15 +799,12 @@ function SpawnSaleVehicles()
 
 		FreezeEntityPosition(veh,true)
 		spawnedvehicles[#spawnedvehicles+1] = veh
-		SetVehicleNumberPlateText(veh, i .. "CARSALE")
+		SetVehicleNumberPlateText(veh, "PDM ".. i)
 	end
 	vehicles_spawned = true
 end
 
-function DespawnSaleVehicles(pDontWait)
-	if pDontWait == nil and not pDontWait then
-		Wait(15000)
-	end
+function DespawnSaleVehicles()
 	for i = 1, #spawnedvehicles do
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(spawnedvehicles[i]))
 	end
@@ -889,8 +886,8 @@ function ShowVehshopBlips(bool)
 							DrawPrices()
 						end
 
-						local pData = exports["isPed"]:isPed("myJob")
-						if pData == 'pdm' then
+						local pData = URPCore.GetPlayerData()
+						if pData.job.name == 'pdm' then
 							OwnerMenu()
 						end
 						BuyMenu()
@@ -1228,10 +1225,10 @@ Citizen.CreateThread(function()
 			local y = vehshop.menu.y + 0.12
 			buttoncount = tablelength(menu.buttons)
 			local selected = false
-			local pData = exports["isPed"]:isPed("myJob")
+			local pData = URPCore.GetPlayerData()
 			for i,button in pairs(menu.buttons) do
 				--local br = button.rank ~= nil and button.rank or 0
-				if pData == 'pdm' and i >= vehshop.menu.from and i <= vehshop.menu.to then
+				if pData.job.name == 'pdm' and i >= vehshop.menu.from and i <= vehshop.menu.to then
 
 					if i == vehshop.selectedbutton then
 						selected = true
@@ -1403,10 +1400,11 @@ end)
 
 
 RegisterCommand('finance', function(source, args, raw)
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' then
+	local pData = URPCore.GetPlayerData()
+	local job = pData.job.name
+	if job == 'pdm' then
 		TriggerEvent('finance')
-	elseif pData == 'tuner' then
+	elseif job == 'tuner' then
 		TriggerEvent('finance_tuner')
 	else
 		TriggerEvent('DoLongHudText', 'You dont have permissions for this!', 2)
@@ -1414,15 +1412,16 @@ RegisterCommand('finance', function(source, args, raw)
 end)
 
 RegisterCommand('commission', function(source, args, raw)
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' then
+	local pData = URPCore.GetPlayerData()
+	local job = pData.job.name
+	if job == 'pdm' then
 		local amount = args[1]
 		if amount ~= nil then
 			TriggerEvent('commission', amount)
 		else
 			TriggerEvent('DoLongHudText', 'Invalid amount "/commision [amount]', 1)
 		end
-	elseif pData == 'tuner' then
+	elseif job == 'tuner' then
 		local amount = args[1]
 		if amount ~= nil then
 			TriggerEvent('commission_tuner', amount)
@@ -1435,10 +1434,11 @@ RegisterCommand('commission', function(source, args, raw)
 end)
 
 RegisterCommand('testdrive', function(source, args, raw)
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' then
+	local pData = URPCore.GetPlayerData()
+	local job = pData.job.name
+	if job == 'pdm' then
 		TriggerEvent('car:testdrive')
-	elseif pData == 'tuner' then
+	elseif job == 'tuner' then
 		TriggerEvent('car:testdrive_tuner')
 	else
 		TriggerEvent('DoLongHudText', 'You dont have permissions for this!', 2)
@@ -1446,10 +1446,11 @@ RegisterCommand('testdrive', function(source, args, raw)
 end)
 
 RegisterCommand('enableBuy', function(source, args, raw)
-	local pData = exports["isPed"]:isPed("myJob")
-	if pData == 'pdm' then
+	local pData = URPCore.GetPlayerData()
+	local job = pData.job.name
+	if job == 'pdm' then
 		TriggerEvent('buyEnable')
-	elseif pData == 'tuner' then
+	elseif job == 'tuner' then
 		TriggerEvent('tuner:enable_buy')
 	else
 		TriggerEvent('DoLongHudText', 'You dont have permissions for this!', 2)

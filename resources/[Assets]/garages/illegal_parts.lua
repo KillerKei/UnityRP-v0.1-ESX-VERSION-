@@ -288,9 +288,6 @@ function GrabParts()
 
 	TriggerEvent("attachRemoveChopShop")	
 	if pushObj ~= 0 then
-
-		print("Attempting to use ".. upgradeItems[pushObj]["itemname"] .. "(".. upgradeItems[pushObj]["count"] ..")")
-
 		local itemcount = exports["urp-inventory"]:getQuantity(upgradeItems[pushObj]["itemid"])
 		if itemcount < upgradeItems[pushObj]["count"] then
 			TriggerEvent("DoLongHudText","You do not have enough ".. upgradeItems[pushObj]["itemname"] .. "(".. upgradeItems[pushObj]["count"] ..")")
@@ -411,6 +408,7 @@ Citizen.CreateThread(function()
 				SetEntityHeading(veh,153.25765991211)
 				Citizen.Wait(1000)
 			end
+			DrawText3DTest(mechanicshop["x"],mechanicshop["y"],mechanicshop["z"], "["..Controlkey["generalUse"][2].."] to enter Mechanic Shop!", 255,true)
 		end
 
 		if distanceoutdoor < 5 then
@@ -425,6 +423,7 @@ Citizen.CreateThread(function()
 				SetEntityHeading(veh,153.25765991211)
 				Citizen.Wait(1000)
 			end
+			DrawText3DTest(doorleave["x"],doorleave["y"],doorleave["z"], "["..Controlkey["generalUse"][2].."] to enter Mechanic Shop!", 255,true)
 		end
 
 		if mechanic then
@@ -551,7 +550,7 @@ AddEventHandler('illegal_carshop:SpawnVehicle', function(vehicle, plate, customi
 		end
 
 
-		TriggerEvent("keys:addNew",veh,plate)
+		TriggerServerEvent('garage:addKeys', plate)
 		SetVehicleHasBeenOwnedByPlayer(veh,true)
 		
 

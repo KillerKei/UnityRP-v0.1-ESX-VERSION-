@@ -46,8 +46,8 @@ AddEventHandler('carshop:requesttable', function()
     local user = URPCore.GetPlayerFromId(source)
     local display = MySQL.Sync.fetchAll('SELECT * FROM vehicles_display')
     for k,v in pairs(display) do
-        carTable[v.id] = v
-        v.price = carTable[v.id].baseprice
+        carTable[v.ID] = v
+        v.price = carTable[v.ID].baseprice
     end
     TriggerClientEvent('veh_shop:returnTable', user.source, carTable)
 end)
@@ -56,20 +56,33 @@ end)
 RegisterServerEvent('CheckMoneyForVeh')
 AddEventHandler('CheckMoneyForVeh', function(name, model,price,financed)
 	local user = URPCore.GetPlayerFromId(source)
+<<<<<<< HEAD
+    local money = user.getMoney()
+    if financed then
+        local financedPrice = math.ceil(price / 4)
+        if money >= financedPrice then
+            user.removeMoney(financedPrice)
+=======
     local idk = exports["urp-core"]:getCurrentCharacter(source)
     local uCash = idk.money
     if financed then
         local financedPrice = math.ceil(price / 4)
         if uCash >= financedPrice then
             TriggerEvent('urp-core:removeCash', user.source, financedPrice)
+>>>>>>> b2daf08b272af93893931e0c84dc44b32ee1d8c5
             TriggerClientEvent('FinishMoneyCheckForVeh', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)
             TriggerClientEvent('carshop:failedpurchase', user.source)
         end
     else
+<<<<<<< HEAD
+        if money >= price then
+            user.removeMoney(price)
+=======
         if uCash >= price then
             TriggerEvent('urp-core:removeCash', user.source, price)
+>>>>>>> b2daf08b272af93893931e0c84dc44b32ee1d8c5
             TriggerClientEvent('FinishMoneyCheckForVeh', user.source, name, model, price, financed)
         else
             TriggerClientEvent('DoLongHudText', user.source, 'You dont have enough money on you!', 2)
@@ -142,8 +155,11 @@ AddEventHandler('RS7x:phonePayment', function(plate)
     local src = source
     local pPlate = plate
     local xPlayer = URPCore.GetPlayerFromId(src)
+<<<<<<< HEAD
+=======
     local idk = exports["urp-core"]:getCurrentCharacter(src)
     local uCash = idk.money
+>>>>>>> b2daf08b272af93893931e0c84dc44b32ee1d8c5
     local group = MySQL.Sync.fetchAll("SELECT shop FROM owned_vehicles WHERE plate=@plate", {['@plate'] = plate})
     print(group[1].shop)
     if pPlate ~= nil then
@@ -152,11 +168,20 @@ AddEventHandler('RS7x:phonePayment', function(plate)
             if pData ~= nil then
                 if pPlate == v.plate then
                     local price = (v.buy_price / 10)
+<<<<<<< HEAD
+                    if xPlayer.getMoney() >= price then
+                        xPlayer.removeMoney(price)
+=======
                     if uCash >= price then
                         TriggerEvent('urp-core:removeCash', src, price)
+>>>>>>> b2daf08b272af93893931e0c84dc44b32ee1d8c5
                         fuck = true
+                        TriggerClientEvent('chatMessagess', src, 'IMPORTANT: ', 1, 'Please see pdm dealer for reimbursement. Take a screen shot of the payment or you will not receive any money back!')
+                        TriggerClientEvent('chatMessagess', src, 'IMPORTANT: ', 1, 'You payed $'.. price .. ' on your vehicle.')
                     else
                         fuck = false
+                        TriggerClientEvent('DoLongHudText', src, 'You don\'t have enough money to pay on this vehicle!', 2)
+                        TriggerClientEvent('DoLongHudText', src, 'You need $'.. price .. ' to pay for your vehicle!', 1)
                     end
 
                     if fuck then
@@ -190,8 +215,8 @@ end)
 
 function updateDisplayVehicles()
     for i=1, #carTable do
-        MySQL.Sync.execute("UPDATE vehicles_display SET model=@model, commission=@commission, baseprice=@baseprice WHERE id=@id",{
-            ['@id'] = i,
+        MySQL.Sync.execute("UPDATE vehicles_display SET model=@model, commission=@commission, baseprice=@baseprice WHERE ID=@ID",{
+            ['@ID'] = i,
             ['@model'] = carTable[i]["model"],
             ['@commission'] = carTable[i]["commission"],
             ['@baseprice'] = carTable[i]["baseprice"]

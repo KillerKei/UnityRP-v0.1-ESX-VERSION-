@@ -645,7 +645,7 @@ function playDrill3()
 	back = front
 	FreezeEntityPosition(PlayerPedId(), false)
 	SetVehicleNumberPlateText(myChop, back)
-	TriggerEvent("keys:addNew",myChop,back)
+	TriggerServerEvent('garage:addKeys', back)
 end
 
 function playDrill()

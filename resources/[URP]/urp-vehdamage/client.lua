@@ -626,10 +626,6 @@ local degHealth = {
 local engineHealth = 0
 local bodyHealth = 0
 
-RegisterCommand("examine", function()
-	TriggerEvent('towgarage:triggermenu')
-end)
-
 RegisterNetEvent('towgarage:triggermenu')
 AddEventHandler('towgarage:triggermenu', function(degradation,eHealth,bHealth)
 	local degHealth = {
@@ -645,8 +641,8 @@ AddEventHandler('towgarage:triggermenu', function(degradation,eHealth,bHealth)
 	-- print(eHealth,bHealth)
 	local engineHealth = eHealth
 	local bodyHealth = bHealth
-	local temp = changingVar:split(",")
-		if(temp[1] ~= nil) then	
+	local temp = degradation:split(",")
+	if(temp[1] ~= nil) then	
 
 		for i,v in ipairs(temp) do
 			if i == 1 then
