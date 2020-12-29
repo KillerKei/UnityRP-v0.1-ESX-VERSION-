@@ -104,8 +104,8 @@ end)
 
 
 
-RegisterNetEvent("ai:store:remove:nikez:sucks")
-AddEventHandler("ai:store:remove:nikez:sucks", function(key,id)
+RegisterNetEvent("ai:store:remove:mortal:sucks")
+AddEventHandler("ai:store:remove:mortal:sucks", function(key,id)
 	if waitingAI[key] then
 		waitingAI[key] = nil
 	end
