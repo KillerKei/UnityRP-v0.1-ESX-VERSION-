@@ -83,8 +83,8 @@ end)
 
 RegisterNetEvent('inventory:bandage')
 AddEventHandler('inventory:bandage', function()
-    TriggerEvent('urp-ambulancejob:heal', 'small', true)
-    TriggerEvent('urp-hospital:client:RemoveBleed')
+    -- TriggerEvent('urp-ambulancejob:heal', 'small', true)
+    TriggerEvent('urp-hospital:items:bandage')
 end)
 
 RegisterNetEvent('HealSlow')
