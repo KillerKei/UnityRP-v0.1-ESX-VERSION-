@@ -240,12 +240,12 @@ AddEventHandler('dispatch:clNotify', function(pNotificationData)
                         end
                     end
 
-                    if currentJob ~= "news" then
+                    if currentJob ~= "reporter" then
                         SendNUIMessage({
                             mId = "notification",
                             eData = pNotificationData
                         })
-                    elseif currentJob == "news" then
+                    elseif currentJob == "reporter" then
                         if exports["urp-inventory"]:getQuantity("scanner") > 0 then
                             local newsObject = {}
                             newsObject.dispatchMessage = "A 911 call has been picked up on your radio scanner!"
@@ -261,7 +261,7 @@ AddEventHandler('dispatch:clNotify', function(pNotificationData)
                         end
                     end
 
-                    if(pNotificationData.playSound and currentJob ~= "news" and not disableNotificationSounds) then
+                    if(pNotificationData.playSound and currentJob ~= "reporter" and not disableNotificationSounds) then
                         TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 3.0, pNotificationData.soundName, 0.3)
                     end
                 end
