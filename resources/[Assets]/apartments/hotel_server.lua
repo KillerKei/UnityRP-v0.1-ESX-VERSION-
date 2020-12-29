@@ -1,78 +1,99 @@
-local roomSV = 0
+URPCore = nil
 
+TriggerEvent('urp:getSharedObject', function(obj) URPCore = obj end)
 
-RegisterServerEvent("hotel:createRoom")
-AddEventHandler("hotel:createRoom", function(cid)
+local motels = {}
+local houses = {}
+
+RegisterServerEvent('hotel:createRoom')
+AddEventHandler('hotel:createRoom', function(cid)
+    houses = {}
+    motels = {}
     local src = source
-    exports.ghmattimysql:execute("INSERT INTO __motels cid, roomType, mykeys, ilness, isImprisoned, isClothesSpawn) VALUE (@cid, @roomType, @mykeys, @ilness, @isImprisoned, @isClothesSpawn)", {
-        ['@cid'] = cid,
-        ['@roomType'] = 1,
-        ['@mykeys'] = true,
-        ['@ilness'] = false,
-        ['@isImprisoned'] = false,
-        ['isClothesSpawn'] = true,
-    })
-    TriggerEvent('refresh', cid)
-end)
-
-RegisterServerEvent('hotel:load')
-AddEventHandler('hotel:load', function()
-    local src = source
-    local cid = getCid(src)
-    exports.ghmattimysql:execute('SELECT * FROM __motels WHERE cid = ?', {cid}, function(result)
-        if result[1] ~= nil then
-            TriggerClientEvent('hotel:createRoomFirst', src, result[1].room, result[1].roomType)
-            TriggerClientEvent('hotel:SetID', src, result[1].room)
+    local pussy = 0
+    local number = math.random(1,88)
+    local asshole = {}
+    print(cid)
+    exports.ghmattimysql:execute("SELECT * FROM __motels WHERE cid= ?", {cid}, function(data)
+        asshole = data
+        if data[1] == nil then
+            table.insert(motels, {owner = cid, roomnumber = number})
+            print(json.encode(data))
+            exports.ghmattimysql:execute("SELECT * FROM __housedata WHERE cid= ?", {cid}, function(chicken)
+                for k, r in pairs(chicken) do
+                    if r ~= nil then
+                        if r.housename ~= nil then
+                            local random = math.random(1111,9999)
+                            houses[random] = {}
+                            table.insert(houses[random], {["house_name"] = r.housename, ["house_model"] = r.house_model, ["house_id"] = r.house_id})
+                        end
+                    end
+                end
+                for k, v in pairs(motels) do
+                    if v.owner == cid then
+                        pussy = v.roomnumber
+                    end
+                end
+                TriggerClientEvent('hotel:createRoom1', src, pussy, 1, houses)
+                TriggerClientEvent('hotel:SetID', src, cid)
+            end)
         else
-            roomSV = roomSV + 1
-            TriggerClientEvent('hotel:createRoomFirst', src, roomSV, 1)
-            TriggerClientEvent('hotel:SetID', src, roomSV)
+            exports.ghmattimysql:execute("SELECT * FROM __housedata WHERE cid= ?", {cid}, function(chicken)
+                for k, v in pairs(chicken) do
+                    if v ~= nil then
+                        if v.housename ~= nil then
+                            local random = math.random(1111,9999)
+                            houses[random] = {}
+                            table.insert(houses[random], {["house_name"] = v.housename, ["house_model"] = v.house_model, ["house_id"] = v.house_id})
+                            TriggerClientEvent('hotel:createRoom1', src, asshole[1].roomNumber, asshole[1].roomType, houses)
+                            TriggerClientEvent('hotel:SetID', src, cid)
+                            return
+                        end
+                    end
+                end
+                print(json.encode(asshole))
+                TriggerClientEvent('hotel:createRoom1', src, asshole[1].roomNumber, asshole[1].roomType, 0)
+                TriggerClientEvent('hotel:SetID', src, cid)
+            end)
         end
     end)
 end)
 
-RegisterServerEvent('hotel:updateLockStatus')
-AddEventHandler('hotel:updateLockStatus', function(status)
+RegisterServerEvent('hotel:updatelocks')
+AddEventHandler('hotel:updatelocks', function(status)
     local src = source
     TriggerClientEvent('hotel:updateLockStatus', src, status)
 end)
 
-RegisterServerEvent('hmm')
-AddEventHandler('hmm', function(source)
-    local src = source
-    local cid = getCid(src)
-    exports.ghmattimysql:execute('SELECT * FROM __motels WHERE cid = ?', {cid}, function(result)
-    roomSV = result[1].room
-    roomSV = (roomSV - 1)
-    exports.ghmattimysql:execute("ALTER TABLE __motels AUTO_INCREMENT = ?", {1})
-        TriggerEvent('hotel:delete', cid)
-    end)
-end)
-
-RegisterServerEvent('refresh')
-AddEventHandler('refresh', function(cid)
-    local src = source
-    exports.ghmattimysql:execute('SELECT * FROM __motels WHERE cid = ?', {cid}, function(result)
-        Citizen.Wait(3000)
-        TriggerClientEvent('hotel:createRoomFirst', src, result[1].room, result[1].roomType)
-        TriggerClientEvent('hotel:SetID', src, result[1].room)
-    end)
-end)
-
-
-
-AddEventHandler('playerDropped', function()
-    roomSV = (roomSV - 1)
-    if roomSV == -1 then
-        roomSV = 0
+RegisterServerEvent('hotel:clearStates')
+AddEventHandler('hotel:clearStates', function(cid)
+    for k, v in pairs(motels) do
+        if v.owner == cid then
+            table.remove(motels, k)
+        end
     end
 end)
 
-function getCid(source) 
-  local identifier = GetPlayerIdentifiers(source)[1]
-  local result = MySQL.Sync.fetchAll("SELECT characters.cid FROM characters WHERE identifier = @identifier", {['@identifier'] = identifier})
-  if result[1] ~= nil then
-      return result[1].cid
-  end
-  return nil
-end
+RegisterServerEvent('hotel:upgradeApartment')
+AddEventHandler('hotel:upgradeApartment', function(cid, roomType, roomNumber)
+    local src = source
+    for k, v in pairs(motels) do
+        if v.owner == cid then
+            table.remove(motels, k)
+        end
+    end
+    if roomType == 1 then
+        exports.ghmattimysql:execute('INSERT INTO __motels(cid, roomType, roomNumber) VALUES(?, ?, ?)', {cid, 2, roomNumber})
+        TriggerClientEvent('newRoomType', src, 2)
+        TriggerClientEvent('DoLongHudText', src, "Congratulations, your new Integrity Apartment is available with Room Number: [" .. tonumber(roomNumber) .. "]")
+    else
+        TriggerClientEvent('DoLongHudText', src, "You already have an Integrity Apartment with the Room Number: [" .. tonumber(roomNumber) .. "]", 2)
+    end
+end)
+
+RegisterServerEvent('hotel:removeMoney')
+AddEventHandler('hotel:removeMoney', function(amount)
+local source = source
+local xPlayer  = URPCore.GetPlayerFromId(source)
+    xPlayer.removeMoney(amount)
+end)
