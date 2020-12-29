@@ -1,6 +1,6 @@
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-description 'ES Extended'
+description 'URP Core'
 
 version '1.1.0'
 
@@ -11,38 +11,38 @@ server_scripts {
 	'locale.lua',
 	'locales/en.lua',
 	
-	'config.lua',
+	'sh_init.lua',
 
-	'server/common.lua',
-	'server/classes/player.lua',
-	'server/functions.lua',
-	'server/paycheck.lua',
-	'server/main.lua',
-	'server/commands.lua',
+	'playermanager/server.lua',
+	'player/sv_settings.lua',
+	'spawnmanager/cl_spawnmanager.lua',
+	'player/sv_player.lua',
+	'player/sv_controls.lua',
+	'gameplay/cl_gameplay.lua',
 
-	'common/modules/math.lua',
-	'common/modules/table.lua',
-	'common/functions.lua'
+	'database/sv_db.lua',
+	'events/sv_events.lua',
+	'core/cl_core.lua'
 }
 
 client_scripts {
 	'locale.lua',
 	'locales/en.lua',
 
-	'config.lua',
-	'client/common.lua',
-	'client/entityiter.lua',
-	'client/functions.lua',
-	'client/wrapper.lua',
-	'client/main.lua',
+	'sh_init.lua',
+	'blipmanager/cl_blipmanager.lua',
+	'blipmanager/cl_blips.lua',
+	'commands/cl_commands.lua',
+	'core/sv_characters.lua',
+	'core/sh_core.lua',
 
-	'client/modules/death.lua',
-	'client/modules/scaleform.lua',
-	'client/modules/streaming.lua',
+	'core/sv_core.lua',
+	'events/cl_events.lua',
+	'events/sh_events.lua',
 
-	'common/modules/math.lua',
-	'common/modules/table.lua',
-	'common/functions.lua',
+	'database/sv_db.lua',
+	'events/sv_events.lua',
+	'core/cl_core.lua',
 	"@urp-errorlog/client/cl_errorlog.lua"
 }
 

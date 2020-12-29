@@ -34,6 +34,13 @@ Citizen.CreateThread(function()
 	URPCore.PlayerData = URPCore.GetPlayerData()
 end)
 
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1)
+		SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
+	end
+end)
+
 RegisterNetEvent('nowCopDeathOff')
 AddEventHandler('nowCopDeathOff', function()
     isCop = false
@@ -150,17 +157,17 @@ Citizen.CreateThread(function()
 end)
 
 
-RegisterNetEvent('doTimer')
-AddEventHandler('doTimer', function()
-    while IsDead do
-        Citizen.Wait(0)
-        if thecount > 0 then
-            drawTxt(0.94, 1.44, 1.0,1.0,0.6, "Respawn: ~r~" .. math.ceil(thecount) .. "~w~ seconds remaining", 255, 255, 255, 255)
-        else
-            drawTxt(0.94, 1.44, 1.0,1.0,0.6, "~w~ PRESS ~r~H ~w~TO ~r~RESPAWN ~w~OR WAIT FOR A ~r~MEDIC", 255, 255, 255, 255)
-        end
-    end
-end)
+-- RegisterNetEvent('doTimer')
+-- AddEventHandler('doTimer', function()
+--     while IsDead do
+--         Citizen.Wait(0)
+--         if thecount > 0 then
+--             drawTxt(0.94, 1.44, 1.0,1.0,0.6, "Respawn: ~r~" .. math.ceil(thecount) .. "~w~ seconds remaining", 255, 255, 255, 255)
+--         else
+--             drawTxt(0.94, 1.44, 1.0,1.0,0.6, "~w~ PRESS ~r~H ~w~TO ~r~RESPAWN ~w~OR WAIT FOR A ~r~MEDIC", 255, 255, 255, 255)
+--         end
+--     end
+-- end)
 
 dragged = false
 RegisterNetEvent('deathdrop')
@@ -237,7 +244,7 @@ AddEventHandler('disableAllActions', function()
         TriggerEvent("resurrect:relationships")
       --  SetPedCanRagdoll(GetPlayerPed(-1), false)
         
-        TriggerEvent("deathAnim")
+        -- TriggerEvent("deathAnim")
         TriggerEvent("disableAllActions2")
         local inveh = 0
         while IsDead do
@@ -255,12 +262,12 @@ AddEventHandler('disableAllActions', function()
             elseif not InVeh() and inveh and GetEntityHeightAboveGround(GetPlayerPed(-1)) < 2.0 or inveh == 0 and GetEntityHeightAboveGround(GetPlayerPed(-1)) < 2.0 then
                 inveh = false
                 Citizen.Trace("Not In Veh DA")
-                TriggerEvent("deathAnim")
+                -- TriggerEvent("deathAnim")
             elseif not InVeh() then
                 if (GetEntitySpeed(GetPlayerPed(-1)) > 0.3  and not inwater) or (not IsEntityPlayingAnim(GetPlayerPed(-1), "dead", myanim, 1) and not inwater) then
-                    TriggerEvent("deathAnim")
+                    -- TriggerEvent("deathAnim")
                 elseif (not IsEntityPlayingAnim(GetPlayerPed(-1), "dam_ko", "drown", 1) and inwater) then
-                    TriggerEvent("deathAnim")
+                    -- TriggerEvent("deathAnim")
                 end 
             end
 
@@ -330,7 +337,7 @@ AddEventHandler('disableAllActions2', function()
             if IsControlJustPressed(1,29) then
                 SetPedToRagdoll(GetPlayerPed(-1), 26000, 26000, 3, 0, 0, 0) 
                  Citizen.Wait(22000)
-                 TriggerEvent("deathAnim")
+                --  TriggerEvent("deathAnim")
             end
 
             DisableControlAction(1, 106, true) -- VehicleMouseControlOverride
@@ -360,30 +367,30 @@ function deadcaranim()
    TaskPlayAnim(GetPlayerPed(-1), "veh@low@front_ps@idle_duck", "sit", 8.0, -8, -1, 1, 0, 0, 0, 0)
 end
 myanim = "dead_a"
-RegisterNetEvent('deathAnim')
-AddEventHandler('deathAnim', function()
-    if not dragged and not tryingAnim and not enteringveh and not InVeh() and IsDead then
-        tryingAnim = true
-        while GetEntitySpeed(GetPlayerPed(-1)) > 0.5 and not inwater do
-            Citizen.Wait(1)
-        end        
-        Citizen.Trace("Death Anim")
-        if inwater then
-            SetEntityCoords(GetEntityCoords(GetPlayerPed(-1)))
-            SetPedToRagdoll(GetPlayerPed(-1), 26000, 26000, 3, 0, 0, 0) 
-        else
+-- RegisterNetEvent('deathAnim')
+-- AddEventHandler('deathAnim', function()
+--     if not dragged and not tryingAnim and not enteringveh and not InVeh() and IsDead then
+--         tryingAnim = true
+--         while GetEntitySpeed(GetPlayerPed(-1)) > 0.5 and not inwater do
+--             Citizen.Wait(1)
+--         end        
+--         Citizen.Trace("Death Anim")
+--         if inwater then
+--             SetEntityCoords(GetEntityCoords(GetPlayerPed(-1)))
+--             SetPedToRagdoll(GetPlayerPed(-1), 26000, 26000, 3, 0, 0, 0) 
+--         else
             
-            loadAnimDict( "dead" ) 
-            SetEntityCoords(GetPlayerPed(-1),GetEntityCoords(GetPlayerPed(-1)))
-            ClearPedTasksImmediately(GetPlayerPed(-1))
-            TaskPlayAnim(GetPlayerPed(-1), "dead", myanim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
-        end
+--             loadAnimDict( "dead" ) 
+--             SetEntityCoords(GetPlayerPed(-1),GetEntityCoords(GetPlayerPed(-1)))
+--             ClearPedTasksImmediately(GetPlayerPed(-1))
+--             TaskPlayAnim(GetPlayerPed(-1), "dead", myanim, 1.0, 1.0, -1, 1, 0, 0, 0, 0)
+--         end
 
 
-        Citizen.Wait(3000)
-        tryingAnim = false
-    end
-end)
+--         Citizen.Wait(3000)
+--         tryingAnim = false
+--     end
+-- end)
 
 function loadAnimDict( dict )
     RequestAnimDict( dict )
@@ -398,7 +405,7 @@ function deathTimer()
     TriggerEvent("doTimer")
     Citizen.Trace("timer")
     IsDead = true
-	StartDistressSignal()
+	-- StartDistressSignal()
 
 
 
@@ -423,42 +430,42 @@ function deathTimer()
     end
 end
 
-function StartDistressSignal()
-	Citizen.CreateThread(function()
-		local timer = Config.BleedoutTimer
+-- function StartDistressSignal()
+-- 	Citizen.CreateThread(function()
+-- 		local timer = Config.BleedoutTimer
 
-		while timer > 0 and IsDead do
-			Citizen.Wait(2)
-			timer = timer - 30
+-- 		while timer > 0 and IsDead do
+-- 			Citizen.Wait(2)
+-- 			timer = timer - 30
 
-			SetTextFont(4)
-			SetTextScale(0.40, 0.40)
-			SetTextColour(185, 185, 185, 255)
-			SetTextDropshadow(0, 0, 0, 0, 255)
-			SetTextEdge(1, 0, 0, 0, 255)
-			SetTextDropShadow()
-			SetTextOutline()
-			BeginTextCommandDisplayText('STRING')
-			AddTextComponentSubstringPlayerName(_U('distress_send'))
-			EndTextCommandDisplayText(0.442, 0.90)
+-- 			SetTextFont(4)
+-- 			SetTextScale(0.40, 0.40)
+-- 			SetTextColour(185, 185, 185, 255)
+-- 			SetTextDropshadow(0, 0, 0, 0, 255)
+-- 			SetTextEdge(1, 0, 0, 0, 255)
+-- 			SetTextDropShadow()
+-- 			SetTextOutline()
+-- 			BeginTextCommandDisplayText('STRING')
+-- 			AddTextComponentSubstringPlayerName(_U('distress_send'))
+-- 			EndTextCommandDisplayText(0.442, 0.90)
 
-			if IsControlPressed(0, Keys['G']) then
-				TriggerEvent("police:1047")
-				TriggerEvent('DoLongHudText', 'Distress signal has been sent to available units!', 1)
+-- 			if IsControlPressed(0, Keys['G']) then
+-- 				TriggerEvent("police:1047")
+-- 				TriggerEvent('DoLongHudText', 'Distress signal has been sent to available units!', 1)
              
 
-				 --[[ Citizen.CreateThread(function()
-					Citizen.Wait(1000 * 60 * 5)
-					if IsDead then
-						StartDistressSignal()
-					end 
-				end) ]]
+-- 				 --[[ Citizen.CreateThread(function()
+-- 					Citizen.Wait(1000 * 60 * 5)
+-- 					if IsDead then
+-- 						StartDistressSignal()
+-- 					end 
+-- 				end) ]]
 
-				break 
-			end
-		end
-	end)
-end
+-- 				break 
+-- 			end
+-- 		end
+-- 	end)
+-- end
 
 
 function DrawGenericTextThisFrame()

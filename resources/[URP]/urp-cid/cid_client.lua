@@ -47,7 +47,7 @@ RegisterNUICallback('error', function(data, cb)
   cb('ok')
 end)
 
-isCop = false
+isCop = true
  
 RegisterNetEvent('nowCopSpawn')
 AddEventHandler('nowCopSpawn', function()
@@ -66,11 +66,11 @@ Citizen.CreateThread(function()
 
             if isCop then
 
-                local dist = #(vector3(-544.28, -204.92, 38.22) - GetEntityCoords(PlayerPedId()))
+                local dist = #(vector3(237.81, -413.08, 48.11) - GetEntityCoords(PlayerPedId()))
                 if dist < 15 then isNear = true end
                 if dist < 10 then 
-                  DrawMarker(27,-544.28, -204.92, 37.22, 0, 0, 0, 0, 0, 0, 0.69, 0.69, 0.3, 100, 255, 255, 60, 0, 0, 2, 0, 0, 0, 0) 
-                  DrawText3D(-544.28, -204.92, 38.22,"[Use] to create ID.")
+                  DrawMarker(27,237.81, -413.08, 48.11, 0, 0, 0, 0, 0, 0, 0.69, 0.69, 0.3, 100, 255, 255, 60, 0, 0, 2, 0, 0, 0, 0) 
+                  DrawText3D(237.81, -413.08, 48.11,"[Use] to create ID.")
                   if IsControlJustPressed(0, 38) then
                     TriggerEvent('event:control:cid')
                   end
