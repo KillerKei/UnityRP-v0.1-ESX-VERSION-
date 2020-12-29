@@ -1531,7 +1531,7 @@ end)
 RegisterNetEvent("police:setCallSign")
 AddEventHandler("police:setCallSign", function(pCallSign)
 	if pCallSign ~= nil then currentCallSign = pCallSign end
-	TriggerEvent('DoLongHudText', "Çağrı kodun belirlendi, ".. currentCallSign..".", 1)
+	-- TriggerEvent('DoLongHudText', ", ".. currentCallSign..".", 1)
 end)
 
 function GetStreetAndZone()
